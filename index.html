@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Debt Destroyer | Global Edition</title>
+<title>Debt Destroyer | Full Working Tabs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -52,7 +52,7 @@ body {
   flex-direction: column;
   flex: 1;
 }
-/* ANIMATED COUNTRY SELECTOR */
+/* Animated Country Selector */
 .country-overlay {
   position: fixed;
   top: 0;
@@ -78,18 +78,14 @@ body {
   padding: 40px 28px;
   width: 320px;
   text-align: center;
-  box-shadow: 0 25px 45px rgba(0,0,0,0.3), 0 0 0 1px rgba(var(--accent),0.1);
+  box-shadow: 0 25px 45px rgba(0,0,0,0.3);
   transform: translateY(0);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.3s ease;
   animation: slideUp 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
 }
 @keyframes slideUp {
   from { transform: translateY(40px); opacity: 0; }
   to { transform: translateY(0); opacity: 1; }
-}
-.country-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 35px 55px rgba(0,0,0,0.4);
 }
 .country-card h2 {
   font-family: 'Syne', sans-serif;
@@ -99,7 +95,6 @@ body {
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  letter-spacing: -0.5px;
 }
 .country-select {
   width: 100%;
@@ -112,12 +107,6 @@ body {
   font-size: 1rem;
   text-align: center;
   cursor: pointer;
-  transition: all 0.25s;
-  font-weight: 500;
-}
-.country-select:hover {
-  border-color: var(--accent);
-  background: var(--surface);
 }
 .start-btn {
   background: linear-gradient(135deg, var(--accent), #ff6b35);
@@ -130,12 +119,8 @@ body {
   font-size: 1rem;
   cursor: pointer;
   transition: all 0.25s;
-  box-shadow: 0 4px 12px rgba(240,136,62,0.3);
 }
-.start-btn:hover {
-  transform: scale(1.02);
-  box-shadow: 0 8px 20px rgba(240,136,62,0.5);
-}
+.start-btn:hover { transform: scale(1.02); }
 .floating-globe {
   position: absolute;
   bottom: 20px;
@@ -149,40 +134,8 @@ body {
   0%, 100% { transform: translateY(0px); }
   50% { transform: translateY(-15px); }
 }
-.floating-euro {
-  position: absolute;
-  top: 15%;
-  left: 10%;
-  font-size: 2rem;
-  opacity: 0.15;
-  animation: spin 12s infinite linear;
-}
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.particles {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-  pointer-events: none;
-}
-.particle {
-  position: absolute;
-  background: var(--accent);
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  opacity: 0.4;
-  animation: particleFloat 8s infinite;
-}
-@keyframes particleFloat {
-  0% { transform: translateY(100vh) scale(1); opacity: 0; }
-  50% { opacity: 0.6; }
-  100% { transform: translateY(-20vh) scale(0); opacity: 0; }
-}
 
+/* Main App Styles */
 .warning-banner {
   background: rgba(227,179,65,0.2);
   border-left: 4px solid var(--warning);
@@ -245,10 +198,19 @@ body {
   font-weight: 600;
   cursor: pointer;
 }
-
-/* Rest of the styles are kept as before (compact but complete) */
-.hero-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; padding: 12px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 12px 10px; position: relative; }
+.hero-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  padding: 12px;
+}
+.stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 10px;
+  position: relative;
+}
 .stat-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; border-radius: 12px 12px 0 0; }
 .stat-card.danger::before { background: var(--danger); }
 .stat-card.success::before { background: var(--success); }
@@ -271,9 +233,29 @@ body {
 .setup-strip label { font-size: 0.72rem; font-weight: 700; color: var(--text2); }
 .input-group { display: flex; align-items: center; gap: 6px; }
 .term-group { display: flex; align-items: center; gap: 8px; background: var(--surface2); padding: 6px 12px; border-radius: 20px; border: 1px solid var(--border); }
-.tab-bar { display: flex; background: var(--surface); border-bottom: 2px solid var(--border); overflow-x: auto; padding: 0 8px; position: sticky; top: 53px; z-index: 90; }
+.tab-bar {
+  display: flex;
+  background: var(--surface);
+  border-bottom: 2px solid var(--border);
+  overflow-x: auto;
+  padding: 0 8px;
+  position: sticky;
+  top: 53px;
+  z-index: 90;
+}
 .tab-bar::-webkit-scrollbar { display: none; }
-.tab-btn { padding: 10px 14px; font-size: 0.72rem; font-weight: 700; color: var(--text2); background: none; border: none; border-bottom: 3px solid transparent; cursor: pointer; white-space: nowrap; transition: all 0.3s; }
+.tab-btn {
+  padding: 10px 14px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text2);
+  background: none;
+  border: none;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.3s;
+}
 .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
 .tab-panel { display: none; padding: 12px; }
 .tab-panel.active { display: block; }
@@ -308,7 +290,6 @@ button:hover { transform: translateY(-2px); }
 .btn-primary { background: linear-gradient(135deg, var(--accent), #ff6b35); color: white; border-color: var(--accent); }
 .btn-success { background: linear-gradient(135deg, var(--success), #2da863); color: white; border-color: var(--success); }
 .btn-danger { background: rgba(248,81,73,0.1); color: var(--danger); border-color: var(--danger); }
-.btn-danger:hover { background: var(--danger); color: white; }
 .tip { background: linear-gradient(135deg, rgba(88,166,255,0.12), rgba(88,166,255,0.05)); border-left: 4px solid var(--accent2); padding: 10px 12px; font-size: 0.7rem; margin: 10px 0; border-radius: 6px; }
 .info-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.75rem; }
 .total-debt-row { background: var(--surface2); border-radius: 10px; padding: 12px; margin-top: 10px; display: flex; justify-content: space-between; align-items: center; font-weight: 800; }
@@ -336,9 +317,7 @@ button:hover { transform: translateY(-2px); }
 </head>
 <body>
 <div id="countryOverlay" class="country-overlay">
-  <div class="particles" id="particles"></div>
   <div class="floating-globe">🌍</div>
-  <div class="floating-euro">💰</div>
   <div class="country-card">
     <h2>🌏 DEBT DESTROYER</h2>
     <select id="initialCountrySelect" class="country-select">
@@ -393,22 +372,38 @@ button:hover { transform: translateY(-2px); }
 </div>
 
 <div class="tab-bar">
-  <button class="tab-btn active" data-tab="tab-debts">💳 Debts</button>
-  <button class="tab-btn" data-tab="tab-income">📊 Income</button>
-  <button class="tab-btn" data-tab="tab-salary">💰 Salary Tracker</button>
-  <button class="tab-btn" data-tab="tab-tracker">✅ Tracker</button>
-  <button class="tab-btn" data-tab="tab-plan">🚀 Plan</button>
-  <button class="tab-btn" data-tab="tab-settings">⚙️ Settings</button>
+  <button class="tab-btn active" data-tab="debts">💳 Debts</button>
+  <button class="tab-btn" data-tab="income">📊 Income</button>
+  <button class="tab-btn" data-tab="salary">💰 Salary Tracker</button>
+  <button class="tab-btn" data-tab="tracker">✅ Tracker</button>
+  <button class="tab-btn" data-tab="plan">🚀 Plan</button>
+  <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
 </div>
 
-<div class="tab-panel active" id="tab-debts"><div class="card"><div class="card-title">💳 Debt Breakdown <span class="badge" id="debtCountBadge">0</span></div><div style="overflow-x:auto;"><table class="debt-table"><thead><tr><th>Bank</th><th>Product</th><th>Balance</th><th>Interest %</th><th>Min Monthly</th><th>Due Day</th><th></th></tr></thead><tbody id="debtTableBody"></tbody><table></div><button class="btn-primary" id="addDebtRowBtn" style="width:100%; margin-top:10px;">+ Add Debt</button><div class="info-row" style="margin-top:12px;"><span>📊 Total Monthly Minimum Payments:</span><strong id="sumMinMonthlyDisplay" style="color:var(--accent);">$0</strong></div><div class="total-debt-row"><span>💀 TOTAL OBLIGATION (Principal + Monthly Mins)</span><strong id="totalObligationDisplay" style="color:var(--accent); font-size:1.1rem;">$0</strong></div><div class="tip">✅ Interest rate auto-updates. Min payment = (Balance × Interest/12/100) + (Balance × 1%). Due Day is used for automatic deduction.</div></div><div class="card"><div class="card-title">📉 Progress</div><div class="plan-bar-wrap"><div class="plan-bar" id="progressBar" style="width:0%"></div></div><div id="progressPercent" style="text-align:center; font-weight:800;">0%</div></div></div>
+<div class="tab-panel active" id="debts">
+  <div class="card">
+    <div class="card-title">💳 Debt Breakdown <span class="badge" id="debtCountBadge">0</span></div>
+    <div style="overflow-x:auto;">
+      <table class="debt-table">
+        <thead><tr><th>Bank</th><th>Product</th><th>Balance</th><th>Interest %</th><th>Min Monthly</th><th>Due Day</th><th></th></tr></thead>
+        <tbody id="debtTableBody"></tbody>
+      </table>
+    </div>
+    <button class="btn-primary" id="addDebtRowBtn" style="width:100%; margin-top:10px;">+ Add Debt</button>
+    <div class="info-row" style="margin-top:12px;"><span>📊 Total Monthly Minimum Payments:</span><strong id="sumMinMonthlyDisplay" style="color:var(--accent);">$0</strong></div>
+    <div class="total-debt-row"><span>💀 TOTAL OBLIGATION (Principal + Monthly Mins)</span><strong id="totalObligationDisplay" style="color:var(--accent); font-size:1.1rem;">$0</strong></div>
+    <div class="tip">✅ Interest rate auto-updates. Min payment = (Balance × Interest/12/100) + (Balance × 1%). Due Day for auto-deduction.</div>
+  </div>
+  <div class="card"><div class="card-title">📉 Progress</div><div class="plan-bar-wrap"><div class="plan-bar" id="progressBar" style="width:0%"></div></div><div id="progressPercent" style="text-align:center; font-weight:800;">0%</div></div>
+</div>
 
-<div class="tab-panel" id="tab-income"><div class="card"><div class="card-title">💰 Income</div><div class="fin-grid"><div class="fin-item"><label>Weekly Salary</label><input type="number" id="weeklySalary" value="0"></div><div class="fin-item"><label>Additional Monthly</label><input type="number" id="additionalIncome" value="0"></div></div><div class="fin-total"><span>Monthly Income</span><span class="val"><span id="currencySymbolIncome">$</span><span id="totalIncomeDisplay">0</span></span></div></div>
+<div class="tab-panel" id="income">
+  <div class="card"><div class="card-title">💰 Income</div><div class="fin-grid"><div class="fin-item"><label>Weekly Salary</label><input type="number" id="weeklySalary" value="0"></div><div class="fin-item"><label>Additional Monthly</label><input type="number" id="additionalIncome" value="0"></div></div><div class="fin-total"><span>Monthly Income</span><span class="val"><span id="currencySymbolIncome">$</span><span id="totalIncomeDisplay">0</span></span></div></div>
   <div class="card"><div class="card-title">📅 Scheduled Monthly Expenses (Auto-Deduct)</div>
-    <div class="date-row"><label>🏠 Rent Day:</label><input type="number" id="rentDay" min="1" max="31" placeholder="Day" style="width:70px"><span>Amount: </span><span id="currencySymbolRent">$</span><input type="number" id="rentAmount" value="0" step="50" style="width:90px"></div>
-    <div class="date-row"><label>🚗 Car Loan Day:</label><input type="number" id="carLoanDay" min="1" max="31" placeholder="Day" style="width:70px"><span>Amount: </span><span id="currencySymbolCar">$</span><input type="number" id="carLoanAmount" value="0" step="50" style="width:90px"></div>
-    <div class="date-row"><label>💸 Loan Payment Day:</label><input type="number" id="loanPaymentDay" min="1" max="31" placeholder="Day" style="width:70px"><span>Amount: </span><span id="currencySymbolLoan">$</span><input type="number" id="loanPaymentAmount" value="0" step="50" style="width:90px"></div>
-    <div class="date-row"><label>📆 Other Payment Day:</label><input type="number" id="otherPaymentDay" min="1" max="31" placeholder="Day" style="width:70px"><span>Amount: </span><span id="currencySymbolOther">$</span><input type="number" id="otherPaymentAmount" value="0" step="50" style="width:90px"></div>
+    <div class="date-row"><label>🏠 Rent Day:</label><input type="number" id="rentDay" min="1" max="31" style="width:70px"><span>Amount: </span><span id="currencySymbolRent">$</span><input type="number" id="rentAmount" value="0" step="50" style="width:90px"></div>
+    <div class="date-row"><label>🚗 Car Loan Day:</label><input type="number" id="carLoanDay" min="1" max="31" style="width:70px"><span>Amount: </span><span id="currencySymbolCar">$</span><input type="number" id="carLoanAmount" value="0" step="50" style="width:90px"></div>
+    <div class="date-row"><label>💸 Loan Payment Day:</label><input type="number" id="loanPaymentDay" min="1" max="31" style="width:70px"><span>Amount: </span><span id="currencySymbolLoan">$</span><input type="number" id="loanPaymentAmount" value="0" step="50" style="width:90px"></div>
+    <div class="date-row"><label>📆 Other Payment Day:</label><input type="number" id="otherPaymentDay" min="1" max="31" style="width:70px"><span>Amount: </span><span id="currencySymbolOther">$</span><input type="number" id="otherPaymentAmount" value="0" step="50" style="width:90px"></div>
     <div style="margin-top:12px;"><strong>➕ Custom Monthly Expenses</strong></div>
     <div id="customPaymentsList"></div>
     <div class="date-row" style="margin-top:8px;">
@@ -432,40 +427,31 @@ button:hover { transform: translateY(-2px); }
   <div class="card"><div class="card-title">🏦 Bank & Savings</div><div class="bank-row"><label>Bank Balance:</label><input type="number" id="bankBalanceInput" value="0"><button class="btn-success" id="updateBankBtn">Update</button></div><div class="bank-row"><label>Savings Goal (per payday):</label><input type="number" id="savingsGoalInput" value="50"><button class="btn-primary" id="updateSavingsGoalBtn">Set</button></div></div>
 </div>
 
-<div class="tab-panel" id="tab-salary">
-  <div class="card salary-card" style="background:linear-gradient(135deg,var(--accent2),#1e40af);"><div class="card-title" style="color:white;">💰 TOTAL SALARY RECEIVED</div><div style="text-align:center; padding:20px 0;"><div style="font-size:2.5rem; font-family:'Space Mono',monospace; font-weight:800; color:white;" id="totalSalaryReceived">$0</div><div style="font-size:0.7rem; color:rgba(255,255,255,0.8);">Since Start Date</div></div></div>
+<div class="tab-panel" id="salary">
+  <div class="card salary-card"><div class="card-title" style="color:white;">💰 TOTAL SALARY RECEIVED</div><div style="text-align:center; padding:20px 0;"><div style="font-size:2.5rem; font-family:'Space Mono',monospace; font-weight:800; color:white;" id="totalSalaryReceived">$0</div><div style="font-size:0.7rem; color:rgba(255,255,255,0.8);">Since Start Date</div></div></div>
   <div class="card"><div class="card-title">📅 Salary History (Weekly Paydays)</div><div id="salaryHistoryList" style="max-height:300px; overflow-y:auto; font-size:0.75rem;"></div><div class="tip">💡 Click "Payday" to record weekly salary + savings transfer.</div></div>
   <div class="card"><div class="card-title">📊 Salary Analytics</div><div class="info-row"><span>💰 Weekly Salary Amount:</span><strong id="salaryWeeklyAmount">$0</strong></div><div class="info-row"><span>📆 Paydays Passed:</span><strong id="paydaysPassedCount">0</strong></div><div class="info-row"><span>💵 Average Monthly Salary:</span><strong id="avgMonthlySalary">$0</strong></div><div class="info-row"><span>🎯 Yearly Projection:</span><strong id="yearlyProjection">$0</strong></div></div>
   <div class="card"><div class="card-title">⚙️ Salary Settings</div><div class="bank-row"><label>Weekly Salary Amount:</label><input type="number" id="salaryWeeklyInput" value="0" step="50"><button class="btn-primary" id="updateSalaryAmountBtn">Update</button></div></div>
 </div>
 
-<div class="tab-panel" id="tab-tracker"><div class="card"><div class="card-title">✅ Weekly Payment Tracker (Tap to Pay)</div><div id="weeklyTracker" class="tracker-grid"></div><div class="tip">💡 Each chip shows which bank you're paying each week.</div></div></div>
-<div class="tab-panel" id="tab-plan"><div class="card"><div class="card-title">🚀 Payoff Plan</div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><div style="background:var(--surface2); padding:10px; border-radius:8px;"><strong id="planTotalDebt" style="font-family:Space Mono; font-size:1.1rem; color:var(--accent);">$0</strong><div style="font-size:0.65rem;">Total Debt</div></div><div style="background:var(--surface2); padding:10px; border-radius:8px;"><strong id="planRequiredWeekly" style="font-family:Space Mono; font-size:1.1rem; color:var(--accent);">$0</strong><div style="font-size:0.65rem;">Weekly Payment</div></div><div style="background:var(--surface2); padding:10px; border-radius:8px;"><strong id="planTargetDate" style="font-family:Space Mono; font-size:1.1rem; color:var(--accent);">—</strong><div style="font-size:0.65rem;">Target Date</div></div></div></div><div class="card"><div class="card-title">⚡ Strategy</div><div id="strategyText" style="font-size:0.75rem;">Add debts to see strategy.</div></div></div>
-<div class="tab-panel" id="tab-settings"><div class="card"><div class="card-title">⚙️ Settings</div><div class="bank-row"><label>Current Passcode:</label><input type="password" id="currentPasscodeInput" maxlength="4" placeholder="****" style="width:80px;"></div><div class="bank-row"><label>New Passcode (4 digits):</label><input type="password" id="newPasscodeInput" maxlength="4" placeholder="****" style="width:80px;"></div><div class="bank-row"><label>Confirm New:</label><input type="password" id="confirmPasscodeInput" maxlength="4" placeholder="****" style="width:80px;"></div><button class="btn-primary" id="changePasscodeBtn" style="width:100%; margin-bottom:12px;">🔐 Update Passcode</button></div><div class="tip">🔐 Default: 1234 | Factory Reset clears current country data only.</div></div>
+<div class="tab-panel" id="tracker">
+  <div class="card"><div class="card-title">✅ Weekly Payment Tracker (Tap to Pay)</div><div id="weeklyTracker" class="tracker-grid"></div><div class="tip">💡 Each chip shows which bank you're paying each week.</div></div>
+</div>
+
+<div class="tab-panel" id="plan">
+  <div class="card"><div class="card-title">🚀 Payoff Plan</div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><div style="background:var(--surface2); padding:10px; border-radius:8px;"><strong id="planTotalDebt" style="font-family:Space Mono; font-size:1.1rem; color:var(--accent);">$0</strong><div style="font-size:0.65rem;">Total Debt</div></div><div style="background:var(--surface2); padding:10px; border-radius:8px;"><strong id="planRequiredWeekly" style="font-family:Space Mono; font-size:1.1rem; color:var(--accent);">$0</strong><div style="font-size:0.65rem;">Weekly Payment</div></div><div style="background:var(--surface2); padding:10px; border-radius:8px;"><strong id="planTargetDate" style="font-family:Space Mono; font-size:1.1rem; color:var(--accent);">—</strong><div style="font-size:0.65rem;">Target Date</div></div></div></div>
+  <div class="card"><div class="card-title">⚡ Strategy</div><div id="strategyText" style="font-size:0.75rem;">Add debts to see strategy.</div></div>
+</div>
+
+<div class="tab-panel" id="settings">
+  <div class="card"><div class="card-title">⚙️ Settings</div><div class="bank-row"><label>Current Passcode:</label><input type="password" id="currentPasscodeInput" maxlength="4" placeholder="****" style="width:80px;"></div><div class="bank-row"><label>New Passcode (4 digits):</label><input type="password" id="newPasscodeInput" maxlength="4" placeholder="****" style="width:80px;"></div><div class="bank-row"><label>Confirm New:</label><input type="password" id="confirmPasscodeInput" maxlength="4" placeholder="****" style="width:80px;"></div><button class="btn-primary" id="changePasscodeBtn" style="width:100%; margin-bottom:12px;">🔐 Update Passcode</button></div>
+  <div class="tip">🔐 Default: 1234 | Factory Reset clears current country data only.</div>
+</div>
 </div>
 </div>
 
 <script>
-// Generate floating particles
-function createParticles() {
-  const container = document.getElementById('particles');
-  if (!container) return;
-  for (let i = 0; i < 60; i++) {
-    const p = document.createElement('div');
-    p.className = 'particle';
-    const size = Math.random() * 4 + 1;
-    p.style.width = size + 'px';
-    p.style.height = size + 'px';
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDelay = Math.random() * 8 + 's';
-    p.style.animationDuration = 5 + Math.random() * 6 + 's';
-    p.style.background = `hsl(${Math.random() * 60 + 20}, 80%, 60%)`;
-    container.appendChild(p);
-  }
-}
-createParticles();
-
-// ==================== COUNTRY DATABASE ====================
+// Country database
 const countries = {
   Australia: { currency: "AUD", symbol: "$", banks: { "CommBank":18.2, "NAB":16.5, "Westpac":15.99, "ANZ":17.8, "HSBC":14.9, "Coles Credit":19.99, "Kogan Card":22.9, "Afterpay":0, "Zip Pay":0, "Latitude":21.5, "Flexi Loan":17.5, "Others":10 } },
   USA: { currency: "USD", symbol: "$", banks: { "Chase":20.99, "Bank of America":18.5, "Wells Fargo":17.9, "Citi":19.5, "Capital One":21.0, "Discover":17.2, "American Express":21.5, "Others":15 } },
@@ -482,13 +468,11 @@ let currentCountry = "Australia";
 let currencySymbol = "$";
 let bankInterestRates = {};
 
-// Storage helpers with country prefix
 function getStorageKey(key) { return `${key}_${currentCountry}`; }
 function saveToStorage(key, value) { localStorage.setItem(getStorageKey(key), JSON.stringify(value)); }
 function loadFromStorage(key, defaultValue) { const val = localStorage.getItem(getStorageKey(key)); return val ? JSON.parse(val) : defaultValue; }
 
-// Global app state
-let currentBankBalance = 0, totalSaved = 0, savingsGoal = 50, planStartDate = new Date(2026,4,27), debtOriginal = 0, isLight = false, selectedTermYears = 5;
+let currentBankBalance = 0, totalSaved = 0, savingsGoal = 50, planStartDate = new Date(2026,4,27), debtOriginal = 0, selectedTermYears = 5;
 let totalSalaryReceived = 0, salaryHistory = [], weeklySalaryAmount = 0;
 let customPayments = [], lastDeductionRecord = {}, lastDebtMinDeductionRecord = {};
 let RESET_PASSCODE = "1234";
@@ -502,8 +486,7 @@ function setCountry(country) {
   bankInterestRates = countries[country].banks;
   loadAllDataForCurrentCountry();
   document.querySelectorAll('#currencySymbolIncome, #currencySymbolRent, #currencySymbolCar, #currencySymbolLoan, #currencySymbolOther, #currencySymbolVarExp').forEach(el => el.textContent = currencySymbol);
-  updateAllCurrencyDisplays();
-  resetBankSelects();
+  updateAllDisplays();
   const selector = document.getElementById('countrySelector');
   if (selector) selector.value = country;
 }
@@ -542,8 +525,7 @@ function loadAllDataForCurrentCountry() {
   totalSaved = loadFromStorage('totalSaved', 0);
   savingsGoal = loadFromStorage('savingsGoal', 50);
   const savedStart = loadFromStorage('planStartDate', null);
-  if (savedStart) planStartDate = new Date(savedStart);
-  else planStartDate = new Date(2026,4,27);
+  planStartDate = savedStart ? new Date(savedStart) : new Date(2026,4,27);
   selectedTermYears = loadFromStorage('termYears', 5);
   debtOriginal = loadFromStorage('debtOriginal', 0);
   document.getElementById('weeklySalary').value = loadFromStorage('weeklySalary', 0);
@@ -573,11 +555,10 @@ function loadAllDataForCurrentCountry() {
   renderCustomPaymentsList();
   const savedDebts = loadFromStorage('debtsData', []);
   renderDebtTable(savedDebts);
-  updateAllCurrencyDisplays();
+  updateAllDisplays();
 }
 
-function resetBankSelects() { const saved = loadFromStorage('debtsData', []); renderDebtTable(saved); }
-function updateAllCurrencyDisplays() { updateSalaryDisplay(); updateBankDisplay(); updateSavingsDisplay(); updateIncomeExpenseTotals(); calculateTotalDebt(); updateWeeksTracker(); }
+function updateAllDisplays() { updateSalaryDisplay(); updateBankDisplay(); updateSavingsDisplay(); updateIncomeExpenseTotals(); calculateTotalDebt(); updateWeeksTracker(); }
 
 function getDebtRows() {
   return Array.from(document.querySelectorAll('#debtTableBody tr[data-row]')).map(tr => ({
@@ -606,11 +587,21 @@ function renderDebtTable(rows) {
     const prods = {"Credit Card":"Credit Card","Personal Loan":"Personal Loan","Car Loan":"Car Loan","Home Loan":"Home Loan","BNPL":"BNPL"};
     Object.keys(prods).forEach(p => { const o = document.createElement('option'); o.value = p; o.textContent = p; if (p === row.product) o.selected = true; prodSel.appendChild(o); });
     tdProd.appendChild(prodSel);
-    const tdBal = document.createElement('td'); const balInp = document.createElement('input'); balInp.type = 'number'; balInp.value = row.balance; balInp.className = 'balance-input'; tdBal.appendChild(balInp);
-    const tdRate = document.createElement('td'); const rateInp = document.createElement('input'); rateInp.type = 'text'; rateInp.value = row.rate; rateInp.placeholder = '%'; rateInp.className = 'rate-input'; rateInp.readOnly = true; tdRate.appendChild(rateInp);
-    const tdMin = document.createElement('td'); const minInp = document.createElement('input'); minInp.type = 'number'; minInp.value = row.minPayment; minInp.className = 'min-input'; minInp.readOnly = true; tdMin.appendChild(minInp);
-    const tdDue = document.createElement('td'); const dueInp = document.createElement('input'); dueInp.type = 'number'; dueInp.value = row.dueDay || 1; dueInp.min = 1; dueInp.max = 31; dueInp.className = 'due-day-input'; tdDue.appendChild(dueInp);
-    const tdDel = document.createElement('td'); const del = document.createElement('button'); del.textContent = '✖'; del.className = 'delete-row-btn btn-sm btn-danger'; tdDel.appendChild(del);
+    const tdBal = document.createElement('td');
+    const balInp = document.createElement('input'); balInp.type = 'number'; balInp.value = row.balance; balInp.className = 'balance-input';
+    tdBal.appendChild(balInp);
+    const tdRate = document.createElement('td');
+    const rateInp = document.createElement('input'); rateInp.type = 'text'; rateInp.value = row.rate; rateInp.placeholder = '%'; rateInp.className = 'rate-input'; rateInp.readOnly = true;
+    tdRate.appendChild(rateInp);
+    const tdMin = document.createElement('td');
+    const minInp = document.createElement('input'); minInp.type = 'number'; minInp.value = row.minPayment; minInp.className = 'min-input'; minInp.readOnly = true;
+    tdMin.appendChild(minInp);
+    const tdDue = document.createElement('td');
+    const dueInp = document.createElement('input'); dueInp.type = 'number'; dueInp.value = row.dueDay || 1; dueInp.min = 1; dueInp.max = 31; dueInp.className = 'due-day-input';
+    tdDue.appendChild(dueInp);
+    const tdDel = document.createElement('td');
+    const del = document.createElement('button'); del.textContent = '✖'; del.className = 'btn-sm btn-danger';
+    tdDel.appendChild(del);
     tr.append(tdBank, tdProd, tdBal, tdRate, tdMin, tdDue, tdDel);
     tbody.appendChild(tr);
     const refresh = () => {
@@ -641,9 +632,9 @@ function getAutoWeeklyPayment() { const total = getDebtRows().reduce((s,r) => s 
 function calculateTotalDebt() { let bal = 0, min = 0; getDebtRows().forEach(d => { bal += d.balance; min += d.minPayment; }); const totalObligation = bal + min; document.getElementById('heroTotalDebt').innerHTML = formatMoney(totalObligation); document.getElementById('debtCountBadge').innerText = getDebtRows().length; document.getElementById('planTotalDebt').innerHTML = formatMoney(bal); document.getElementById('sumMinMonthlyDisplay').innerHTML = formatMoney(min); document.getElementById('totalObligationDisplay').innerHTML = formatMoney(totalObligation); updateProgress(bal); updateDisplayValues(); return bal; }
 function updateProgress(bal) { if (!debtOriginal || debtOriginal < bal) debtOriginal = bal || 1; const pct = Math.min(100, Math.round(((debtOriginal - bal) / debtOriginal) * 100)); document.getElementById('progressBar').style.width = pct + '%'; document.getElementById('progressPercent').innerText = pct + '% paid'; }
 function updateDisplayValues() { const weekly = getAutoWeeklyPayment(); document.getElementById('heroWeeklyPayment').innerHTML = formatMoney(weekly); document.getElementById('planRequiredWeekly').innerHTML = formatMoney(weekly); const totalDebt = getDebtRows().reduce((s,r) => s + r.balance, 0); if (totalDebt > 0 && weekly > 0) { const weeks = Math.ceil(totalDebt / weekly); document.getElementById('weeksRemaining').innerText = weeks; const target = new Date(planStartDate); target.setDate(target.getDate() + weeks * 7); document.getElementById('planTargetDate').innerText = target.toLocaleDateString('en-AU'); document.getElementById('targetDateLabel').innerHTML = `Target: ${target.toLocaleDateString('en-AU')}`; } else { document.getElementById('weeksRemaining').innerText = '--'; document.getElementById('planTargetDate').innerText = '—'; document.getElementById('targetDateLabel').innerHTML = 'Add debts'; } const high = getDebtRows().filter(d => d.balance > 0).sort((a,b) => b.rate - a.rate); document.getElementById('strategyText').innerHTML = high.length ? `🎯 Pay ${high[0].bank} (${high[0].rate}%) first.` : `Add debts.`; }
+function formatMoney(n) { return currencySymbol + Math.round(n || 0).toLocaleString(); }
 function updateBankDisplay() { document.getElementById('heroBankDisplay').innerHTML = formatMoney(currentBankBalance); checkLowBalanceWarning(); }
 function updateSavingsDisplay() { document.getElementById('totalSavingsDisplay').innerHTML = formatMoney(totalSaved); }
-function formatMoney(n) { return currencySymbol + Math.round(n || 0).toLocaleString(); }
 function updateSalaryDisplay() { document.getElementById('totalSalaryReceived').innerHTML = formatMoney(totalSalaryReceived); document.getElementById('heroTotalSalary').innerHTML = formatMoney(totalSalaryReceived); const cont = document.getElementById('salaryHistoryList'); if (cont) { if (salaryHistory.length === 0) cont.innerHTML = '<div style="padding:12px;text-align:center;">No salary records yet.</div>'; else cont.innerHTML = salaryHistory.slice().reverse().map(r => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border);"><span>📅 ${r.date}</span><span style="color:var(--success);">+${currencySymbol}${r.amount}</span></div>`).join(''); } document.getElementById('paydaysPassedCount').innerText = salaryHistory.length; const avg = (totalSalaryReceived / Math.max(1, salaryHistory.length)) * 4.33; document.getElementById('avgMonthlySalary').innerHTML = formatMoney(avg); document.getElementById('yearlyProjection').innerHTML = formatMoney(weeklySalaryAmount * 52); document.getElementById('salaryWeeklyAmount').innerHTML = formatMoney(weeklySalaryAmount); }
 function addSalaryRecord(amount, date = null) { const d = date || new Date().toLocaleDateString('en-AU'); salaryHistory.push({ date: d, amount }); totalSalaryReceived += amount; saveAllDataToCurrentCountry(); updateSalaryDisplay(); }
 function updateWeeklySalaryAmount() { const amt = parseFloat(document.getElementById('salaryWeeklyInput').value) || 0; weeklySalaryAmount = amt; saveAllDataToCurrentCountry(); updateSalaryDisplay(); alert(`Weekly salary set to ${formatMoney(amt)}`); }
@@ -651,21 +642,37 @@ function recordSalaryPayday() { if (weeklySalaryAmount <= 0) { alert("Set weekly
 function applyDebtPayment(amount) { let items = []; document.querySelectorAll('#debtTableBody tr[data-row]').forEach(row => { let b = parseFloat(row.querySelector('.balance-input')?.value) || 0; if (b > 0) items.push({ row, balance: b }); }); items.sort((a,b) => a.balance - b.balance); let rem = amount; for (let it of items) { if (rem <= 0) break; let inp = it.row.querySelector('.balance-input'); let cur = parseFloat(inp.value) || 0; let deduct = Math.min(rem, cur); inp.value = cur - deduct; rem -= deduct; } calculateTotalDebt(); updateIncomeExpenseTotals(); saveDebts(); saveAllDataToCurrentCountry(); }
 function extraDebtPayment() { let amt = prompt("Enter extra payment amount:", "100"); if (amt && !isNaN(amt) && parseFloat(amt) > 0) { let amount = parseFloat(amt); if (currentBankBalance >= amount) { currentBankBalance -= amount; applyDebtPayment(amount); updateBankDisplay(); saveAllDataToCurrentCountry(); alert(`✅ Extra ${formatMoney(amount)} paid!`); } else alert(`❌ Insufficient balance. Need ${formatMoney(amount)}`); } }
 function markWeekPaid(weekDate) { const key = `week_paid_${weekDate.toISOString().split('T')[0]}`; const storageKey = getStorageKey(key); if (localStorage.getItem(storageKey) === 'true') return false; const weeklyAmt = getAutoWeeklyPayment(); if (weeklyAmt <= 0) return false; if (currentBankBalance >= weeklyAmt) { currentBankBalance -= weeklyAmt; applyDebtPayment(weeklyAmt); localStorage.setItem(storageKey, 'true'); updateBankDisplay(); saveAllDataToCurrentCountry(); updateWeeksTracker(); alert(`✅ Paid ${formatMoney(weeklyAmt)}!`); return true; } else { alert(`❌ Insufficient balance. Need ${formatMoney(weeklyAmt)}`); return false; } }
-function updateWeeksTracker() { const tracker = document.getElementById('weeklyTracker'); const start = new Date(planStartDate); tracker.innerHTML = ''; const weeklyAmt = getAutoWeeklyPayment(); let debts = getDebtRows().filter(d => d.balance > 0).sort((a,b) => b.rate - a.rate); if (debts.length === 0 || weeklyAmt <= 0) { tracker.innerHTML = '<div class="tip">No active debts.</div>'; return; } const totalDebt = debts.reduce((s,d) => s + d.balance, 0); const totalWeeksNeeded = Math.ceil(totalDebt / weeklyAmt); const maxWeeksToShow = Math.min(totalWeeksNeeded + 20, 300); for (let i = 0; i < maxWeeksToShow; i++) { let d = new Date(start); d.setDate(start.getDate() + i * 7); const key = `week_paid_${d.toISOString().split('T')[0]}`; const isPaid = localStorage.getItem(getStorageKey(key)) === 'true'; let chip = document.createElement('div'); chip.className = 'week-chip' + (isPaid ? ' paid' : ''); let targetDebt = debts[0]; let cum = 0; for (let debt of debts) { let needed = Math.ceil(debt.balance / weeklyAmt); if (i < cum + needed) { targetDebt = debt; break; } cum += needed; } chip.innerHTML = `<div class="chip-debt-name">🎯 ${targetDebt.bank}</div><div class="chip-amount">${formatMoney(weeklyAmt)}</div><div style="font-size:0.6rem;">${d.toLocaleDateString('en-AU')}</div>`; if (!isPaid) chip.onclick = () => { if (markWeekPaid(d)) chip.classList.add('paid'); }; else chip.onclick = null; tracker.appendChild(chip); } }
+function updateWeeksTracker() { const tracker = document.getElementById('weeklyTracker'); const start = new Date(planStartDate); tracker.innerHTML = ''; const weeklyAmt = getAutoWeeklyPayment(); let debts = getDebtRows().filter(d => d.balance > 0).sort((a,b) => b.rate - a.rate); if (debts.length === 0 || weeklyAmt <= 0) { tracker.innerHTML = '<div class="tip">No active debts.</div>'; return; } const totalDebt = debts.reduce((s,d) => s + d.balance, 0); const totalWeeksNeeded = Math.ceil(totalDebt / weeklyAmt); const maxWeeksToShow = Math.min(totalWeeksNeeded + 20, 300); for (let i = 0; i < maxWeeksToShow; i++) { let d = new Date(start); d.setDate(start.getDate() + i * 7); const isPaid = localStorage.getItem(getStorageKey(`week_paid_${d.toISOString().split('T')[0]}`)) === 'true'; let chip = document.createElement('div'); chip.className = 'week-chip' + (isPaid ? ' paid' : ''); let targetDebt = debts[0]; let cum = 0; for (let debt of debts) { let needed = Math.ceil(debt.balance / weeklyAmt); if (i < cum + needed) { targetDebt = debt; break; } cum += needed; } chip.innerHTML = `<div class="chip-debt-name">🎯 ${targetDebt.bank}</div><div class="chip-amount">${formatMoney(weeklyAmt)}</div><div style="font-size:0.6rem;">${d.toLocaleDateString('en-AU')}</div>`; if (!isPaid) chip.onclick = () => { if (markWeekPaid(d)) chip.classList.add('paid'); }; else chip.onclick = null; tracker.appendChild(chip); } }
 function getTotalScheduledPayments() { let total = 0; total += parseFloat(document.getElementById('rentAmount').value) || 0; total += parseFloat(document.getElementById('carLoanAmount').value) || 0; total += parseFloat(document.getElementById('loanPaymentAmount').value) || 0; total += parseFloat(document.getElementById('otherPaymentAmount').value) || 0; total += customPayments.reduce((s,p) => s + p.amount, 0); return total; }
 function deductMonthlyExpenses() { const today = new Date(); const currentDay = today.getDate(); const currentMonthKey = `${today.getFullYear()}-${today.getMonth()}`; let any = false; const expenses = [ { name: "Rent", day: parseInt(document.getElementById('rentDay').value), amount: parseFloat(document.getElementById('rentAmount').value) || 0 }, { name: "Car Loan", day: parseInt(document.getElementById('carLoanDay').value), amount: parseFloat(document.getElementById('carLoanAmount').value) || 0 }, { name: "Loan Payment", day: parseInt(document.getElementById('loanPaymentDay').value), amount: parseFloat(document.getElementById('loanPaymentAmount').value) || 0 }, { name: "Other Payment", day: parseInt(document.getElementById('otherPaymentDay').value), amount: parseFloat(document.getElementById('otherPaymentAmount').value) || 0 }, ...customPayments.map(p => ({ name: p.name, day: p.day, amount: p.amount })) ]; for (let exp of expenses) { if (exp.amount > 0 && exp.day === currentDay) { const recordKey = `${exp.name}_${currentMonthKey}`; if (!lastDeductionRecord[recordKey]) { if (currentBankBalance >= exp.amount) { currentBankBalance -= exp.amount; lastDeductionRecord[recordKey] = true; any = true; } } } } if (any) { saveAllDataToCurrentCountry(); updateBankDisplay(); } }
 function deductDebtMinimums() { const today = new Date(); const currentDay = today.getDate(); const currentMonthKey = `${today.getFullYear()}-${today.getMonth()}`; let any = false; const debts = getDebtRows(); for (let debt of debts) { if (debt.minPayment > 0 && debt.dueDay === currentDay) { const recordKey = `${debt.bank}_${debt.product}_${currentMonthKey}`; if (!lastDebtMinDeductionRecord[recordKey]) { if (currentBankBalance >= debt.minPayment) { currentBankBalance -= debt.minPayment; lastDebtMinDeductionRecord[recordKey] = true; any = true; } } } } if (any) { saveAllDataToCurrentCountry(); updateBankDisplay(); } }
 function updateIncomeExpenseTotals() { const weeklySal = parseFloat(document.getElementById('weeklySalary').value) || 0; const add = parseFloat(document.getElementById('additionalIncome').value) || 0; const monthlyIncome = (weeklySal * 52 / 12) + add; const variableExp = (parseFloat(document.getElementById('coffee').value) || 0) + (parseFloat(document.getElementById('zip').value) || 0) + (parseFloat(document.getElementById('other').value) || 0); const scheduledTotal = getTotalScheduledPayments(); const minPay = getTotalMonthlyMinimums(); const afterVariable = monthlyIncome - variableExp; const afterScheduled = afterVariable - scheduledTotal; const trueSurplus = Math.max(0, afterScheduled - minPay); document.getElementById('totalIncomeDisplay').innerText = Math.round(monthlyIncome); document.getElementById('totalExpensesDisplay').innerText = Math.round(variableExp); document.getElementById('minPaymentsDeduct').innerHTML = formatMoney(minPay); document.getElementById('incomeAfterExpenses').innerHTML = formatMoney(afterVariable); document.getElementById('scheduledPaymentsDeduct').innerHTML = formatMoney(scheduledTotal); document.getElementById('minusMinPayments').innerHTML = formatMoney(minPay); document.getElementById('trueSurplusDisplay').innerHTML = formatMoney(trueSurplus); document.getElementById('heroSurplus').innerHTML = formatMoney(trueSurplus); }
 function checkLowBalanceWarning() { const today = new Date(); if (today.getDate() === 1 && currentBankBalance < 800) { document.getElementById('warningBanner').style.display = 'block'; document.getElementById('warningBanner').innerHTML = `⚠️ WARNING: Bank balance (${formatMoney(currentBankBalance)}) below 800 on the 1st.`; } else { document.getElementById('warningBanner').style.display = 'none'; } }
 function saveCustomPayments() { saveToStorage('customPayments', customPayments); renderCustomPaymentsList(); updateIncomeExpenseTotals(); }
-function renderCustomPaymentsList() { const container = document.getElementById('customPaymentsList'); if (!container) return; if (customPayments.length === 0) { container.innerHTML = '<div style="font-size:0.7rem; color:var(--text2); padding:6px;">No custom expenses added.</div>'; return; } container.innerHTML = customPayments.map((p, idx) => `<div class="custom-payment-item"><span style="flex:1; font-weight:600;">${p.name}</span><span>Day: ${p.day}</span><span>Amount: ${currencySymbol}${p.amount}</span><button class="btn-danger small-btn" data-idx="${idx}" onclick="window.removeCustomPayment(${idx})">✖</button></div>`).join(''); }
+function renderCustomPaymentsList() { const container = document.getElementById('customPaymentsList'); if (!container) return; if (customPayments.length === 0) { container.innerHTML = '<div style="font-size:0.7rem; color:var(--text2); padding:6px;">No custom expenses added.</div>'; return; } container.innerHTML = customPayments.map((p, idx) => `<div class="custom-payment-item"><span style="flex:1; font-weight:600;">${p.name}</span><span>Day: ${p.day}</span><span>Amount: ${currencySymbol}${p.amount}</span><button class="btn-danger small-btn" data-idx="${idx}" onclick="removeCustomPayment(${idx})">✖</button></div>`).join(''); }
 window.removeCustomPayment = function(idx) { customPayments.splice(idx,1); saveCustomPayments(); updateIncomeExpenseTotals(); saveAllDataToCurrentCountry(); };
 function addCustomPayment() { const name = document.getElementById('newCustomName').value.trim(); const day = parseInt(document.getElementById('newCustomDay').value); const amount = parseFloat(document.getElementById('newCustomAmount').value); if (!name || isNaN(day) || day<1 || day>31 || isNaN(amount) || amount<=0) { alert("Valid name, day (1-31), amount."); return; } customPayments.push({ name, day, amount }); saveCustomPayments(); document.getElementById('newCustomName').value = ''; document.getElementById('newCustomDay').value = ''; document.getElementById('newCustomAmount').value = ''; updateIncomeExpenseTotals(); saveAllDataToCurrentCountry(); }
-function fullReset() { if (confirm("Factory reset will clear ALL data for current country. This cannot be undone.")) { const keysToClear = ['bankBalance','totalSaved','savingsGoal','planStartDate','termYears','debtOriginal','weeklySalary','additionalIncome','coffee','zip','other','rentDay','rentAmount','carLoanDay','carLoanAmount','loanPaymentDay','loanPaymentAmount','otherPaymentDay','otherPaymentAmount','lastDeductionRecord','lastDebtMinDeductionRecord','customPayments','debtsData','totalSalaryReceived','salaryHistory','weeklySalaryAmount']; keysToClear.forEach(k => localStorage.removeItem(getStorageKey(k))); for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key && key.startsWith(`week_paid_${currentCountry}`)) localStorage.removeItem(key); } loadAllDataForCurrentCountry(); updateAllCurrencyDisplays(); updateWeeksTracker(); alert("Factory reset complete for " + currentCountry); } }
+function fullReset() { if (confirm("Factory reset will clear ALL data for current country. This cannot be undone.")) { const keysToClear = ['bankBalance','totalSaved','savingsGoal','planStartDate','termYears','debtOriginal','weeklySalary','additionalIncome','coffee','zip','other','rentDay','rentAmount','carLoanDay','carLoanAmount','loanPaymentDay','loanPaymentAmount','otherPaymentDay','otherPaymentAmount','lastDeductionRecord','lastDebtMinDeductionRecord','customPayments','debtsData','totalSalaryReceived','salaryHistory','weeklySalaryAmount']; keysToClear.forEach(k => localStorage.removeItem(getStorageKey(k))); for (let i = 0; i < localStorage.length; i++) { const key = localStorage.key(i); if (key && key.startsWith(`week_paid_${currentCountry}`)) localStorage.removeItem(key); } loadAllDataForCurrentCountry(); updateAllDisplays(); alert("Factory reset complete for " + currentCountry); } }
 function updatePasscode() { const cur = document.getElementById('currentPasscodeInput').value; const newC = document.getElementById('newPasscodeInput').value; const con = document.getElementById('confirmPasscodeInput').value; if (cur !== RESET_PASSCODE) { alert("❌ Current incorrect"); return; } if (!/^\d{4}$/.test(newC)) { alert("4 digits"); return; } if (newC !== con) { alert("Not match"); return; } RESET_PASSCODE = newC; localStorage.setItem('globalPasscode', RESET_PASSCODE); alert("Passcode updated"); }
 function showPasscodePrompt(callback, title="Enter Passcode") { const modal = document.createElement('div'); modal.className = 'passcode-modal'; modal.innerHTML = `<div class="passcode-box"><h3>🔒 ${title}</h3><input type="password" id="passcodeInput" maxlength="4"><div style="margin-top:15px;"><button id="passcodeConfirmBtn">Confirm</button> <button id="passcodeCancelBtn">Cancel</button></div></div>`; document.body.appendChild(modal); const input = modal.querySelector('#passcodeInput'); input.focus(); modal.querySelector('#passcodeConfirmBtn').onclick = () => { if (input.value === RESET_PASSCODE) { modal.remove(); callback(true); } else { alert("Wrong passcode!"); modal.remove(); callback(false); } }; modal.querySelector('#passcodeCancelBtn').onclick = () => { modal.remove(); callback(false); }; input.onkeypress = (e) => { if (e.key === 'Enter') modal.querySelector('#passcodeConfirmBtn').click(); }; }
 
-// Initialization
+// Tab switching - FIXED
+function initTabs() {
+  const tabs = document.querySelectorAll('.tab-btn');
+  const panels = document.querySelectorAll('.tab-panel');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetId = tab.getAttribute('data-tab');
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      panels.forEach(p => p.classList.remove('active'));
+      const activePanel = document.getElementById(targetId);
+      if (activePanel) activePanel.classList.add('active');
+      else console.warn('Panel not found:', targetId);
+    });
+  });
+}
+
 function initApp() {
   const globalPass = localStorage.getItem('globalPasscode');
   if (globalPass) RESET_PASSCODE = globalPass;
@@ -673,8 +680,12 @@ function initApp() {
   if (lastCountry && countries[lastCountry]) setCountry(lastCountry);
   else setCountry("Australia");
   const isLightSaved = localStorage.getItem('isLightMode') === 'true';
-  if (isLightSaved) { isLight = true; document.body.classList.add('light'); document.getElementById('darkToggleBtn').textContent = '🌙 Dark'; }
-  document.getElementById('darkToggleBtn').onclick = () => { isLight = !isLight; document.body.classList.toggle('light', isLight); localStorage.setItem('isLightMode', isLight); document.getElementById('darkToggleBtn').textContent = isLight ? '🌙 Dark' : '☀️ Light'; };
+  if (isLightSaved) { document.body.classList.add('light'); document.getElementById('darkToggleBtn').textContent = '🌙 Dark'; }
+  document.getElementById('darkToggleBtn').onclick = () => {
+    const isLight = document.body.classList.toggle('light');
+    localStorage.setItem('isLightMode', isLight);
+    document.getElementById('darkToggleBtn').textContent = isLight ? '🌙 Dark' : '☀️ Light';
+  };
   const selector = document.getElementById('countrySelector');
   selector.innerHTML = '';
   for (let c in countries) { const opt = document.createElement('option'); opt.value = c; opt.textContent = `${c} (${countries[c].symbol})`; if (c === currentCountry) opt.selected = true; selector.appendChild(opt); }
@@ -694,7 +705,7 @@ function initApp() {
   document.getElementById('addCustomPaymentBtn').onclick = addCustomPayment;
   ['weeklySalary','additionalIncome','coffee','zip','other','rentAmount','carLoanAmount','loanPaymentAmount','otherPaymentAmount'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('input', () => { updateIncomeExpenseTotals(); saveAllDataToCurrentCountry(); }); });
   ['rentDay','carLoanDay','loanPaymentDay','otherPaymentDay'].forEach(id => { const el = document.getElementById(id); if (el) el.addEventListener('input', () => { saveAllDataToCurrentCountry(); }); });
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.addEventListener('click', () => { document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active')); document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active')); btn.classList.add('active'); document.getElementById(btn.dataset.tab).classList.add('active'); }));
+  initTabs();
   setInterval(() => { deductMonthlyExpenses(); deductDebtMinimums(); checkLowBalanceWarning(); }, 3600000);
   deductMonthlyExpenses(); deductDebtMinimums();
 }

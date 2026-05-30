@@ -1,259 +1,499 @@
 <meta>
 <meta>
 <title>Debt Destroyer Pro</title>
-<script></script>
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --surface: #12121a;
-    --card: #1a1a26;
-    --border: #2a2a3e;
-    --accent: #6c63ff;
-    --accent2: #ff6584;
-    --green: #00d68f;
-    --yellow: #ffb300;
-    --red: #ff4d6d;
-    --text: #e8e8f0;
-    --muted: #7a7a9a;
-    --radius: 14px;
-    --shadow: 0 4px 24px rgba(0,0,0,0.4);
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { height: 100%; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 15px; }
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
 
-  /* HEADER */
-  .app-header {
-    background: linear-gradient(135deg, #1a1a2e, #16213e);
-    padding: 16px 20px 12px;
-    text-align: center;
-    border-bottom: 1px solid var(--border);
-    position: sticky; top: 0; z-index: 100;
-  }
-  .app-header h1 { font-size: 20px; font-weight: 700; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-  .app-header p { font-size: 11px; color: var(--muted); margin-top: 2px; }
+:root {
+  --bg: #0a0a0f;
+  --surface: #12121a;
+  --card: #1a1a26;
+  --border: #2a2a3e;
+  --accent: #6c63ff;
+  --accent2: #ff6584;
+  --green: #00d68f;
+  --yellow: #ffb300;
+  --red: #ff4d6d;
+  --text: #e8e8f0;
+  --muted: #7a7a9a;
+  --radius: 14px;
+}
 
-  /* TABS */
-  .tab-bar {
-    display: flex; overflow-x: auto; background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    scrollbar-width: none; position: sticky; top: 65px; z-index: 99;
-  }
-  .tab-bar::-webkit-scrollbar { display: none; }
-  .tab-btn {
-    flex: 0 0 auto; padding: 12px 16px; font-size: 12px; font-weight: 600;
-    color: var(--muted); background: none; border: none; cursor: pointer;
-    border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.2s;
-  }
-  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+html, body {
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 15px;
+}
 
-  /* CONTENT */
-  .tab-content { display: none; padding: 16px; max-width: 600px; margin: 0 auto; padding-bottom: 80px; }
-  .tab-content.active { display: block; }
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, #1a1a2e, #16213e);
+  padding: 14px 16px 10px;
+  text-align: center;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 200;
+}
+.header h1 {
+  font-size: 19px;
+  font-weight: 800;
+  background: linear-gradient(90deg, #6c63ff, #ff6584);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.header p {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+}
 
-  /* CARDS */
-  .card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 16px; margin-bottom: 14px;
-    box-shadow: var(--shadow);
-  }
-  .card-title { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); margin-bottom: 10px; }
+/* ── TAB BAR ── */
+.tab-bar {
+  display: flex;
+  overflow-x: auto;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 62px;
+  z-index: 199;
+  scrollbar-width: none;
+}
+.tab-bar::-webkit-scrollbar { display: none; }
 
-  /* HERO GRID */
-  .hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
-  .hero-card {
-    background: var(--card); border: 1px solid var(--border);
-    border-radius: var(--radius); padding: 14px; text-align: center;
-  }
-  .hero-card .label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
-  .hero-card .value { font-size: 22px; font-weight: 700; }
-  .hero-card .value.green { color: var(--green); }
-  .hero-card .value.yellow { color: var(--yellow); }
-  .hero-card .value.red { color: var(--red); }
-  .hero-card .value.purple { color: var(--accent); }
-  .hero-card .value.blue { color: #4fc3f7; }
+.tab-btn {
+  flex: 0 0 auto;
+  padding: 11px 15px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s, border-color 0.2s;
+}
+.tab-btn.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}
 
-  /* FORMS */
-  .form-group { margin-bottom: 12px; }
-  .form-group label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 5px; }
-  input, select, textarea {
-    width: 100%; padding: 11px 14px; background: var(--surface);
-    border: 1px solid var(--border); border-radius: 10px;
-    color: var(--text); font-size: 15px; outline: none;
-    transition: border-color 0.2s; -webkit-appearance: none;
-  }
-  select option { background: var(--surface); }
-  input:focus, select:focus { border-color: var(--accent); }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+/* ── PAGES ── */
+.page {
+  display: none;
+  padding: 14px;
+  max-width: 600px;
+  margin: 0 auto;
+  padding-bottom: 90px;
+}
+.page.active { display: block; }
 
-  /* BUTTONS */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-    padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
-    border: none; cursor: pointer; transition: all 0.2s; width: 100%;
-  }
-  .btn-primary { background: linear-gradient(135deg, var(--accent), #8b5cf6); color: white; }
-  .btn-green { background: linear-gradient(135deg, var(--green), #00b377); color: #001a0d; }
-  .btn-red { background: linear-gradient(135deg, var(--red), #cc0033); color: white; }
-  .btn-yellow { background: linear-gradient(135deg, var(--yellow), #ff8f00); color: #1a0f00; }
-  .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-  .btn:active { transform: scale(0.97); }
-  .btn-sm { padding: 7px 14px; font-size: 12px; width: auto; border-radius: 8px; }
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.card-title {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin-bottom: 10px;
+  font-weight: 700;
+}
 
-  /* DEBT ITEMS */
-  .debt-item {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 14px; margin-bottom: 10px;
-    position: relative;
-  }
-  .debt-item .debt-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
-  .debt-item .debt-sub { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
-  .debt-item .debt-stats { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-  .debt-item .stat { text-align: center; }
-  .debt-item .stat .s-label { font-size: 10px; color: var(--muted); }
-  .debt-item .stat .s-val { font-size: 14px; font-weight: 700; }
-  .debt-item .progress-bar { height: 6px; background: var(--border); border-radius: 3px; margin-top: 10px; overflow: hidden; }
-  .debt-item .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); transition: width 0.5s; }
-  .debt-actions { display: flex; gap: 8px; margin-top: 10px; }
-  .delete-btn { position: absolute; top: 12px; right: 12px; background: rgba(255,77,109,0.15); border: none; color: var(--red); width: 28px; height: 28px; border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; }
+/* ── HERO GRID ── */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.hero-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 12px;
+  text-align: center;
+}
+.hero-label {
+  font-size: 10px;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 5px;
+}
+.hero-value {
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.1;
+}
+.c-green  { color: var(--green); }
+.c-red    { color: var(--red); }
+.c-yellow { color: var(--yellow); }
+.c-purple { color: var(--accent); }
+.c-blue   { color: #4fc3f7; }
 
-  /* EXPENSE ITEMS */
-  .expense-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; margin-bottom: 8px;
-  }
-  .expense-item .exp-left .exp-note { font-size: 14px; font-weight: 600; }
-  .expense-item .exp-left .exp-date { font-size: 11px; color: var(--muted); }
-  .expense-item .exp-right { display: flex; align-items: center; gap: 10px; }
-  .expense-item .exp-amount { font-size: 16px; font-weight: 700; color: var(--red); }
+/* ── FORMS ── */
+.form-group { margin-bottom: 11px; }
+.form-group label {
+  display: block;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+  font-weight: 600;
+}
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select,
+textarea {
+  width: 100%;
+  padding: 10px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--text);
+  font-size: 15px;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a7a9a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 32px;
+}
+input:focus, select:focus { border-color: var(--accent); }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
 
-  /* TRACKER */
-  .tracker-week {
-    background: var(--surface); border: 1px solid var(--border);
-    border-radius: 12px; padding: 12px 14px; margin-bottom: 8px;
-    display: flex; justify-content: space-between; align-items: center;
-  }
-  .tracker-week.paid { border-color: var(--green); background: rgba(0,214,143,0.05); }
-  .tracker-week .tw-left .tw-week { font-size: 13px; font-weight: 700; }
-  .tracker-week .tw-left .tw-debt { font-size: 11px; color: var(--muted); }
-  .tracker-week .tw-right { display: flex; align-items: center; gap: 10px; }
-  .tracker-week .tw-amount { font-size: 15px; font-weight: 700; color: var(--accent); }
-  .paid-badge { background: var(--green); color: #001a0d; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; }
-  .unpaid-badge { background: var(--border); color: var(--muted); font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 20px; cursor: pointer; }
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  transition: opacity 0.15s, transform 0.15s;
+}
+.btn:active { opacity: 0.8; transform: scale(0.98); }
+.btn-primary  { background: linear-gradient(135deg, #6c63ff, #8b5cf6); color: #fff; }
+.btn-green    { background: linear-gradient(135deg, #00d68f, #00b377); color: #001a0d; }
+.btn-red      { background: linear-gradient(135deg, #ff4d6d, #cc0033); color: #fff; }
+.btn-yellow   { background: linear-gradient(135deg, #ffb300, #ff8f00); color: #1a0f00; }
+.btn-outline  { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-sm       { padding: 7px 13px; font-size: 12px; width: auto; border-radius: 8px; }
+.btn-row      { display: flex; gap: 8px; }
+.btn-row .btn { flex: 1; }
 
-  /* SALARY HISTORY */
-  .salary-item {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 14px; background: var(--surface); border: 1px solid var(--border);
-    border-radius: 10px; margin-bottom: 8px;
-  }
-  .salary-item .sal-date { font-size: 12px; color: var(--muted); }
-  .salary-item .sal-amount { font-size: 16px; font-weight: 700; color: var(--green); }
+/* ── ALERTS ── */
+.alert {
+  padding: 11px 13px;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  font-size: 13px;
+  line-height: 1.4;
+}
+.alert-green  { background: rgba(0,214,143,.1); border: 1px solid rgba(0,214,143,.3); color: var(--green); }
+.alert-yellow { background: rgba(255,179,0,.1); border: 1px solid rgba(255,179,0,.3); color: var(--yellow); }
+.alert-red    { background: rgba(255,77,109,.1); border: 1px solid rgba(255,77,109,.3); color: var(--red); }
 
-  /* TOGGLE */
-  .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); }
-  .toggle-row:last-child { border-bottom: none; }
-  .toggle-row label { font-size: 14px; }
-  .toggle { position: relative; width: 44px; height: 24px; }
-  .toggle input { opacity: 0; width: 0; height: 0; }
-  .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: var(--border); border-radius: 24px; transition: 0.3s; }
-  .toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: 0.3s; }
-  input:checked + .toggle-slider { background: var(--accent); }
-  input:checked + .toggle-slider:before { transform: translateX(20px); }
+/* ── LIST ITEMS ── */
+.list-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 13px;
+  margin-bottom: 9px;
+  position: relative;
+}
+.list-item-title { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.list-item-sub   { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
 
-  /* ALERT */
-  .alert { padding: 12px 14px; border-radius: 10px; margin-bottom: 12px; font-size: 13px; }
-  .alert-green { background: rgba(0,214,143,0.1); border: 1px solid rgba(0,214,143,0.3); color: var(--green); }
-  .alert-yellow { background: rgba(255,179,0,0.1); border: 1px solid rgba(255,179,0,0.3); color: var(--yellow); }
-  .alert-red { background: rgba(255,77,109,0.1); border: 1px solid rgba(255,77,109,0.3); color: var(--red); }
+.stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+.stat-box  { text-align: center; background: var(--card); border-radius: 8px; padding: 7px 4px; }
+.stat-label { font-size: 10px; color: var(--muted); margin-bottom: 3px; }
+.stat-value { font-size: 13px; font-weight: 700; }
 
-  /* SECTION HEADING */
-  .section-heading { font-size: 13px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin: 16px 0 8px; }
+.prog-wrap { height: 5px; background: var(--border); border-radius: 3px; margin-top: 9px; overflow: hidden; }
+.prog-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--accent), var(--accent2)); }
 
-  /* DIVIDER */
-  .divider { height: 1px; background: var(--border); margin: 14px 0; }
+.del-btn {
+  position: absolute;
+  top: 10px; right: 10px;
+  background: rgba(255,77,109,.15);
+  border: none;
+  color: var(--red);
+  width: 26px; height: 26px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 13px;
+  display: flex; align-items: center; justify-content: center;
+}
 
-  /* EMPTY STATE */
-  .empty-state { text-align: center; padding: 40px 20px; color: var(--muted); }
-  .empty-state .icon { font-size: 40px; margin-bottom: 10px; }
-  .empty-state p { font-size: 14px; }
+/* ── BADGES ── */
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.b-credit  { background: rgba(255,101,132,.2); color: #ff6584; }
+.b-personal{ background: rgba(108,99,255,.2);  color: #6c63ff; }
+.b-home    { background: rgba(0,214,143,.2);   color: #00d68f; }
+.b-car     { background: rgba(255,179,0,.2);   color: #ffb300; }
+.b-student { background: rgba(79,195,247,.2);  color: #4fc3f7; }
+.b-bnpl    { background: rgba(255,101,132,.2); color: #ff6584; }
+.b-tax     { background: rgba(122,122,154,.2); color: #7a7a9a; }
+.b-other   { background: rgba(122,122,154,.2); color: #7a7a9a; }
 
-  /* MODAL */
-  .modal-overlay {
-    display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7); z-index: 200; align-items: flex-end;
-  }
-  .modal-overlay.show { display: flex; }
-  .modal {
-    background: var(--card); border-radius: 20px 20px 0 0; padding: 20px;
-    width: 100%; max-width: 600px; margin: 0 auto;
-    max-height: 90vh; overflow-y: auto;
-    border-top: 1px solid var(--border);
-    animation: slideUp 0.3s ease;
-  }
-  @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-  .modal-header h3 { font-size: 17px; font-weight: 700; }
-  .modal-close { background: var(--border); border: none; color: var(--text); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+/* ── TRACKER ITEMS ── */
+.track-item {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 11px 13px;
+  margin-bottom: 7px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.track-item.paid-row {
+  border-color: rgba(0,214,143,.35);
+  background: rgba(0,214,143,.04);
+}
+.track-left .tw-week { font-size: 13px; font-weight: 700; }
+.track-left .tw-debt { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.track-right { display: flex; align-items: center; gap: 9px; }
+.track-amount { font-size: 14px; font-weight: 700; color: var(--accent); }
+.badge-paid   { background: var(--green); color: #001; font-size: 10px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+.badge-unpaid {
+  background: var(--border); color: var(--muted);
+  font-size: 10px; font-weight: 700;
+  padding: 3px 9px; border-radius: 20px;
+  cursor: pointer; border: none;
+}
 
-  /* SCROLLABLE LIST */
-  .scroll-list { max-height: 300px; overflow-y: auto; }
+/* ── SALARY ITEMS ── */
+.sal-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 7px;
+}
+.sal-left .sal-name { font-size: 13px; font-weight: 600; }
+.sal-left .sal-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.sal-amount { font-size: 16px; font-weight: 800; color: var(--green); }
 
-  /* BOTTOM SAVE BAR */
-  .save-indicator {
-    position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-    background: var(--green); color: #001a0d; padding: 8px 20px;
-    border-radius: 20px; font-size: 13px; font-weight: 700;
-    opacity: 0; transition: opacity 0.3s; z-index: 300; pointer-events: none;
-  }
-  .save-indicator.show { opacity: 1; }
+/* ── EXPENSE ITEMS ── */
+.exp-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 13px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  margin-bottom: 7px;
+}
+.exp-left .exp-name { font-size: 13px; font-weight: 600; }
+.exp-left .exp-date { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.exp-right { display: flex; align-items: center; gap: 9px; }
+.exp-amount { font-size: 15px; font-weight: 800; color: var(--red); }
 
-  /* BANK BALANCE DISPLAY */
-  .balance-display {
-    text-align: center; padding: 20px; background: linear-gradient(135deg, rgba(108,99,255,0.1), rgba(255,101,132,0.1));
-    border-radius: 14px; border: 1px solid var(--border); margin-bottom: 14px;
-  }
-  .balance-display .bal-label { font-size: 12px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-  .balance-display .bal-amount { font-size: 42px; font-weight: 800; color: var(--green); margin: 6px 0; }
-  .balance-display .bal-sub { font-size: 12px; color: var(--muted); }
+/* ── PLAN ROWS ── */
+.plan-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.plan-row:last-child { border-bottom: none; }
+.plan-row .pl  { color: var(--muted); }
+.plan-row .pv  { font-weight: 700; }
 
-  /* DEBT TYPE BADGE */
-  .debt-type-badge {
-    display: inline-block; padding: 2px 8px; border-radius: 20px;
-    font-size: 10px; font-weight: 700; text-transform: uppercase;
-  }
-  .badge-credit { background: rgba(255,101,132,0.2); color: var(--accent2); }
-  .badge-personal { background: rgba(108,99,255,0.2); color: var(--accent); }
-  .badge-home { background: rgba(0,214,143,0.2); color: var(--green); }
-  .badge-car { background: rgba(255,179,0,0.2); color: var(--yellow); }
-  .badge-student { background: rgba(79,195,247,0.2); color: #4fc3f7; }
-  .badge-other { background: rgba(122,122,154,0.2); color: var(--muted); }
+/* ── MODAL ── */
+.overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.75);
+  z-index: 300;
+  align-items: flex-end;
+  justify-content: center;
+}
+.overlay.open { display: flex; }
+.modal {
+  background: var(--card);
+  border-radius: 20px 20px 0 0;
+  border-top: 1px solid var(--border);
+  padding: 18px 16px 30px;
+  width: 100%;
+  max-width: 600px;
+  max-height: 92vh;
+  overflow-y: auto;
+  animation: slideUp .28s ease;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+.modal-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.modal-head h3 { font-size: 16px; font-weight: 700; }
+.modal-close {
+  background: var(--border);
+  border: none;
+  color: var(--text);
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 15px;
+}
 
-  /* INTEREST ACCRUAL NOTE */
-  .interest-note { font-size: 11px; color: var(--muted); margin-top: 4px; }
+/* ── SAVE TOAST ── */
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--green);
+  color: #001a0d;
+  padding: 8px 22px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity .3s;
+  z-index: 400;
+  pointer-events: none;
+  white-space: nowrap;
+}
+.toast.show { opacity: 1; }
 
-  /* PLAN SUMMARY */
-  .plan-item { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
-  .plan-item:last-child { border-bottom: none; }
-  .plan-item .pi-label { font-size: 13px; color: var(--muted); }
-  .plan-item .pi-value { font-size: 14px; font-weight: 700; }
+/* ── MISC ── */
+.section-head {
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--muted);
+  margin: 14px 0 7px;
+}
+.empty {
+  text-align: center;
+  padding: 36px 20px;
+  color: var(--muted);
+}
+.empty .ei { font-size: 38px; margin-bottom: 8px; }
+.empty p   { font-size: 13px; line-height: 1.5; }
+.divider   { height: 1px; background: var(--border); margin: 12px 0; }
+.hint      { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.bal-block {
+  text-align: center;
+  padding: 18px;
+  background: linear-gradient(135deg, rgba(108,99,255,.1), rgba(255,101,132,.1));
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  margin-bottom: 12px;
+}
+.bal-block .bl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.bal-block .bv { font-size: 40px; font-weight: 800; color: var(--green); margin: 6px 0 2px; }
+.bal-block .bs { font-size: 11px; color: var(--muted); }
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle-row span { font-size: 13px; }
+.tog { position: relative; width: 42px; height: 23px; }
+.tog input { opacity: 0; width: 0; height: 0; }
+.tog-sl {
+  position: absolute; cursor: pointer;
+  inset: 0; background: var(--border);
+  border-radius: 23px; transition: .28s;
+}
+.tog-sl:before {
+  content: "";
+  position: absolute;
+  height: 17px; width: 17px;
+  left: 3px; bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: .28s;
+}
+input:checked + .tog-sl { background: var(--accent); }
+input:checked + .tog-sl:before { transform: translateX(19px); }
 
-  /* WEEK FILTER */
-  .filter-row { display: flex; gap: 8px; margin-bottom: 12px; overflow-x: auto; }
-  .filter-chip { flex: 0 0 auto; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 600; border: 1px solid var(--border); background: var(--surface); color: var(--muted); cursor: pointer; }
-  .filter-chip.active { background: var(--accent); color: white; border-color: var(--accent); }
+/* ── FILTER CHIPS ── */
+.chips {
+  display: flex;
+  gap: 7px;
+  overflow-x: auto;
+  margin-bottom: 10px;
+  scrollbar-width: none;
+}
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto;
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--muted);
+  cursor: pointer;
+}
+.chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
-  @media (min-width: 480px) {
-    .hero-grid { grid-template-columns: 1fr 1fr 1fr; }
-  }
+@media (min-width: 420px) {
+  .hero-grid { grid-template-columns: repeat(3, 1fr); }
+}
 </style>
 
 
 
 
+
   💳 Debt Destroyer Pro
-  Ready
+  Loading…
+
 
 
 
@@ -269,10 +509,12 @@
 
 
 
+
+
   
   
   
-    💳 Debt Overview
+    💳 Debt Snapshot
     
   
   
@@ -283,11 +525,7 @@
 
 
 
-  <button>
-    ➕ Add New Debt
-  
-  
-    💳No debts added yet
+  <button>➕ Add New Debt
   
 
 
@@ -296,82 +534,82 @@
   
     Current Bank Balance
     $0.00
-    Updated after each transaction
+    Updated after every transaction
   
 
   
     💵 Weekly Income
     
-      <label>Weekly Salary (After Tax)</label>
+      <label>Weekly Salary (after tax)</label>
       <input>
     
     
-      <label>Additional Weekly Income (Side Gigs, Overtime etc.)</label>
+      <label>Additional Weekly Income (overtime, side gigs…)</label>
       <input>
     
     <button>💾 Save Income
   
 
   
-    🏦 Bank Balance
+    🏦 Set Bank Balance
     
       
-        <label>Set Bank Balance
+        <label>Balance ($)</label>
         <input>
       
       
-        <button>Set
+        <button>Set Balance
       
     
   
 
   
-    💰 Record Salary Payment
+    💵 Record Salary Received
     
       
-        <label>Amount Received</label>
+        <label>Amount</label>
         <input>
       
       
-        <label>Date Received
+        <label>Date</label>
         <input>
       
     
-    <button>✅ Record Payment Received
+    <button>✅ Add to Balance
   
 
   
-    ➕ Add Savings to Balance
+    ➕ Add Savings / Windfall
     
       
-        <label>Savings Amount
+        <label>Amount</label>
         <input>
       
       
-        <label>Note (Optional)
+        <label>Note (optional)</label>
         <input>
       
     
-    <button>➕ Add to Balance
+    <button>➕ Add Savings
   
 
 
 
 
   
-    🧾 Log Daily Expense
+    🧾 Log Expense
     
       
-        <label>Amount
+        <label>Amount ($)</label>
         <input>
       
       
-        <label>Date
+        <label>Date</label>
         <input>
       
     
     
-      <label>Category
+      <label>Category</label>
       <select>
         🛒 Food & Groceries
         ⛽ Fuel
@@ -386,10 +624,10 @@
       </select>
     
     
-      <label>Note (Optional)
+      <label>Note (optional)</label>
       <input>
     
-    <button>➕ Add Expense
+    <button>➕ Log Expense
   
 
   
@@ -397,7 +635,7 @@
     
   
 
-  Recent Expenses
+  History
   
   
 
@@ -405,7 +643,7 @@
 
 
   
-    📅 Weekly Payment Tracker
+    📅 Payment Tracker
     
   
   
@@ -419,17 +657,17 @@
 
 
   
-    📋 Debt Freedom Plan
+    📊 Plan Summary
     
   
   
     ⚙️ Plan Settings
     
-      <label>Plan Start Date
+      <label>Plan Start Date</label>
       <input>
     
     
-      <label>Target Term (Years)
+      <label>Target Term</label>
       <select>
         1 Year
         2 Years
@@ -441,16 +679,17 @@
       
     
     
-      <label>Debt Payoff Strategy
+      <label>Strategy</label>
       <select>
-        Avalanche (Highest Interest First)
-        Snowball (Lowest Balance First)
+        Avalanche — Highest Interest First
+        Snowball — Lowest Balance First
         Equal Distribution
       
     
+    <button>💾 Save Plan Settings
   
   
-    📊 Payoff Order
+    🎯 Payoff Order
     
   
 
@@ -458,10 +697,10 @@
 
 
   
-    📈 Income Summary
+    📈 Income Overview
     
   
-  Salary Payment History
+  Payment History
   
 
 
@@ -470,7 +709,7 @@
   
     🌏 Region
     
-      <label>Country
+      <label>Country</label>
       <select>
         🇦🇺 Australia
         🇺🇸 United States
@@ -480,7 +719,7 @@
       
     
     
-      <label>Currency Symbol
+      <label>Currency Symbol</label>
       <select>
         $ Dollar
         £ Pound
@@ -488,25 +727,26 @@
         ¥ Yen
       
     
+    <button>💾 Save Settings
   
 
   
     🔔 Preferences
     
-      <label>Apply Monthly Interest Accrual
-      <label>
+      Auto-apply Monthly Interest
+      <label></label>
     
     
-      <label>Show Interest Warnings
-      <label>
+      Show Balance Warnings
+      <label></label>
     
   
 
   
-    💾 Data Management
+    💾 Data
     
-      <button>📤 Export Data (JSON)
-      <button>📥 Import Data
+      <button>📤 Export Backup (JSON)
+      <button>📥 Import Backup
       <input>
       <button>🗑️ Factory Reset
     
@@ -515,26 +755,23 @@
   
     ℹ️ App Info
     
-      Debt Destroyer Pro v4.0
-      Data stored locally using IndexedDB
-      Data auto-clears 1 year after plan end date
-      
-    
   
+
+
 
 
 
 
   
     
-      ➕ Add New Debt
+      ➕ Add Debt
       <button>✕
     
 
     
-      <label>Bank / Lender
+      <label>Bank / Lender</label>
       <select>
-        Select Bank...
+        — Select Lender —
         
           Commonwealth Bank
           ANZ
@@ -546,43 +783,52 @@
           ING Australia
           Suncorp
           AMP Bank
+          HSBC Australia
+          RACQ Bank
         
         
           Afterpay
-          Zip Pay
+          Zip Pay / Zip Money
           Humm
           Latitude Financial
-          GE Money
           American Express
           Citibank
+          HSBC Credit Card
+          Coles Credit Card
+          Woolworths Credit Card
         
         
-          Commonwealth Bank Home Loan
+          CommBank Home Loan
           ANZ Home Loan
           Westpac Home Loan
           NAB Home Loan
           ING Home Loan
           Athena Home Loans
+          Unloan
+          Ubank
         
         
           Toyota Finance
-          Holden Finance
           Volkswagen Finance
           BMW Financial Services
-          Esanda
+          Mercedes-Benz Financial
+          Esanda / ANZ Car
           Capital Finance
+          Angle Finance
         
         
           HECS-HELP (ATO)
-          VET Student Loans
+          FEE-HELP
+          VET Student Loan
           StudyLink NZ
         
         
-          Centrelink Debt (Services Australia)
+          Centrelink (Services Australia)
           ATO Tax Debt
           Child Support
+          State Revenue Office
         
-        Other / Custom
+        ✏️ Other / Custom…
       
     
 
@@ -592,7 +838,7 @@
     
 
     
-      <label>Debt Type
+      <label>Debt Type</label>
       <select>
         💳 Credit Card
         💰 Personal Loan
@@ -600,41 +846,41 @@
         🚗 Car Loan
         🎓 Student Loan / HECS
         🛍️ Buy Now Pay Later
-        🏛️ Tax / Government Debt
+        🏛️ Tax / Government
         📌 Other
       
     
 
     
       
-        <label>Outstanding Balance
+        <label>Outstanding Balance ($)</label>
         <input>
       
       
-        <label>Credit Limit (if applicable)
+        <label>Credit Limit (if any)</label>
         <input>
       
     
 
     
-      <label>Annual Interest Rate (%)
+      <label>Annual Interest Rate (%)</label>
       <input>
-      💡 Typical credit card rate: 18-22% p.a.
+      💡 Typical credit card rate: 18–22% p.a.
     
 
     
       
-        <label>Minimum Monthly Payment
+        <label>Min Monthly Payment ($)</label>
         <input>
       
       
-        <label>Next Payment Due Date
+        <label>Next Due Date
         <input>
       
     
 
     
-      <label>Notes (Optional)
+      <label>Notes (optional)</label>
       <input>
     
 
@@ -659,1125 +905,916 @@
 
 ✓ Saved
 
+
 <script>
-// ============================================================
-// APP STATE
-// ============================================================
-const DEFAULT_STATE = {
-  version: 4,
-  country: "Australia",
-  currency: "$",
+'use strict';
 
-  finances: {
-    bankBalance: 0,
-    totalSaved: 0,
-    totalDailyExpenses: 0
-  },
-
-  income: {
-    weeklySalary: 0,
-    additionalWeeklyIncome: 0
-  },
-
-  debts: [],
-  dailyExpenses: [],
-  salaryHistory: [],
-
-  settings: {
-    termYears: 5,
-    startDate: null,
-    strategy: "avalanche",
-    applyInterest: false,
-    showWarnings: true
-  },
-
-  tracker: {
-    paidWeeks: {}
-  },
-
-  paymentPlan: []
+/* ─────────────────────────────────────────
+   STATE
+───────────────────────────────────────── */
+const DEFAULTS = {
+  ver: 4,
+  country: 'Australia',
+  currency: '$',
+  finances: { bankBalance: 0, totalSaved: 0, totalExpenses: 0 },
+  income:   { weekly: 0, extra: 0 },
+  settings: { termYears: 5, startDate: null, strategy: 'avalanche', autoInterest: false, warnings: true },
+  tracker:  { paid: {} },
+  debts:    [],
+  expenses: [],
+  salaryLog: []
 };
 
-let appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
+let S = deepClone(DEFAULTS);
 let saveTimer = null;
-let trackerFilter = 'all';
+let trackFilter = 'all';
+let expFilter   = 'all';
+let activeTab   = 'dashboard';
+let payingDebtIdx = -1;
 
-// ============================================================
-// STORAGE
-// ============================================================
-localforage.config({ name: 'DebtDestroyerPro', storeName: 'appdata' });
+/* ─────────────────────────────────────────
+   UTILS
+───────────────────────────────────────── */
+function deepClone(o) { return JSON.parse(JSON.stringify(o)); }
 
-async function loadState() {
-  try {
-    const saved = await localforage.getItem('debtDestroyerState');
-    if (saved) {
-      appState = Object.assign(JSON.parse(JSON.stringify(DEFAULT_STATE)), saved);
-      // Ensure nested objects exist
-      if (!appState.finances) appState.finances = DEFAULT_STATE.finances;
-      if (!appState.income) appState.income = DEFAULT_STATE.income;
-      if (!appState.settings) appState.settings = DEFAULT_STATE.settings;
-      if (!appState.tracker) appState.tracker = { paidWeeks: {} };
-      if (!appState.tracker.paidWeeks) appState.tracker.paidWeeks = {};
-      if (!Array.isArray(appState.debts)) appState.debts = [];
-      if (!Array.isArray(appState.dailyExpenses)) appState.dailyExpenses = [];
-      if (!Array.isArray(appState.salaryHistory)) appState.salaryHistory = [];
-    }
-    checkAutoCleanup();
-    renderAll();
-    updateLastSaved();
-  } catch(e) {
-    console.error('Load error:', e);
-    renderAll();
-  }
+function $(id) { return document.getElementById(id); }
+
+function cur(n) {
+  const sym = S.currency || '$';
+  return sym + parseFloat(n || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-async function saveState() {
-  try {
-    await localforage.setItem('debtDestroyerState', appState);
-    showSaveIndicator();
-    updateLastSaved();
-  } catch(e) {
-    console.error('Save error:', e);
-  }
+function pct(n) { return parseFloat(n || 0).toFixed(2) + '%'; }
+
+function fmtDate(str) {
+  if (!str) return '—';
+  const d = new Date(str);
+  if (isNaN(d)) return str;
+  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+}
+
+function today() { return new Date().toISOString().split('T')[0]; }
+
+function showToast(msg) {
+  const t = $('toast');
+  t.textContent = msg || '✓ Saved';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+/* ─────────────────────────────────────────
+   STORAGE  (IndexedDB via in-page minimal shim)
+───────────────────────────────────────── */
+const DB_NAME  = 'DebtDestroyerPro';
+const DB_STORE = 'state';
+const DB_KEY   = 'appState';
+
+let db = null;
+
+function openDB() {
+  return new Promise((res, rej) => {
+    const req = indexedDB.open(DB_NAME, 1);
+    req.onupgradeneeded = e => {
+      e.target.result.createObjectStore(DB_STORE);
+    };
+    req.onsuccess = e => { db = e.target.result; res(db); };
+    req.onerror   = e => rej(e);
+  });
+}
+
+function dbSave(data) {
+  return new Promise((res, rej) => {
+    if (!db) { localStorage.setItem(DB_KEY, JSON.stringify(data)); res(); return; }
+    const tx = db.transaction(DB_STORE, 'readwrite');
+    tx.objectStore(DB_STORE).put(data, DB_KEY);
+    tx.oncomplete = res;
+    tx.onerror    = rej;
+  });
+}
+
+function dbLoad() {
+  return new Promise((res, rej) => {
+    if (!db) {
+      try {
+        const raw = localStorage.getItem(DB_KEY);
+        res(raw ? JSON.parse(raw) : null);
+      } catch(e) { res(null); }
+      return;
+    }
+    const tx  = db.transaction(DB_STORE, 'readonly');
+    const req = tx.objectStore(DB_STORE).get(DB_KEY);
+    req.onsuccess = e => res(e.target.result || null);
+    req.onerror   = rej;
+  });
 }
 
 function scheduleSave() {
   clearTimeout(saveTimer);
-  saveTimer = setTimeout(saveState, 600);
+  saveTimer = setTimeout(async () => {
+    await dbSave(S);
+    showToast('✓ Saved');
+    $('hdrStatus').textContent = 'Saved ' + new Date().toLocaleTimeString();
+  }, 700);
 }
 
-function showSaveIndicator() {
-  const el = document.getElementById('saveIndicator');
-  el.classList.add('show');
-  setTimeout(() => el.classList.remove('show'), 2000);
+/* ─────────────────────────────────────────
+   CALCULATIONS
+───────────────────────────────────────── */
+function totalDebt() {
+  return S.debts.reduce((a, d) => a + (parseFloat(d.balance) || 0), 0);
+}
+function totalMinMonthly() {
+  return S.debts.reduce((a, d) => a + (parseFloat(d.minPay) || 0), 0);
+}
+function weeklyIncome() {
+  return (parseFloat(S.income.weekly) || 0) + (parseFloat(S.income.extra) || 0);
+}
+function avgRate() {
+  const tb = totalDebt();
+  if (!tb) return 0;
+  return S.debts.reduce((a, d) => a + (parseFloat(d.rate) || 0) * (parseFloat(d.balance) || 0), 0) / tb;
+}
+function weeklyPayment() {
+  const td = totalDebt();
+  const wk = (S.settings.termYears || 5) * 52;
+  const r  = avgRate() / 100 / 52;
+  if (!td || !wk) return 0;
+  if (!r) return td / wk;
+  const p = td * r * Math.pow(1 + r, wk) / (Math.pow(1 + r, wk) - 1);
+  return isFinite(p) ? p : td / wk;
+}
+function weeksLeft() {
+  const wp = weeklyPayment();
+  const td = totalDebt();
+  if (!wp || !td) return 0;
+  return Math.ceil(td / wp);
+}
+function debtFreeDate() {
+  const wl = weeksLeft();
+  if (!wl) return 'N/A';
+  const d = new Date();
+  d.setDate(d.getDate() + wl * 7);
+  return d.toLocaleDateString('en-AU', { month: 'short', year: 'numeric' });
+}
+function sortedDebts() {
+  const arr = [...S.debts];
+  const st  = S.settings.strategy;
+  if (st === 'avalanche') return arr.sort((a, b) => (parseFloat(b.rate) || 0) - (parseFloat(a.rate) || 0));
+  if (st === 'snowball')  return arr.sort((a, b) => (parseFloat(a.balance) || 0) - (parseFloat(b.balance) || 0));
+  return arr;
+}
+function weekExpenses(type) {
+  const now  = new Date();
+  const wStart = new Date(now); wStart.setDate(now.getDate() - now.getDay()); wStart.setHours(0,0,0,0);
+  const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+  return S.expenses.filter(e => {
+    const d = new Date(e.date);
+    if (type === 'week')  return d >= wStart;
+    if (type === 'month') return d >= mStart;
+    return true;
+  }).reduce((a, e) => a + (parseFloat(e.amount) || 0), 0);
 }
 
-function updateLastSaved() {
-  const el = document.getElementById('lastSaved');
-  if (el) el.textContent = 'Last saved: ' + new Date().toLocaleTimeString();
-}
+/* ─────────────────────────────────────────
+   GENERATE WEEKLY PLAN
+───────────────────────────────────────── */
+function buildWeeklyPlan() {
+  if (!S.settings.startDate || !S.debts.length) return [];
+  const start = new Date(S.settings.startDate);
+  const totalWk = (S.settings.termYears || 5) * 52;
+  const wPay    = weeklyPayment();
+  const ordered = sortedDebts().map(d => ({ ...d, rem: parseFloat(d.balance) || 0 }));
+  const plan    = [];
+  let di = 0;
 
-// ============================================================
-// AUTO CLEANUP
-// ============================================================
-function checkAutoCleanup() {
-  if (!appState.settings.startDate) return;
-  const end = new Date(appState.settings.startDate);
-  end.setFullYear(end.getFullYear() + (appState.settings.termYears || 5) + 1);
-  if (new Date() > end) {
-    if (confirm('Your debt plan period has ended. Clear all data?')) {
-      resetApp();
-    }
+  for (let i = 0; i < Math.min(totalWk, 520) && di < ordered.length; i++) {
+    while (di < ordered.length && ordered[di].rem <= 0.005) di++;
+    if (di >= ordered.length) break;
+
+    const dt = new Date(start);
+    dt.setDate(start.getDate() + i * 7);
+    const key    = dt.toISOString().split('T')[0];
+    const pmt    = Math.min(wPay, ordered[di].rem);
+    ordered[di].rem -= pmt;
+
+    plan.push({
+      key,
+      label: `Week ${i + 1} — ${fmtDate(key)}`,
+      debt:  ordered[di].bank,
+      amount: pmt,
+      num: i + 1
+    });
   }
+  return plan;
 }
 
-// ============================================================
-// TAB NAVIGATION
-// ============================================================
-document.querySelectorAll('.tab-btn').forEach(btn => {
-  btn.addEventListener('click', () => {
+/* ─────────────────────────────────────────
+   TABS
+───────────────────────────────────────── */
+function initTabs() {
+  $('tabBar').addEventListener('click', e => {
+    const btn = e.target.closest('.tab-btn');
+    if (!btn) return;
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
     btn.classList.add('active');
     const tab = btn.dataset.tab;
-    document.getElementById('tab-' + tab).classList.add('active');
+    activeTab = tab;
+    $('pg-' + tab).classList.add('active');
     renderTab(tab);
   });
-});
+}
 
 function renderTab(tab) {
-  switch(tab) {
-    case 'dashboard': renderDashboard(); break;
-    case 'debts': renderDebts(); break;
-    case 'income': renderIncome(); break;
-    case 'expenses': renderExpenses(); break;
-    case 'tracker': renderTracker(); break;
-    case 'plan': renderPlan(); break;
-    case 'salary': renderSalary(); break;
-    case 'settings': renderSettings(); break;
-  }
+  const fn = {
+    dashboard: renderDashboard,
+    debts:     renderDebts,
+    income:    renderIncome,
+    expenses:  renderExpenses,
+    tracker:   renderTracker,
+    plan:      renderPlan,
+    salary:    renderSalary,
+    settings:  renderSettings
+  };
+  if (fn[tab]) fn[tab]();
 }
 
 function renderAll() {
-  renderDashboard();
-  renderDebts();
-  renderIncome();
-  renderExpenses();
-  renderTracker();
-  renderPlan();
-  renderSalary();
-  renderSettings();
+  renderTab(activeTab);
 }
 
-// ============================================================
-// CURRENCY
-// ============================================================
-function cur(amount) {
-  const sym = appState.currency || '$';
-  return sym + parseFloat(amount || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function pct(rate) {
-  return parseFloat(rate || 0).toFixed(2) + '%';
-}
-
-// ============================================================
-// CALCULATIONS
-// ============================================================
-function getTotalDebt() {
-  return appState.debts.reduce((s, d) => s + (parseFloat(d.balance) || 0), 0);
-}
-
-function getTotalMinPayments() {
-  return appState.debts.reduce((s, d) => s + (parseFloat(d.minPayment) || 0), 0);
-}
-
-function getMonthlyIncome() {
-  const weekly = (parseFloat(appState.income.weeklySalary) || 0) + (parseFloat(appState.income.additionalWeeklyIncome) || 0);
-  return (weekly * 52) / 12;
-}
-
-function getWeeklyIncome() {
-  return (parseFloat(appState.income.weeklySalary) || 0) + (parseFloat(appState.income.additionalWeeklyIncome) || 0);
-}
-
-function getWeeklyPayment() {
-  const totalDebt = getTotalDebt();
-  const weeks = (appState.settings.termYears || 5) * 52;
-  const avgRate = getAverageInterestRate() / 100 / 52;
-  if (avgRate === 0 || totalDebt === 0) return weeks > 0 ? totalDebt / weeks : 0;
-  const payment = totalDebt * avgRate * Math.pow(1 + avgRate, weeks) / (Math.pow(1 + avgRate, weeks) - 1);
-  return isFinite(payment) ? payment : totalDebt / weeks;
-}
-
-function getAverageInterestRate() {
-  if (appState.debts.length === 0) return 0;
-  const totalBalance = getTotalDebt();
-  if (totalBalance === 0) return 0;
-  return appState.debts.reduce((s, d) => s + (parseFloat(d.rate) || 0) * (parseFloat(d.balance) || 0), 0) / totalBalance;
-}
-
-function getTotalExpensesSinceStart() {
-  if (!appState.settings.startDate) {
-    return appState.dailyExpenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
-  }
-  const start = new Date(appState.settings.startDate);
-  return appState.dailyExpenses
-    .filter(e => new Date(e.date) >= start)
-    .reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
-}
-
-function getWeeksUntilDebtFree() {
-  const totalDebt = getTotalDebt();
-  const weeklyPayment = getWeeklyPayment();
-  if (weeklyPayment <= 0 || totalDebt <= 0) return 0;
-  return Math.ceil(totalDebt / weeklyPayment);
-}
-
-function getPayoffOrder() {
-  const debts = [...appState.debts];
-  const strategy = appState.settings.strategy || 'avalanche';
-  if (strategy === 'avalanche') {
-    return debts.sort((a, b) => (parseFloat(b.rate) || 0) - (parseFloat(a.rate) || 0));
-  } else if (strategy === 'snowball') {
-    return debts.sort((a, b) => (parseFloat(a.balance) || 0) - (parseFloat(b.balance) || 0));
-  }
-  return debts;
-}
-
-// ============================================================
-// DASHBOARD
-// ============================================================
+/* ─────────────────────────────────────────
+   DASHBOARD
+───────────────────────────────────────── */
 function renderDashboard() {
-  const totalDebt = getTotalDebt();
-  const weeklyPayment = getWeeklyPayment();
-  const weeksLeft = getWeeksUntilDebtFree();
-  const bankBal = appState.finances.bankBalance;
-  const totalExp = getTotalExpensesSinceStart();
-  const totalSaved = appState.finances.totalSaved;
+  const td   = totalDebt();
+  const bb   = S.finances.bankBalance || 0;
+  const wp   = weeklyPayment();
+  const wl   = weeksLeft();
+  const te   = weekExpenses('all');
+  const ts   = S.finances.totalSaved || 0;
 
-  const grid = document.getElementById('heroGrid');
-  if (!grid) return;
-
-  grid.innerHTML = `
-    <div class="hero-card">
-      <div class="label">Total Debt</div>
-      <div class="value red">${cur(totalDebt)}</div>
-    </div>
-    <div class="hero-card">
-      <div class="label">Bank Balance</div>
-      <div class="value green">${cur(bankBal)}</div>
-    </div>
-    <div class="hero-card">
-      <div class="label">Weekly Payment</div>
-      <div class="value purple">${cur(weeklyPayment)}</div>
-    </div>
-    <div class="hero-card">
-      <div class="label">Weeks To Free</div>
-      <div class="value yellow">${weeksLeft}</div>
-    </div>
-    <div class="hero-card">
-      <div class="label">Daily Expenses</div>
-      <div class="value red">${cur(totalExp)}</div>
-    </div>
-    <div class="hero-card">
-      <div class="label">Total Saved</div>
-      <div class="value green">${cur(totalSaved)}</div>
-    </div>
+  $('heroGrid').innerHTML = `
+    <div class="hero-card"><div class="hero-label">Total Debt</div><div class="hero-value c-red">${cur(td)}</div></div>
+    <div class="hero-card"><div class="hero-label">Bank Balance</div><div class="hero-value c-green">${cur(bb)}</div></div>
+    <div class="hero-card"><div class="hero-label">Weekly Payment</div><div class="hero-value c-purple">${cur(wp)}</div></div>
+    <div class="hero-card"><div class="hero-label">Weeks Left</div><div class="hero-value c-yellow">${wl || '—'}</div></div>
+    <div class="hero-card"><div class="hero-label">Daily Expenses</div><div class="hero-value c-red">${cur(te)}</div></div>
+    <div class="hero-card"><div class="hero-label">Total Saved</div><div class="hero-value c-green">${cur(ts)}</div></div>
   `;
 
   // Alerts
-  const alerts = document.getElementById('dashboardAlerts');
-  if (alerts) {
-    let html = '';
-    if (appState.debts.length === 0) {
-      html += `<div class="alert alert-yellow">💡 Add your debts to get started with your plan</div>`;
-    }
-    if (appState.income.weeklySalary === 0) {
-      html += `<div class="alert alert-yellow">💡 Set your income in the Income tab</div>`;
-    }
-    if (bankBal < weeklyPayment && weeklyPayment > 0) {
-      html += `<div class="alert alert-red">⚠️ Bank balance may be insufficient for next payment</div>`;
-    }
-    const highInterest = appState.debts.filter(d => parseFloat(d.rate) > 20);
-    if (highInterest.length > 0) {
-      html += `<div class="alert alert-red">🔥 ${highInterest.length} debt(s) have interest rates above 20%</div>`;
-    }
-    alerts.innerHTML = html;
-  }
+  let alerts = '';
+  if (!S.debts.length)              alerts += `<div class="alert alert-yellow">💡 Add your debts in the Debts tab to start your plan</div>`;
+  if (!S.income.weekly)             alerts += `<div class="alert alert-yellow">💡 Set your income in the Income tab</div>`;
+  if (bb < wp && wp > 0)            alerts += `<div class="alert alert-red">⚠️ Bank balance may be too low for next payment</div>`;
+  if (S.debts.some(d => d.rate > 20)) alerts += `<div class="alert alert-red">🔥 One or more debts have interest above 20% p.a.</div>`;
+  $('dashAlerts').innerHTML = alerts;
 
-  // Debt overview
-  const dashDebtList = document.getElementById('dashDebtList');
-  if (dashDebtList) {
-    if (appState.debts.length === 0) {
-      dashDebtList.innerHTML = `<div style="text-align:center;color:var(--muted);padding:20px;font-size:13px">No debts added</div>`;
-    } else {
-      dashDebtList.innerHTML = appState.debts.map(d => {
-        const progress = d.originalBalance > 0 ? Math.max(0, Math.min(100, ((d.originalBalance - d.balance) / d.originalBalance) * 100)) : 0;
-        return `
-          <div style="margin-bottom:12px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-              <span style="font-weight:700;font-size:13px">${d.bank}</span>
-              <span style="font-size:13px;color:var(--red);font-weight:700">${cur(d.balance)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:6px">
-              <span>${d.type} • ${pct(d.rate)} p.a.</span>
-              <span>${progress.toFixed(0)}% paid off</span>
-            </div>
-            <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
+  // Debt snapshot
+  if (!S.debts.length) {
+    $('dashDebts').innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">No debts added yet</div>`;
+  } else {
+    $('dashDebts').innerHTML = S.debts.map(d => {
+      const pct = d.origBal > 0 ? Math.max(0, Math.min(100, (d.origBal - d.balance) / d.origBal * 100)) : 0;
+      return `
+        <div style="margin-bottom:11px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+            <span style="font-weight:700;font-size:13px">${d.bank}</span>
+            <span style="font-size:13px;color:var(--red);font-weight:700">${cur(d.balance)}</span>
           </div>
-        `;
-      }).join('');
-    }
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px">
+            <span>${d.typeLabel} • ${pct_(d.rate)} p.a.</span>
+            <span>${pct.toFixed(0)}% paid off</span>
+          </div>
+          <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>
+        </div>`;
+    }).join('');
   }
 
   // Next actions
-  const nextActions = document.getElementById('nextActions');
-  if (nextActions) {
-    const ordered = getPayoffOrder();
-    let html = '';
-    if (ordered.length > 0) {
-      html += `<div class="plan-item"><span class="pi-label">🎯 Focus Debt</span><span class="pi-value" style="color:var(--accent)">${ordered[0].bank}</span></div>`;
-      html += `<div class="plan-item"><span class="pi-label">💳 Recommended Payment</span><span class="pi-value">${cur(weeklyPayment)}/week</span></div>`;
-      html += `<div class="plan-item"><span class="pi-label">📅 Debt Free Date</span><span class="pi-value">${getDebtFreeDate()}</span></div>`;
-    } else {
-      html = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:16px">Add debts and income to see your action plan</div>`;
-    }
-    nextActions.innerHTML = html;
+  const od = sortedDebts();
+  $('dashActions').innerHTML = od.length ? `
+    <div class="plan-row"><span class="pl">🎯 Focus Debt</span><span class="pv c-purple">${od[0].bank}</span></div>
+    <div class="plan-row"><span class="pl">💳 Weekly Payment</span><span class="pv">${cur(wp)}</span></div>
+    <div class="plan-row"><span class="pl">📅 Debt-Free Date</span><span class="pv c-green">${debtFreeDate()}</span></div>
+    <div class="plan-row"><span class="pl">📈 Avg Interest Rate</span><span class="pv c-yellow">${pct_(avgRate())}</span></div>
+  ` : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Add debts and income to see your action plan</div>`;
+}
+
+function pct_(n) { return parseFloat(n || 0).toFixed(2) + '%'; }
+
+/* ─────────────────────────────────────────
+   DEBTS
+───────────────────────────────────────── */
+function renderDebts() {
+  if (!S.debts.length) {
+    $('debtList').innerHTML = `<div class="empty"><div class="ei">💳</div><p>No debts added yet.<br>Tap "Add New Debt" above.</p></div>`;
+    return;
   }
+
+  const badgeMap = { credit:'b-credit', personal:'b-personal', home:'b-home', car:'b-car', student:'b-student', bnpl:'b-bnpl', tax:'b-tax', other:'b-other' };
+
+  $('debtList').innerHTML = S.debts.map((d, i) => {
+    const pctPaid  = d.origBal > 0 ? Math.max(0, Math.min(100, (d.origBal - d.balance) / d.origBal * 100)) : 0;
+    const mInterest = parseFloat(d.balance) * (parseFloat(d.rate) / 100 / 12);
+    const bc = badgeMap[d.typeKey] || 'b-other';
+    return `
+      <div class="list-item">
+        <button class="del-btn" onclick="deleteDebt(${i})">✕</button>
+        <div class="list-item-title">${d.bank}</div>
+        <div class="list-item-sub">
+          <span class="badge ${bc}">${d.typeLabel}</span>
+          ${d.dueDate ? `<span style="margin-left:8px;font-size:11px">📅 Due ${fmtDate(d.dueDate)}</span>` : ''}
+        </div>
+        <div class="stats-row">
+          <div class="stat-box"><div class="stat-label">Balance</div><div class="stat-value c-red">${cur(d.balance)}</div></div>
+          <div class="stat-box"><div class="stat-label">Rate p.a.</div><div class="stat-value c-yellow">${pct_(d.rate)}</div></div>
+          <div class="stat-box"><div class="stat-label">Min / mo</div><div class="stat-value">${cur(d.minPay)}</div></div>
+        </div>
+        <div style="margin-top:7px;font-size:11px;color:var(--muted)">
+          Monthly interest cost: <span style="color:var(--red)">${cur(mInterest)}</span>
+          ${d.limit > 0 ? ` &nbsp;|&nbsp; Utilisation: ${((d.balance/d.limit)*100).toFixed(0)}%` : ''}
+        </div>
+        ${d.notes ? `<div style="margin-top:5px;font-size:11px;color:var(--muted)">📝 ${d.notes}</div>` : ''}
+        <div class="prog-wrap"><div class="prog-fill" style="width:${pctPaid}%"></div></div>
+        <div class="btn-row" style="margin-top:9px">
+          <button class="btn btn-green btn-sm" onclick="openPayModal(${i})">💳 Make Payment</button>
+          <button class="btn btn-outline btn-sm" onclick="applyInterest(${i})">📊 Apply Interest</button>
+        </div>
+      </div>`;
+  }).join('');
 }
 
-function getDebtFreeDate() {
-  const weeks = getWeeksUntilDebtFree();
-  if (weeks <= 0) return 'N/A';
-  const date = new Date();
-  date.setDate(date.getDate() + weeks * 7);
-  return date.toLocaleDateString('en-AU', { month: 'short', year: 'numeric' });
+function deleteDebt(i) {
+  if (!confirm(`Delete "${S.debts[i].bank}"? This cannot be undone.`)) return;
+  S.debts.splice(i, 1);
+  scheduleSave();
+  renderAll();
 }
 
-// ============================================================
-// DEBTS
-// ============================================================
-document.getElementById('debtBank').addEventListener('change', function() {
-  const customGroup = document.getElementById('customBankGroup');
-  customGroup.style.display = this.value === 'Other' ? 'block' : 'none';
-});
-
-const interestHints = {
-  credit: '💡 Typical credit card rate: 18–22% p.a.',
-  personal: '💡 Typical personal loan rate: 8–15% p.a.',
-  home: '💡 Typical home loan rate: 5–7% p.a.',
-  car: '💡 Typical car loan rate: 6–12% p.a.',
-  student: '💡 HECS: indexed to CPI (~4–7%). Private loans higher.',
-  buynow: '💡 BNPL often 0% if paid on time; late fees apply.',
-  tax: '💡 ATO general interest charge: ~11% p.a.',
-  other: ''
-};
-
-function updateInterestHint() {
-  const type = document.getElementById('debtType').value;
-  document.getElementById('interestHint').textContent = interestHints[type] || '';
+function openPayModal(i) {
+  payingDebtIdx = i;
+  const d = S.debts[i];
+  $('mdPayBody').innerHTML = `
+    <div style="margin-bottom:12px">
+      <div style="font-size:15px;font-weight:700">${d.bank}</div>
+      <div style="font-size:12px;color:var(--muted)">${d.typeLabel} &nbsp;|&nbsp; Balance: ${cur(d.balance)}</div>
+    </div>
+    <div class="form-group">
+      <label>Payment Amount ($)</label>
+      <input type="number" id="pmtAmt" value="${d.minPay || ''}" placeholder="Amount" inputmode="decimal">
+    </div>
+    <div class="form-group">
+      <label>Date</label>
+      <input type="date" id="pmtDate" value="${today()}">
+    </div>
+    <div class="form-group">
+      <label>Note (optional)</label>
+      <input type="text" id="pmtNote" placeholder="e.g. Monthly minimum">
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-outline" data-close="mdPay">Cancel</button>
+      <button class="btn btn-green" id="btnConfirmPay">✅ Confirm Payment</button>
+    </div>
+  `;
+  $('btnConfirmPay').onclick = confirmPayment;
+  openOverlay('mdPay');
 }
 
-function addDebt() {
-  const bankRaw = document.getElementById('debtBank').value;
-  const customBank = document.getElementById('debtCustomBank').value.trim();
-  const bank = bankRaw === 'Other' ? (customBank || 'Other') : bankRaw;
-  const type = document.getElementById('debtType').value;
-  const balance = parseFloat(document.getElementById('debtBalance').value);
-  const limit = parseFloat(document.getElementById('debtLimit').value) || 0;
-  const rate = parseFloat(document.getElementById('debtRate').value) || 0;
-  const minPayment = parseFloat(document.getElementById('debtMinPayment').value) || 0;
-  const dueDate = document.getElementById('debtDueDate').value;
-  const notes = document.getElementById('debtNotes').value.trim();
+function confirmPayment() {
+  const amt  = parseFloat($('pmtAmt').value);
+  const dt   = $('pmtDate').value;
+  const note = $('pmtNote').value.trim();
+  if (!amt || amt <= 0)  { alert('Enter a valid amount'); return; }
+  const d = S.debts[payingDebtIdx];
+  d.balance = Math.max(0, (parseFloat(d.balance) || 0) - amt);
+  d.payments = d.payments || [];
+  d.payments.push({ amt, dt, note });
+  S.finances.bankBalance = Math.max(0, (S.finances.bankBalance || 0) - amt);
+  S.finances.totalSaved  = (S.finances.totalSaved || 0) + amt;
+  closeOverlay('mdPay');
+  scheduleSave();
+  renderAll();
+  showToast(`${cur(amt)} applied to ${d.bank}`);
+}
 
-  if (!bank) { alert('Please select a bank/lender'); return; }
-  if (!balance || isNaN(balance) || balance <= 0) { alert('Please enter a valid balance'); return; }
+function applyInterest(i) {
+  const d  = S.debts[i];
+  const r  = parseFloat(d.rate) / 100 / 12;
+  const mi = parseFloat(d.balance) * r;
+  if (!confirm(`Apply 1 month interest (${cur(mi)}) to ${d.bank}?`)) return;
+  d.balance = (parseFloat(d.balance) || 0) + mi;
+  scheduleSave();
+  renderAll();
+  showToast('Interest applied');
+}
 
-  const typeLabels = { credit: 'Credit Card', personal: 'Personal Loan', home: 'Home Loan', car: 'Car Loan', student: 'Student Loan', buynow: 'Buy Now Pay Later', tax: 'Tax Debt', other: 'Other' };
+/* Add Debt */
+function initDebtModal() {
+  $('btnAddDebt').onclick = () => openOverlay('mdDebt');
 
-  appState.debts.push({
-    id: Date.now(),
+  $('dBank').addEventListener('change', function () {
+    $('dCustomWrap').style.display = this.value === '__custom__' ? 'block' : 'none';
+  });
+
+  $('dType').addEventListener('change', function () {
+    const hints = {
+      credit:   '💡 Typical credit card: 18–22% p.a.',
+      personal: '💡 Typical personal loan: 8–15% p.a.',
+      home:     '💡 Typical home loan: 5–7% p.a.',
+      car:      '💡 Typical car loan: 6–12% p.a.',
+      student:  '💡 HECS indexed to CPI (~4–7%). Private higher.',
+      bnpl:     '💡 BNPL: 0% if on time; late fees apply.',
+      tax:      '💡 ATO general interest charge ~11% p.a.',
+      other:    ''
+    };
+    $('rateHint').textContent = hints[this.value] || '';
+  });
+
+  $('btnSaveDebt').onclick = saveDebt;
+}
+
+function saveDebt() {
+  const bankRaw = $('dBank').value;
+  const bank = bankRaw === '__custom__' ? $('dCustomBank').value.trim() : bankRaw;
+  const typeKey = $('dType').value;
+  const typeLabels = { credit:'Credit Card', personal:'Personal Loan', home:'Home Loan', car:'Car Loan', student:'Student Loan', bnpl:'Buy Now Pay Later', tax:'Tax / Gov Debt', other:'Other' };
+  const balance = parseFloat($('dBalance').value);
+
+  if (!bank)                     { alert('Please select a bank / lender'); return; }
+  if (!balance || balance <= 0)  { alert('Please enter a valid balance'); return; }
+
+  S.debts.push({
+    id:       Date.now(),
     bank,
-    type: typeLabels[type] || type,
-    typeKey: type,
+    typeKey,
+    typeLabel: typeLabels[typeKey] || typeKey,
     balance,
-    originalBalance: balance,
-    limit,
-    rate,
-    minPayment,
-    dueDate,
-    notes,
-    addedDate: new Date().toISOString(),
+    origBal:  balance,
+    limit:    parseFloat($('dLimit').value)  || 0,
+    rate:     parseFloat($('dRate').value)   || 0,
+    minPay:   parseFloat($('dMinPay').value) || 0,
+    dueDate:  $('dDueDate').value || null,
+    notes:    $('dNotes').value.trim(),
+    addedOn:  today(),
     payments: []
   });
 
-  // Clear form
-  document.getElementById('debtBank').value = '';
-  document.getElementById('debtCustomBank').value = '';
-  document.getElementById('debtBalance').value = '';
-  document.getElementById('debtLimit').value = '';
-  document.getElementById('debtRate').value = '';
-  document.getElementById('debtMinPayment').value = '';
-  document.getElementById('debtDueDate').value = '';
-  document.getElementById('debtNotes').value = '';
-  document.getElementById('customBankGroup').style.display = 'none';
-
-  closeModal('addDebtModal');
+  // clear form
+  ['dBank','dCustomBank','dBalance','dLimit','dRate','dMinPay','dDueDate','dNotes'].forEach(id => { $(id).value = ''; });
+  $('dCustomWrap').style.display = 'none';
+  closeOverlay('mdDebt');
   scheduleSave();
   renderAll();
+  showToast('Debt added ✓');
 }
 
-function renderDebts() {
-  const list = document.getElementById('debtList');
-  if (!list) return;
-
-  if (appState.debts.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">💳</div><p>No debts added yet.<br>Tap "Add New Debt" to begin.</p></div>`;
-    return;
-  }
-
-  const badgeClass = { credit: 'badge-credit', personal: 'badge-personal', home: 'badge-home', car: 'badge-car', student: 'badge-student', other: 'badge-other', buynow: 'badge-credit', tax: 'badge-other' };
-
-  list.innerHTML = appState.debts.map((d, i) => {
-    const progress = d.originalBalance > 0 ? Math.max(0, Math.min(100, ((d.originalBalance - d.balance) / d.originalBalance) * 100)) : 0;
-    const monthlyInterest = (parseFloat(d.balance) * (parseFloat(d.rate) / 100 / 12));
-    const bc = badgeClass[d.typeKey] || 'badge-other';
-    const dueDisplay = d.dueDate ? new Date(d.dueDate).toLocaleDateString('en-AU', { day: 'numeric', month: 'short' }) : 'Not set';
-
-    return `
-      <div class="debt-item">
-        <button class="delete-btn" onclick="deleteDebt(${i})">✕</button>
-        <div class="debt-name">${d.bank}</div>
-        <div class="debt-sub">
-          <span class="debt-type-badge ${bc}">${d.type}</span>
-          ${d.dueDate ? `<span style="margin-left:8px;font-size:11px">📅 Due ${dueDisplay}</span>` : ''}
-        </div>
-        <div class="debt-stats">
-          <div class="stat">
-            <div class="s-label">Balance</div>
-            <div class="s-val" style="color:var(--red)">${cur(d.balance)}</div>
-          </div>
-          <div class="stat">
-            <div class="s-label">Rate</div>
-            <div class="s-val" style="color:var(--yellow)">${pct(d.rate)}</div>
-          </div>
-          <div class="stat">
-            <div class="s-label">Min/Month</div>
-            <div class="s-val">${cur(d.minPayment)}</div>
-          </div>
-        </div>
-        <div style="margin-top:8px;font-size:11px;color:var(--muted)">
-          Monthly interest cost: <span style="color:var(--red)">${cur(monthlyInterest)}</span>
-          ${d.limit > 0 ? ` • Credit used: ${((d.balance/d.limit)*100).toFixed(0)}%` : ''}
-        </div>
-        ${d.notes ? `<div style="margin-top:6px;font-size:11px;color:var(--muted)">📝 ${d.notes}</div>` : ''}
-        <div class="progress-bar"><div class="progress-fill" style="width:${progress}%"></div></div>
-        <div class="debt-actions">
-          <button class="btn btn-green btn-sm" onclick="openPaymentModal(${i})">💳 Make Payment</button>
-          <button class="btn btn-outline btn-sm" onclick="applyInterest(${i})">📊 Apply Interest</button>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function deleteDebt(index) {
-  if (confirm(`Delete "${appState.debts[index].bank}"?`)) {
-    appState.debts.splice(index, 1);
-    scheduleSave();
-    renderAll();
-  }
-}
-
-function openPaymentModal(index) {
-  const debt = appState.debts[index];
-  const content = document.getElementById('paymentModalContent');
-  content.innerHTML = `
-    <div style="margin-bottom:14px">
-      <div style="font-size:16px;font-weight:700">${debt.bank}</div>
-      <div style="font-size:13px;color:var(--muted)">${debt.type} • Balance: ${cur(debt.balance)}</div>
-    </div>
-    <div class="form-group">
-      <label>Payment Amount</label>
-      <input type="number" id="pmtAmount" value="${debt.minPayment || ''}" placeholder="Enter amount" inputmode="decimal">
-    </div>
-    <div class="form-group">
-      <label>Payment Date</label>
-      <input type="date" id="pmtDate" value="${new Date().toISOString().split('T')[0]}">
-    </div>
-    <div class="form-group">
-      <label>Note (Optional)</label>
-      <input type="text" id="pmtNote" placeholder="e.g. Monthly minimum">
-    </div>
-    <div style="display:flex;gap:10px;margin-top:6px">
-      <button class="btn btn-outline" onclick="closeModal('paymentModal')">Cancel</button>
-      <button class="btn btn-green" onclick="processPayment(${index})">✅ Confirm Payment</button>
-    </div>
-  `;
-  openModal('paymentModal');
-}
-
-function processPayment(index) {
-  const amount = parseFloat(document.getElementById('pmtAmount').value);
-  const date = document.getElementById('pmtDate').value;
-  const note = document.getElementById('pmtNote').value.trim();
-
-  if (!amount || isNaN(amount) || amount <= 0) { alert('Enter a valid amount'); return; }
-
-  const debt = appState.debts[index];
-  debt.balance = Math.max(0, (parseFloat(debt.balance) || 0) - amount);
-  debt.payments.push({ amount, date, note });
-
-  // Deduct from bank balance
-  appState.finances.bankBalance = Math.max(0, (appState.finances.bankBalance || 0) - amount);
-  appState.finances.totalSaved = (appState.finances.totalSaved || 0) + amount;
-
-  closeModal('paymentModal');
-  scheduleSave();
-  renderAll();
-  alert(`Payment of ${cur(amount)} applied to ${debt.bank}. Remaining balance: ${cur(debt.balance)}`);
-}
-
-function applyInterest(index) {
-  const debt = appState.debts[index];
-  const monthlyRate = parseFloat(debt.rate) / 100 / 12;
-  const interest = parseFloat(debt.balance) * monthlyRate;
-  if (confirm(`Apply 1 month interest (${cur(interest)}) to ${debt.bank}?`)) {
-    debt.balance = (parseFloat(debt.balance) || 0) + interest;
-    scheduleSave();
-    renderAll();
-  }
-}
-
-// ============================================================
-// INCOME
-// ============================================================
+/* ─────────────────────────────────────────
+   INCOME
+───────────────────────────────────────── */
 function renderIncome() {
-  const sal = document.getElementById('weeklySalary');
-  const add = document.getElementById('additionalWeekly');
-  const bal = document.getElementById('bankBalanceInput');
-  const display = document.getElementById('incomeBalanceDisplay');
-
-  if (sal) sal.value = appState.income.weeklySalary || '';
-  if (add) add.value = appState.income.additionalWeeklyIncome || '';
-  if (bal) bal.value = appState.finances.bankBalance || '';
-  if (display) display.textContent = cur(appState.finances.bankBalance || 0);
-
-  const today = new Date().toISOString().split('T')[0];
-  const spd = document.getElementById('salaryPaymentDate');
-  if (spd && !spd.value) spd.value = today;
+  $('fWeeklySal').value = S.income.weekly || '';
+  $('fAddWeekly').value = S.income.extra  || '';
+  $('fBankBal').value   = S.finances.bankBalance || '';
+  $('incBal').textContent = cur(S.finances.bankBalance || 0);
+  if (!$('fSalDate').value) $('fSalDate').value = today();
 }
 
-function saveIncome() {
-  appState.income.weeklySalary = parseFloat(document.getElementById('weeklySalary').value) || 0;
-  appState.income.additionalWeeklyIncome = parseFloat(document.getElementById('additionalWeekly').value) || 0;
-  scheduleSave();
-  renderAll();
-  alert('Income saved ✓');
+function initIncome() {
+  $('btnSaveIncome').onclick = () => {
+    S.income.weekly = parseFloat($('fWeeklySal').value) || 0;
+    S.income.extra  = parseFloat($('fAddWeekly').value) || 0;
+    scheduleSave();
+    renderAll();
+    showToast('Income saved ✓');
+  };
+  $('btnSetBal').onclick = () => {
+    const v = parseFloat($('fBankBal').value);
+    if (isNaN(v)) { alert('Enter a valid amount'); return; }
+    S.finances.bankBalance = v;
+    scheduleSave();
+    renderIncome();
+    renderDashboard();
+    showToast('Balance updated ✓');
+  };
+  $('btnRecordSal').onclick = () => {
+    const amt = parseFloat($('fSalAmt').value);
+    const dt  = $('fSalDate').value;
+    if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+    if (!dt) { alert('Select a date'); return; }
+    S.finances.bankBalance = (S.finances.bankBalance || 0) + amt;
+    S.salaryLog.unshift({ amt, dt, type: 'salary', note: 'Salary' });
+    $('fSalAmt').value = '';
+    scheduleSave();
+    renderAll();
+    showToast(`${cur(amt)} added to balance ✓`);
+  };
+  $('btnAddSav').onclick = () => {
+    const amt  = parseFloat($('fSavAmt').value);
+    const note = $('fSavNote').value.trim();
+    if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+    S.finances.bankBalance = (S.finances.bankBalance || 0) + amt;
+    S.finances.totalSaved  = (S.finances.totalSaved  || 0) + amt;
+    S.salaryLog.unshift({ amt, dt: today(), type: 'savings', note: note || 'Savings Added' });
+    $('fSavAmt').value  = '';
+    $('fSavNote').value = '';
+    scheduleSave();
+    renderAll();
+    showToast(`${cur(amt)} saved ✓`);
+  };
 }
 
-function setBankBalance() {
-  const val = parseFloat(document.getElementById('bankBalanceInput').value);
-  if (isNaN(val)) { alert('Enter a valid amount'); return; }
-  appState.finances.bankBalance = val;
-  scheduleSave();
-  renderIncome();
-  renderDashboard();
-  alert('Bank balance updated ✓');
-}
-
-function recordSalaryPayment() {
-  const amount = parseFloat(document.getElementById('salaryPaymentAmount').value);
-  const date = document.getElementById('salaryPaymentDate').value;
-  if (!amount || isNaN(amount) || amount <= 0) { alert('Enter a valid amount'); return; }
-  if (!date) { alert('Select a date'); return; }
-
-  appState.finances.bankBalance = (appState.finances.bankBalance || 0) + amount;
-  appState.salaryHistory.unshift({ amount, date, type: 'salary' });
-
-  document.getElementById('salaryPaymentAmount').value = '';
-  scheduleSave();
-  renderAll();
-  alert(`${cur(amount)} added to bank balance ✓`);
-}
-
-function addSavings() {
-  const amount = parseFloat(document.getElementById('savingsAmount').value);
-  const note = document.getElementById('savingsNote').value.trim();
-  if (!amount || isNaN(amount) || amount <= 0) { alert('Enter a valid amount'); return; }
-
-  appState.finances.bankBalance = (appState.finances.bankBalance || 0) + amount;
-  appState.finances.totalSaved = (appState.finances.totalSaved || 0) + amount;
-  appState.salaryHistory.unshift({ amount, date: new Date().toISOString().split('T')[0], type: 'savings', note });
-
-  document.getElementById('savingsAmount').value = '';
-  document.getElementById('savingsNote').value = '';
-  scheduleSave();
-  renderAll();
-  alert(`${cur(amount)} added to balance ✓`);
-}
-
-// ============================================================
-// EXPENSES
-// ============================================================
+/* ─────────────────────────────────────────
+   EXPENSES
+───────────────────────────────────────── */
 function renderExpenses() {
-  const today = new Date().toISOString().split('T')[0];
-  const expDate = document.getElementById('expDate');
-  if (expDate && !expDate.value) expDate.value = today;
-
-  renderExpenseSummary();
-  renderExpenseFilters();
-  renderExpenseList('all');
+  if (!$('fExpDate').value) $('fExpDate').value = today();
+  renderExpSummary();
+  renderExpChips();
+  renderExpList();
 }
 
-function renderExpenseSummary() {
-  const el = document.getElementById('expenseSummary');
-  if (!el) return;
-
-  const total = appState.dailyExpenses.reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
-  const thisWeek = getThisWeekExpenses();
-  const thisMonth = getThisMonthExpenses();
-
-  el.innerHTML = `
-    <div class="form-row-3">
-      <div style="text-align:center">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Week</div>
-        <div style="font-size:18px;font-weight:700;color:var(--yellow)">${cur(thisWeek)}</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Month</div>
-        <div style="font-size:18px;font-weight:700;color:var(--yellow)">${cur(thisMonth)}</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">All Time</div>
-        <div style="font-size:18px;font-weight:700;color:var(--red)">${cur(total)}</div>
-      </div>
-    </div>
-  `;
+function renderExpSummary() {
+  $('expSummary').innerHTML = `
+    <div class="row3">
+      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Week</div><div style="font-size:18px;font-weight:800;color:var(--yellow)">${cur(weekExpenses('week'))}</div></div>
+      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Month</div><div style="font-size:18px;font-weight:800;color:var(--yellow)">${cur(weekExpenses('month'))}</div></div>
+      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">All Time</div><div style="font-size:18px;font-weight:800;color:var(--red)">${cur(weekExpenses('all'))}</div></div>
+    </div>`;
 }
 
-function getThisWeekExpenses() {
-  const now = new Date();
-  const weekStart = new Date(now);
-  weekStart.setDate(now.getDate() - now.getDay());
-  weekStart.setHours(0,0,0,0);
-  return appState.dailyExpenses
-    .filter(e => new Date(e.date) >= weekStart)
-    .reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
+function renderExpChips() {
+  const cats = ['all', ...new Set(S.expenses.map(e => e.cat))];
+  $('expChips').innerHTML = cats.map(c => `<div class="chip${c === expFilter ? ' active' : ''}" onclick="setExpFilter('${c}',this)">${c === 'all' ? 'All' : c}</div>`).join('');
 }
 
-function getThisMonthExpenses() {
-  const now = new Date();
-  return appState.dailyExpenses
-    .filter(e => {
-      const d = new Date(e.date);
-      return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
-    })
-    .reduce((s, e) => s + (parseFloat(e.amount) || 0), 0);
-}
-
-function renderExpenseFilters() {
-  const row = document.getElementById('expFilterRow');
-  if (!row) return;
-  const cats = ['all', ...new Set(appState.dailyExpenses.map(e => e.category))];
-  row.innerHTML = cats.map(c => `<div class="filter-chip ${c==='all'?'active':''}" onclick="filterExpenses('${c}',this)">${c === 'all' ? 'All' : c}</div>`).join('');
-}
-
-function filterExpenses(cat, el) {
-  document.querySelectorAll('#expFilterRow .filter-chip').forEach(c => c.classList.remove('active'));
+function setExpFilter(f, el) {
+  expFilter = f;
+  document.querySelectorAll('#expChips .chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  renderExpenseList(cat);
+  renderExpList();
 }
 
-function renderExpenseList(filter) {
-  const list = document.getElementById('expenseList');
-  if (!list) return;
-
-  let expenses = [...appState.dailyExpenses].reverse();
-  if (filter && filter !== 'all') {
-    expenses = expenses.filter(e => e.category === filter);
-  }
-
-  if (expenses.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">🧾</div><p>No expenses logged yet</p></div>`;
+function renderExpList() {
+  let list = [...S.expenses].reverse();
+  if (expFilter !== 'all') list = list.filter(e => e.cat === expFilter);
+  if (!list.length) {
+    $('expList').innerHTML = `<div class="empty"><div class="ei">🧾</div><p>No expenses logged yet</p></div>`;
     return;
   }
-
-  list.innerHTML = expenses.map((e, i) => {
-    const realIndex = appState.dailyExpenses.length - 1 - appState.dailyExpenses.slice().reverse().indexOf(e);
+  $('expList').innerHTML = list.map((e, ri) => {
+    const realIdx = S.expenses.length - 1 - ri;
     return `
-      <div class="expense-item">
+      <div class="exp-item">
         <div class="exp-left">
-          <div class="exp-note">${e.category}${e.note ? ` — ${e.note}` : ''}</div>
-          <div class="exp-date">${new Date(e.date).toLocaleDateString('en-AU', {day:'numeric',month:'short',year:'numeric'})}</div>
+          <div class="exp-name">${e.cat}${e.note ? ' — ' + e.note : ''}</div>
+          <div class="exp-date">${fmtDate(e.date)}</div>
         </div>
         <div class="exp-right">
           <div class="exp-amount">−${cur(e.amount)}</div>
-          <button class="delete-btn" style="position:static" onclick="deleteExpense(${appState.dailyExpenses.length - 1 - i})">✕</button>
+          <button class="del-btn" style="position:static" onclick="deleteExp(${realIdx})">✕</button>
         </div>
-      </div>
-    `;
+      </div>`;
   }).join('');
 }
 
-function addExpense() {
-  const amount = parseFloat(document.getElementById('expAmount').value);
-  const date = document.getElementById('expDate').value;
-  const category = document.getElementById('expCategory').value;
-  const note = document.getElementById('expNote').value.trim();
+function initExpenses() {
+  $('btnAddExp').onclick = () => {
+    const amt  = parseFloat($('fExpAmt').value);
+    const date = $('fExpDate').value;
+    const cat  = $('fExpCat').value;
+    const note = $('fExpNote').value.trim();
+    if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+    if (!date) { alert('Select a date'); return; }
+    S.expenses.push({ amount: amt, date, cat, note, id: Date.now() });
+    S.finances.bankBalance  = Math.max(0, (S.finances.bankBalance  || 0) - amt);
+    S.finances.totalExpenses = (S.finances.totalExpenses || 0) + amt;
+    $('fExpAmt').value  = '';
+    $('fExpNote').value = '';
+    scheduleSave();
+    renderAll();
+    showToast(`${cur(amt)} logged ✓`);
+  };
+}
 
-  if (!amount || isNaN(amount) || amount <= 0) { alert('Enter a valid amount'); return; }
-  if (!date) { alert('Select a date'); return; }
-
-  appState.dailyExpenses.push({ amount, date, category, note, id: Date.now() });
-  appState.finances.bankBalance = Math.max(0, (appState.finances.bankBalance || 0) - amount);
-  appState.finances.totalDailyExpenses = (appState.finances.totalDailyExpenses || 0) + amount;
-
-  document.getElementById('expAmount').value = '';
-  document.getElementById('expNote').value = '';
-
+function deleteExp(i) {
+  if (!confirm('Delete this expense?')) return;
+  const e = S.expenses[i];
+  S.finances.bankBalance = (S.finances.bankBalance || 0) + (parseFloat(e.amount) || 0);
+  S.expenses.splice(i, 1);
   scheduleSave();
   renderAll();
 }
 
-function deleteExpense(index) {
-  if (confirm('Delete this expense?')) {
-    const exp = appState.dailyExpenses[index];
-    appState.finances.bankBalance = (appState.finances.bankBalance || 0) + (parseFloat(exp.amount) || 0);
-    appState.dailyExpenses.splice(index, 1);
-    scheduleSave();
-    renderAll();
-  }
-}
-
-// ============================================================
-// TRACKER
-// ============================================================
-function filterTracker(f, el) {
-  trackerFilter = f;
-  document.querySelectorAll('#trackerFilterRow .filter-chip').forEach(c => c.classList.remove('active'));
-  if (el) el.classList.add('active');
-  renderTrackerList();
-}
-
+/* ─────────────────────────────────────────
+   TRACKER
+───────────────────────────────────────── */
 function renderTracker() {
   renderTrackerSummary();
   renderTrackerList();
 }
 
 function renderTrackerSummary() {
-  const el = document.getElementById('trackerSummary');
-  if (!el) return;
-
-  const weeks = generateWeeklyPlan();
-  const paid = weeks.filter(w => appState.tracker.paidWeeks[w.key]);
-  const totalPaid = paid.reduce((s, w) => s + w.amount, 0);
-  const upcoming = weeks.find(w => !appState.tracker.paidWeeks[w.key]);
-
-  el.innerHTML = `
-    <div class="form-row-3">
-      <div style="text-align:center">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Paid</div>
-        <div style="font-size:18px;font-weight:700;color:var(--green)">${paid.length}</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Remaining</div>
-        <div style="font-size:18px;font-weight:700;color:var(--yellow)">${weeks.length - paid.length}</div>
-      </div>
-      <div style="text-align:center">
-        <div style="font-size:10px;color:var(--muted);text-transform:uppercase">Total Paid</div>
-        <div style="font-size:18px;font-weight:700;color:var(--green)">${cur(totalPaid)}</div>
-      </div>
+  const plan  = buildWeeklyPlan();
+  const paid  = plan.filter(w => S.tracker.paid[w.key]);
+  const paidAmt = paid.reduce((a, w) => a + w.amount, 0);
+  const next  = plan.find(w => !S.tracker.paid[w.key]);
+  $('trackSummary').innerHTML = `
+    <div class="row3">
+      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Paid</div><div style="font-size:20px;font-weight:800;color:var(--green)">${paid.length}</div></div>
+      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Remaining</div><div style="font-size:20px;font-weight:800;color:var(--yellow)">${plan.length - paid.length}</div></div>
+      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Amount Paid</div><div style="font-size:20px;font-weight:800;color:var(--green)">${cur(paidAmt)}</div></div>
     </div>
-    ${upcoming ? `<div style="margin-top:12px;padding:10px;background:rgba(108,99,255,0.1);border-radius:10px;border:1px solid rgba(108,99,255,0.3);font-size:13px">
-      <strong>Next:</strong> ${upcoming.weekLabel} → ${cur(upcoming.amount)} to ${upcoming.targetDebt}
-    </div>` : ''}
+    ${next ? `<div style="margin-top:11px;padding:9px 12px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.3);border-radius:10px;font-size:13px"><strong>Next:</strong> ${next.label} → ${cur(next.amount)} to <strong>${next.debt}</strong></div>` : ''}
   `;
-}
-
-function generateWeeklyPlan() {
-  if (appState.debts.length === 0 || !appState.settings.startDate) return [];
-
-  const weeks = [];
-  const startDate = new Date(appState.settings.startDate);
-  const totalWeeks = (appState.settings.termYears || 5) * 52;
-  const weeklyPayment = getWeeklyPayment();
-  const orderedDebts = getPayoffOrder();
-
-  let debtBalances = orderedDebts.map(d => ({ ...d, remaining: parseFloat(d.balance) || 0 }));
-  let currentDebtIdx = 0;
-
-  for (let i = 0; i < Math.min(totalWeeks, 260); i++) {
-    const weekDate = new Date(startDate);
-    weekDate.setDate(startDate.getDate() + i * 7);
-    const key = weekDate.toISOString().split('T')[0];
-
-    while (currentDebtIdx < debtBalances.length && debtBalances[currentDebtIdx].remaining <= 0) {
-      currentDebtIdx++;
-    }
-
-    if (currentDebtIdx >= debtBalances.length) break;
-
-    const currentDebt = debtBalances[currentDebtIdx];
-    const payment = Math.min(weeklyPayment, currentDebt.remaining);
-    currentDebt.remaining -= payment;
-
-    weeks.push({
-      key,
-      weekLabel: `Week ${i + 1} — ${weekDate.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}`,
-      targetDebt: currentDebt.bank,
-      amount: payment,
-      weekNum: i + 1
-    });
-  }
-
-  return weeks;
 }
 
 function renderTrackerList() {
-  const list = document.getElementById('trackerList');
-  if (!list) return;
+  const plan = buildWeeklyPlan();
 
-  if (!appState.settings.startDate) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">📅</div><p>Set a plan start date in the Plan tab to generate your payment tracker</p></div>`;
+  if (!S.settings.startDate) {
+    $('trackList').innerHTML = `<div class="empty"><div class="ei">📅</div><p>Set a Plan Start Date in the Plan tab to generate your tracker</p></div>`;
+    return;
+  }
+  if (!S.debts.length) {
+    $('trackList').innerHTML = `<div class="empty"><div class="ei">💳</div><p>Add debts first</p></div>`;
     return;
   }
 
-  if (appState.debts.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">💳</div><p>Add debts first to generate tracker</p></div>`;
-    return;
-  }
+  let view = plan;
+  if (trackFilter === 'paid')   view = plan.filter(w =>  S.tracker.paid[w.key]);
+  if (trackFilter === 'unpaid') view = plan.filter(w => !S.tracker.paid[w.key]);
 
-  let weeks = generateWeeklyPlan();
-
-  if (trackerFilter === 'paid') {
-    weeks = weeks.filter(w => appState.tracker.paidWeeks[w.key]);
-  } else if (trackerFilter === 'unpaid') {
-    weeks = weeks.filter(w => !appState.tracker.paidWeeks[w.key]);
-  }
-
-  if (weeks.length === 0) {
-    list.innerHTML = `<div class="empty-state"><div class="icon">✅</div><p>No weeks match this filter</p></div>`;
-    return;
-  }
-
-  // Show max 52 weeks at once for performance
-  const display = weeks.slice(0, 52);
-
-  list.innerHTML = display.map(w => {
-    const isPaid = !!appState.tracker.paidWeeks[w.key];
+  const show = view.slice(0, 104);
+  $('trackList').innerHTML = show.map(w => {
+    const isPaid = !!S.tracker.paid[w.key];
     return `
-      <div class="tracker-week ${isPaid ? 'paid' : ''}">
-        <div class="tw-left">
-          <div class="tw-week">${w.weekLabel}</div>
-          <div class="tw-debt">🎯 ${w.targetDebt}</div>
+      <div class="track-item${isPaid ? ' paid-row' : ''}">
+        <div class="track-left">
+          <div class="tw-week">${w.label}</div>
+          <div class="tw-debt">🎯 ${w.debt}</div>
         </div>
-        <div class="tw-right">
-          <div class="tw-amount">${cur(w.amount)}</div>
+        <div class="track-right">
+          <div class="track-amount">${cur(w.amount)}</div>
           ${isPaid
-            ? `<span class="paid-badge">✓ PAID</span>`
-            : `<span class="unpaid-badge" onclick="markWeekPaid('${w.key}')">Mark Paid</span>`
-          }
+            ? `<span class="badge-paid">✓ PAID</span>`
+            : `<button class="badge-unpaid" onclick="markPaid('${w.key}')">Mark Paid</button>`}
         </div>
-      </div>
-    `;
-  }).join('');
+      </div>`;
+  }).join('') + (view.length > 104 ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px">Showing 104 of ${view.length} weeks</div>` : '');
+}
 
-  if (weeks.length > 52) {
-    list.innerHTML += `<div style="text-align:center;color:var(--muted);font-size:12px;padding:12px">Showing 52 of ${weeks.length} weeks</div>`;
+function markPaid(key) {
+  S.tracker.paid[key] = true;
+  const plan = buildWeeklyPlan();
+  const w    = plan.find(x => x.key === key);
+  if (w) {
+    S.finances.bankBalance = Math.max(0, (S.finances.bankBalance || 0) - w.amount);
+    S.finances.totalSaved  = (S.finances.totalSaved || 0) + w.amount;
+    const di = S.debts.findIndex(d => d.bank === w.debt);
+    if (di >= 0) S.debts[di].balance = Math.max(0, (parseFloat(S.debts[di].balance) || 0) - w.amount);
   }
-}
-
-function markWeekPaid(key) {
-  appState.tracker.paidWeeks[key] = true;
-  // Deduct from bank balance
-  const weeks = generateWeeklyPlan();
-  const week = weeks.find(w => w.key === key);
-  if (week) {
-    appState.finances.bankBalance = Math.max(0, (appState.finances.bankBalance || 0) - week.amount);
-    // Apply payment to matching debt
-    const debtIdx = appState.debts.findIndex(d => d.bank === week.targetDebt);
-    if (debtIdx >= 0) {
-      appState.debts[debtIdx].balance = Math.max(0, (parseFloat(appState.debts[debtIdx].balance) || 0) - week.amount);
-      appState.finances.totalSaved = (appState.finances.totalSaved || 0) + week.amount;
-    }
-  }
-  scheduleSave();
-  renderTracker();
-  renderDashboard();
-  renderDebts();
-}
-
-// ============================================================
-// PLAN
-// ============================================================
-function renderPlan() {
-  renderPlanSettings();
-  renderPlanSummary();
-  renderPayoffOrder();
-}
-
-function renderPlanSettings() {
-  const startInput = document.getElementById('planStartDate');
-  const termInput = document.getElementById('planTermYears');
-  const stratInput = document.getElementById('planStrategy');
-
-  if (startInput) startInput.value = appState.settings.startDate || '';
-  if (termInput) termInput.value = appState.settings.termYears || 5;
-  if (stratInput) stratInput.value = appState.settings.strategy || 'avalanche';
-}
-
-function renderPlanSummary() {
-  const el = document.getElementById('planSummary');
-  if (!el) return;
-
-  const totalDebt = getTotalDebt();
-  const weeklyPayment = getWeeklyPayment();
-  const monthlyPayment = weeklyPayment * 52 / 12;
-  const totalPayments = weeklyPayment * (appState.settings.termYears || 5) * 52;
-  const totalInterest = Math.max(0, totalPayments - totalDebt);
-  const debtFreeDate = getDebtFreeDate();
-  const avgRate = getAverageInterestRate();
-
-  el.innerHTML = `
-    <div class="plan-item"><span class="pi-label">Total Debt</span><span class="pi-value" style="color:var(--red)">${cur(totalDebt)}</span></div>
-    <div class="plan-item"><span class="pi-label">Average Interest Rate</span><span class="pi-value" style="color:var(--yellow)">${pct(avgRate)}</span></div>
-    <div class="plan-item"><span class="pi-label">Weekly Payment Required</span><span class="pi-value" style="color:var(--accent)">${cur(weeklyPayment)}</span></div>
-    <div class="plan-item"><span class="pi-label">Monthly Equivalent</span><span class="pi-value">${cur(monthlyPayment)}</span></div>
-    <div class="plan-item"><span class="pi-label">Est. Total Interest</span><span class="pi-value" style="color:var(--red)">${cur(totalInterest)}</span></div>
-    <div class="plan-item"><span class="pi-label">Target Debt Free Date</span><span class="pi-value" style="color:var(--green)">${debtFreeDate}</span></div>
-    <div class="plan-item"><span class="pi-label">Strategy</span><span class="pi-value">${(appState.settings.strategy || 'avalanche').charAt(0).toUpperCase() + (appState.settings.strategy || 'avalanche').slice(1)}</span></div>
-  `;
-}
-
-function renderPayoffOrder() {
-  const el = document.getElementById('payoffOrder');
-  if (!el) return;
-
-  const ordered = getPayoffOrder();
-  if (ordered.length === 0) {
-    el.innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:16px">Add debts to see payoff order</div>`;
-    return;
-  }
-
-  el.innerHTML = ordered.map((d, i) => `
-    <div class="plan-item">
-      <span class="pi-label">${i + 1}. ${d.bank}</span>
-      <span class="pi-value" style="color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">
-        ${cur(d.balance)} @ ${pct(d.rate)}
-        ${i === 0 ? ' 🎯' : ''}
-      </span>
-    </div>
-  `).join('');
-}
-
-function updatePlanSettings() {
-  appState.settings.startDate = document.getElementById('planStartDate').value || null;
-  appState.settings.termYears = parseInt(document.getElementById('planTermYears').value) || 5;
-  appState.settings.strategy = document.getElementById('planStrategy').value || 'avalanche';
   scheduleSave();
   renderAll();
 }
 
-// ============================================================
-// SALARY HISTORY
-// ============================================================
+function initTracker() {
+  $('trackChips').addEventListener('click', e => {
+    const chip = e.target.closest('.chip');
+    if (!chip) return;
+    trackFilter = chip.dataset.f;
+    document.querySelectorAll('#trackChips .chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    renderTrackerList();
+  });
+}
+
+/* ─────────────────────────────────────────
+   PLAN
+───────────────────────────────────────── */
+function renderPlan() {
+  $('fPlanStart').value = S.settings.startDate || '';
+  $('fPlanTerm').value  = S.settings.termYears || 5;
+  $('fPlanStrat').value = S.settings.strategy  || 'avalanche';
+  renderPlanSummary();
+  renderPayoffOrder();
+}
+
+function renderPlanSummary() {
+  const td   = totalDebt();
+  const wp   = weeklyPayment();
+  const mp   = wp * 52 / 12;
+  const wk   = (S.settings.termYears || 5) * 52;
+  const tot  = wp * wk;
+  const int_ = Math.max(0, tot - td);
+  $('planSummary').innerHTML = `
+    <div class="plan-row"><span class="pl">Total Debt</span><span class="pv c-red">${cur(td)}</span></div>
+    <div class="plan-row"><span class="pl">Avg Interest Rate</span><span class="pv c-yellow">${pct_(avgRate())}</span></div>
+    <div class="plan-row"><span class="pl">Weekly Payment</span><span class="pv c-purple">${cur(wp)}</span></div>
+    <div class="plan-row"><span class="pl">Monthly Equivalent</span><span class="pv">${cur(mp)}</span></div>
+    <div class="plan-row"><span class="pl">Est. Total Interest</span><span class="pv c-red">${cur(int_)}</span></div>
+    <div class="plan-row"><span class="pl">Debt-Free Date</span><span class="pv c-green">${debtFreeDate()}</span></div>
+    <div class="plan-row"><span class="pl">Strategy</span><span class="pv">${(S.settings.strategy || 'Avalanche')}</span></div>
+  `;
+}
+
+function renderPayoffOrder() {
+  const od = sortedDebts();
+  $('payoffOrder').innerHTML = od.length ? od.map((d, i) => `
+    <div class="plan-row">
+      <span class="pl">${i + 1}. ${d.bank}</span>
+      <span class="pv" style="color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">${cur(d.balance)} @ ${pct_(d.rate)} ${i === 0 ? '🎯' : ''}</span>
+    </div>`).join('')
+    : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Add debts to see payoff order</div>`;
+}
+
+function initPlan() {
+  $('btnSavePlan').onclick = () => {
+    S.settings.startDate = $('fPlanStart').value || null;
+    S.settings.termYears = parseInt($('fPlanTerm').value) || 5;
+    S.settings.strategy  = $('fPlanStrat').value || 'avalanche';
+    scheduleSave();
+    renderAll();
+    showToast('Plan settings saved ✓');
+  };
+}
+
+/* ─────────────────────────────────────────
+   SALARY
+───────────────────────────────────────── */
 function renderSalary() {
-  const el = document.getElementById('salaryHistoryList');
-  const summary = document.getElementById('incomeSummary');
+  const total = S.salaryLog.reduce((a, h) => a + (parseFloat(h.amt) || 0), 0);
+  const wi = weeklyIncome();
+  $('salSummary').innerHTML = `
+    <div class="plan-row"><span class="pl">Weekly Salary</span><span class="pv c-green">${cur(S.income.weekly)}</span></div>
+    <div class="plan-row"><span class="pl">Additional Weekly</span><span class="pv c-green">${cur(S.income.extra)}</span></div>
+    <div class="plan-row"><span class="pl">Total Weekly Income</span><span class="pv c-green">${cur(wi)}</span></div>
+    <div class="plan-row"><span class="pl">Monthly Equivalent</span><span class="pv">${cur(wi * 52 / 12)}</span></div>
+    <div class="plan-row"><span class="pl">Annual Equivalent</span><span class="pv">${cur(wi * 52)}</span></div>
+    <div class="plan-row"><span class="pl">Total Recorded</span><span class="pv">${cur(total)}</span></div>
+    <div class="plan-row"><span class="pl">Records Count</span><span class="pv">${S.salaryLog.length}</span></div>
+  `;
 
-  if (summary) {
-    const totalIncome = appState.salaryHistory.reduce((s, h) => s + (parseFloat(h.amount) || 0), 0);
-    const weekly = getWeeklyIncome();
-    summary.innerHTML = `
-      <div class="plan-item"><span class="pi-label">Weekly Salary</span><span class="pi-value" style="color:var(--green)">${cur(appState.income.weeklySalary)}</span></div>
-      <div class="plan-item"><span class="pi-label">Additional Weekly</span><span class="pi-value" style="color:var(--green)">${cur(appState.income.additionalWeeklyIncome)}</span></div>
-      <div class="plan-item"><span class="pi-label">Total Weekly Income</span><span class="pi-value" style="color:var(--green)">${cur(weekly)}</span></div>
-      <div class="plan-item"><span class="pi-label">Monthly Equivalent</span><span class="pi-value">${cur((weekly * 52) / 12)}</span></div>
-      <div class="plan-item"><span class="pi-label">Total Recorded Payments</span><span class="pi-value">${cur(totalIncome)}</span></div>
-      <div class="plan-item"><span class="pi-label">Number of Records</span><span class="pi-value">${appState.salaryHistory.length}</span></div>
-    `;
-  }
-
-  if (!el) return;
-
-  if (appState.salaryHistory.length === 0) {
-    el.innerHTML = `<div class="empty-state"><div class="icon">📈</div><p>No payments recorded yet</p></div>`;
+  if (!S.salaryLog.length) {
+    $('salList').innerHTML = `<div class="empty"><div class="ei">📈</div><p>No payments recorded yet</p></div>`;
     return;
   }
-
-  el.innerHTML = appState.salaryHistory.slice(0, 50).map(h => `
-    <div class="salary-item">
-      <div>
-        <div style="font-size:14px;font-weight:600">${h.type === 'savings' ? '💰 ' + (h.note || 'Savings Added') : '💵 Salary Payment'}</div>
-        <div class="sal-date">${new Date(h.date).toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+  $('salList').innerHTML = S.salaryLog.slice(0, 60).map(h => `
+    <div class="sal-item">
+      <div class="sal-left">
+        <div class="sal-name">${h.type === 'savings' ? '💰 ' : '💵 '}${h.note || (h.type === 'salary' ? 'Salary' : 'Payment')}</div>
+        <div class="sal-date">${fmtDate(h.dt)}</div>
       </div>
-      <div class="sal-amount">+${cur(h.amount)}</div>
-    </div>
-  `).join('');
+      <div class="sal-amount">+${cur(h.amt)}</div>
+    </div>`).join('');
 }
 
-// ============================================================
-// SETTINGS
-// ============================================================
+/* ─────────────────────────────────────────
+   SETTINGS
+───────────────────────────────────────── */
 function renderSettings() {
-  const country = document.getElementById('settingsCountry');
-  const currency = document.getElementById('settingsCurrency');
-  const interest = document.getElementById('settingsInterest');
-  const warnings = document.getElementById('settingsWarnings');
-  const storageInfo = document.getElementById('storageInfo');
-
-  if (country) country.value = appState.country || 'Australia';
-  if (currency) currency.value = appState.currency || '$';
-  if (interest) interest.checked = appState.settings.applyInterest || false;
-  if (warnings) warnings.checked = appState.settings.showWarnings !== false;
-  if (storageInfo) storageInfo.textContent = `Debts: ${appState.debts.length} | Expenses: ${appState.dailyExpenses.length} | Records: ${appState.salaryHistory.length}`;
+  $('fCountry').value  = S.country   || 'Australia';
+  $('fCurrency').value = S.currency  || '$';
+  $('tInterest').checked = S.settings.autoInterest || false;
+  $('tWarnings').checked = S.settings.warnings !== false;
+  $('appInfo').innerHTML = `
+    Debt Destroyer Pro v4.0<br>
+    Storage: IndexedDB (Safari-safe)<br>
+    Debts: ${S.debts.length} &nbsp;|&nbsp; Expenses: ${S.expenses.length} &nbsp;|&nbsp; Records: ${S.salaryLog.length}<br>
+    Auto-clears 1 year after plan end date
+  `;
 }
 
-function saveSettings() {
-  appState.country = document.getElementById('settingsCountry').value;
-  appState.currency = document.getElementById('settingsCurrency').value;
-  appState.settings.applyInterest = document.getElementById('settingsInterest').checked;
-  appState.settings.showWarnings = document.getElementById('settingsWarnings').checked;
-  scheduleSave();
-  renderDashboard();
-}
-
-function exportData() {
-  const json = JSON.stringify(appState, null, 2);
-  const blob = new Blob([json], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `debt-destroyer-backup-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-function importData(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    try {
-      const data = JSON.parse(e.target.result);
-      if (confirm('Import this data? This will replace all current data.')) {
-        appState = data;
-        saveState();
-        renderAll();
-        alert('Data imported successfully ✓');
-      }
-    } catch(err) {
-      alert('Invalid file format');
+function initSettings() {
+  $('btnSaveSettings').onclick = () => {
+    S.country  = $('fCountry').value;
+    S.currency = $('fCurrency').value;
+    S.settings.autoInterest = $('tInterest').checked;
+    S.settings.warnings     = $('tWarnings').checked;
+    scheduleSave();
+    renderAll();
+    showToast('Settings saved ✓');
+  };
+  $('btnExport').onclick = () => {
+    const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url;
+    a.download = `debt-destroyer-${today()}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+  $('btnImportTrig').onclick = () => $('fImport').click();
+  $('fImport').onchange = e => {
+    const f = e.target.files[0];
+    if (!f) return;
+    const r = new FileReader();
+    r.onload = ev => {
+      try {
+        const data = JSON.parse(ev.target.result);
+        if (confirm('Replace all current data with imported backup?')) {
+          S = data;
+          dbSave(S);
+          renderAll();
+          showToast('Import successful ✓');
+        }
+      } catch { alert('Invalid JSON file'); }
+    };
+    r.readAsText(f);
+    e.target.value = '';
+  };
+  $('btnReset').onclick = () => {
+    if (confirm('⚠️ FACTORY RESET\n\nThis permanently deletes ALL data.\n\nTap OK to confirm.')) {
+      S = deepClone(DEFAULTS);
+      dbSave(S);
+      renderAll();
+      showToast('App reset');
     }
   };
-  reader.readAsText(file);
-  event.target.value = '';
 }
 
-function confirmReset() {
-  if (confirm('⚠️ Factory Reset: This will delete ALL data permanently.\n\nType OK to confirm.')) {
-    resetApp();
-  }
+/* ─────────────────────────────────────────
+   MODALS
+───────────────────────────────────────── */
+function openOverlay(id)  { $(id).classList.add('open'); }
+function closeOverlay(id) { $(id).classList.remove('open'); }
+
+function initModals() {
+  document.addEventListener('click', e => {
+    const closeBtn = e.target.closest('[data-close]');
+    if (closeBtn) closeOverlay(closeBtn.dataset.close);
+    if (e.target.classList.contains('overlay')) closeOverlay(e.target.id);
+  });
 }
 
-function resetApp() {
-  appState = JSON.parse(JSON.stringify(DEFAULT_STATE));
-  localforage.removeItem('debtDestroyerState').then(() => {
+/* ─────────────────────────────────────────
+   AUTO CLEANUP
+───────────────────────────────────────── */
+function checkCleanup() {
+  if (!S.settings.startDate) return;
+  const end = new Date(S.settings.startDate);
+  end.setFullYear(end.getFullYear() + (S.settings.termYears || 5) + 1);
+  if (new Date() > end && confirm('Your debt plan period has ended. Clear all data and start fresh?')) {
+    S = deepClone(DEFAULTS);
+    dbSave(S);
     renderAll();
-    alert('App reset complete');
-  });
-}
-
-// ============================================================
-// MODALS
-// ============================================================
-function openModal(id) {
-  document.getElementById(id).classList.add('show');
-}
-
-function closeModal(id) {
-  document.getElementById(id).classList.remove('show');
-}
-
-// Close modal on overlay click
-document.querySelectorAll('.modal-overlay').forEach(overlay => {
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.classList.remove('show');
-  });
-});
-
-// ============================================================
-// INIT
-// ============================================================
-window.addEventListener('DOMContentLoaded', () => {
-  loadState();
-  // Set today's date on load
-  const today = new Date().toISOString().split('T')[0];
-  const expDate = document.getElementById('expDate');
-  if (expDate) expDate.value = today;
-  const salDate = document.getElementById('salaryPaymentDate');
-  if (salDate) salDate.value = today;
-});
-
-// Apply interest monthly if enabled (check on load)
-function checkMonthlyInterest() {
-  if (!appState.settings.applyInterest) return;
-  const lastApplied = appState.lastInterestApplied;
-  const now = new Date();
-  if (!lastApplied) {
-    appState.lastInterestApplied = now.toISOString();
-    return;
-  }
-  const last = new Date(lastApplied);
-  const monthsDiff = (now.getFullYear() - last.getFullYear()) * 12 + (now.getMonth() - last.getMonth());
-  if (monthsDiff >= 1) {
-    appState.debts.forEach(d => {
-      const rate = parseFloat(d.rate) / 100 / 12;
-      d.balance = (parseFloat(d.balance) || 0) * (1 + rate);
-    });
-    appState.lastInterestApplied = now.toISOString();
-    scheduleSave();
   }
 }
+
+/* ─────────────────────────────────────────
+   BOOT
+───────────────────────────────────────── */
+async function boot() {
+  try {
+    await openDB();
+  } catch (e) {
+    console.warn('IndexedDB unavailable, using localStorage fallback', e);
+  }
+
+  try {
+    const saved = await dbLoad();
+    if (saved) {
+      // Merge saved state into defaults to fill any missing keys
+      S = Object.assign(deepClone(DEFAULTS), saved);
+      S.finances = Object.assign(deepClone(DEFAULTS.finances), saved.finances || {});
+      S.income   = Object.assign(deepClone(DEFAULTS.income),   saved.income   || {});
+      S.settings = Object.assign(deepClone(DEFAULTS.settings), saved.settings || {});
+      S.tracker  = Object.assign(deepClone(DEFAULTS.tracker),  saved.tracker  || {});
+      if (!S.tracker.paid) S.tracker.paid = {};
+      if (!Array.isArray(S.debts))     S.debts     = [];
+      if (!Array.isArray(S.expenses))  S.expenses  = [];
+      if (!Array.isArray(S.salaryLog)) S.salaryLog = [];
+    }
+  } catch (e) {
+    console.error('Load failed', e);
+  }
+
+  checkCleanup();
+
+  // Set default dates
+  $('fExpDate').value  = today();
+  $('fSalDate').value  = today();
+
+  // Init all event listeners
+  initTabs();
+  initDebtModal();
+  initIncome();
+  initExpenses();
+  initTracker();
+  initPlan();
+  initSettings();
+  initModals();
+
+  // First render
+  renderDashboard();
+
+  $('hdrStatus').textContent = 'Ready';
+}
+
+// Start the app
+boot().catch(err => {
+  console.error('Boot error', err);
+  $('hdrStatus').textContent = 'Error — check console';
+});
+</script>

@@ -1,5 +1,8 @@
-<meta>
-<meta>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <title>Debt Destroyer Pro</title>
 <style>
 * {
@@ -54,6 +57,11 @@ html, body {
   font-size: 11px;
   color: var(--muted);
   margin-top: 2px;
+}
+#hdrStatus {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 4px;
 }
 
 /* ── TAB BAR ── */
@@ -486,1335 +494,1283 @@ input:checked + .tog-sl:before { transform: translateX(19px); }
   .hero-grid { grid-template-columns: repeat(3, 1fr); }
 }
 </style>
+</head>
+<body>
 
+  <!-- HEADER -->
+  <div class="header">
+    <h1>Debt Destroyer Pro</h1>
+    <p>Loading…</p>
+    <div id="hdrStatus">Ready</div>
+  </div>
 
+  <!-- TAB BAR -->
+  <div class="tab-bar" id="tabBar">
+    <button class="tab-btn" data-tab="dashboard">📊 Dashboard</button>
+    <button class="tab-btn" data-tab="debts">💳 Debts</button>
+    <button class="tab-btn" data-tab="income">💰 Income</button>
+    <button class="tab-btn" data-tab="expenses">🧾 Expenses</button>
+    <button class="tab-btn" data-tab="tracker">📅 Tracker</button>
+    <button class="tab-btn" data-tab="plan">📋 Plan</button>
+    <button class="tab-btn" data-tab="salary">📈 Salary</button>
+    <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+  </div>
 
+  <!-- PAGES -->
+  <div class="page active" id="pg-dashboard">
+    <div id="heroGrid"></div>
+    <div id="dashAlerts" class="section-head"></div>
+    <div class="card">
+      <div class="card-title">Debt Snapshot</div>
+      <div id="dashDebts"></div>
+    </div>
+    <div class="card">
+      <div class="card-title">Next Actions</div>
+      <div id="dashActions"></div>
+    </div>
+  </div>
 
+  <div class="page" id="pg-debts">
+    <button class="btn btn-primary" id="btnAddDebt">➕ Add New Debt</button>
+    <div id="debtList"></div>
+  </div>
 
-  💳 Debt Destroyer Pro
-  Loading…
+  <div class="page" id="pg-income">
+    <div class="card">
+      <div class="card-title">Current Bank Balance</div>
+      <div class="bal-block">
+        <div class="bl">Current Bank Balance</div>
+        <div class="bv" id="incBal">$0.00</div>
+        <div class="bs">Updated after every transaction</div>
+      </div>
+    </div>
 
+    <div class="card">
+      <div class="card-title">💵 Weekly Income</div>
+      <div class="form-group">
+        <label>Weekly Salary (after tax)</label>
+        <input type="number" id="fWeeklySal" placeholder="e.g. 1200" inputmode="decimal">
+      </div>
+      <div class="form-group">
+        <label>Additional Weekly Income (overtime, side gigs…)</label>
+        <input type="number" id="fAddWeekly" placeholder="e.g. 200" inputmode="decimal">
+      </div>
+      <button class="btn btn-green" id="btnSaveIncome">💾 Save Income</button>
+    </div>
 
-
-
-  <button>📊 Dashboard</button>
-  <button>💳 Debts
-  <button>💰 Income
-  <button>🧾 Expenses
-  <button>📅 Tracker
-  <button>📋 Plan
-  <button>📈 Salary
-  <button>⚙️ Settings
-
-
-
-
-
-
-  
-  
-  
-    💳 Debt Snapshot
-    
-  
-  
-    🎯 Next Actions
-    
-  
-
-
-
-
-  <button>➕ Add New Debt
-  
-
-
-
-
-  
-    Current Bank Balance
-    $0.00
-    Updated after every transaction
-  
-
-  
-    💵 Weekly Income
-    
-      <label>Weekly Salary (after tax)</label>
-      <input>
-    
-    
-      <label>Additional Weekly Income (overtime, side gigs…)</label>
-      <input>
-    
-    <button>💾 Save Income
-  
-
-  
-    🏦 Set Bank Balance
-    
-      
+    <div class="card">
+      <div class="card-title">🏦 Set Bank Balance</div>
+      <div class="form-group">
         <label>Balance ($)</label>
-        <input>
-      
-      
-        <button>Set Balance
-      
-    
-  
+        <input type="number" id="fBankBal" placeholder="e.g. 5000" inputmode="decimal">
+      </div>
+      <button class="btn btn-primary" id="btnSetBal">Set Balance</button>
+    </div>
 
-  
-    💵 Record Salary Received
-    
-      
+    <div class="card">
+      <div class="card-title">💵 Record Salary Received</div>
+      <div class="form-group">
         <label>Amount</label>
-        <input>
-      
-      
+        <input type="number" id="fSalAmt" placeholder="e.g. 1200" inputmode="decimal">
+      </div>
+      <div class="form-group">
         <label>Date</label>
-        <input>
-      
-    
-    <button>✅ Add to Balance
-  
+        <input type="date" id="fSalDate">
+      </div>
+      <button class="btn btn-green" id="btnRecordSal">✅ Add to Balance</button>
+    </div>
 
-  
-    ➕ Add Savings / Windfall
-    
-      
+    <div class="card">
+      <div class="card-title">➕ Add Savings / Windfall</div>
+      <div class="form-group">
         <label>Amount</label>
-        <input>
-      
-      
+        <input type="number" id="fSavAmt" placeholder="e.g. 500" inputmode="decimal">
+      </div>
+      <div class="form-group">
         <label>Note (optional)</label>
-        <input>
-      
-    
-    <button>➕ Add Savings
-  
+        <input type="text" id="fSavNote" placeholder="e.g. Tax refund, bonus">
+      </div>
+      <button class="btn btn-green" id="btnAddSav">➕ Add Savings</button>
+    </div>
+  </div>
 
-
-
-
-  
-    🧾 Log Expense
-    
-      
+  <div class="page" id="pg-expenses">
+    <div class="card">
+      <div class="card-title">🧾 Log Expense</div>
+      <div class="form-group">
         <label>Amount ($)</label>
-        <input>
-      
-      
+        <input type="number" id="fExpAmt" placeholder="e.g. 45.50" inputmode="decimal">
+      </div>
+      <div class="form-group">
         <label>Date</label>
-        <input>
-      
-    
-    
-      <label>Category</label>
-      <select>
-        🛒 Food & Groceries
-        ⛽ Fuel
-        🚌 Transport
-        💡 Utilities
-        🎬 Entertainment
-        🏥 Health
-        🛍️ Shopping
-        ☕ Coffee & Dining
-        📱 Subscriptions
-        📌 Other
-      </select>
-    
-    
-      <label>Note (optional)</label>
-      <input>
-    
-    <button>➕ Log Expense
-  
-
-  
-    📊 Expense Summary
-    
-  
-
-  History
-  
-  
-
-
-
-
-  
-    📅 Payment Tracker
-    
-  
-  
-    All
-    Unpaid
-    Paid ✓
-  
-  
-
-
-
-
-  
-    📊 Plan Summary
-    
-  
-  
-    ⚙️ Plan Settings
-    
-      <label>Plan Start Date</label>
-      <input>
-    
-    
-      <label>Target Term</label>
-      <select>
-        1 Year
-        2 Years
-        3 Years
-        4 Years
-        5 Years
-        7 Years
-        10 Years
-      
-    
-    
-      <label>Strategy</label>
-      <select>
-        Avalanche — Highest Interest First
-        Snowball — Lowest Balance First
-        Equal Distribution
-      
-    
-    <button>💾 Save Plan Settings
-  
-  
-    🎯 Payoff Order
-    
-  
-
-
-
-
-  
-    📈 Income Overview
-    
-  
-  Payment History
-  
-
-
-
-
-  
-    🌏 Region
-    
-      <label>Country</label>
-      <select>
-        🇦🇺 Australia
-        🇺🇸 United States
-        🇬🇧 United Kingdom
-        🇳🇿 New Zealand
-        🇨🇦 Canada
-      
-    
-    
-      <label>Currency Symbol</label>
-      <select>
-        $ Dollar
-        £ Pound
-        € Euro
-        ¥ Yen
-      
-    
-    <button>💾 Save Settings
-  
-
-  
-    🔔 Preferences
-    
-      Auto-apply Monthly Interest
-      <label></label>
-    
-    
-      Show Balance Warnings
-      <label></label>
-    
-  
-
-  
-    💾 Data
-    
-      <button>📤 Export Backup (JSON)
-      <button>📥 Import Backup
-      <input>
-      <button>🗑️ Factory Reset
-    
-  
-
-  
-    ℹ️ App Info
-    
-  
-
-
-
-
-
-
-  
-    
-      ➕ Add Debt
-      <button>✕
-    
-
-    
-      <label>Bank / Lender</label>
-      <select>
-        — Select Lender —
-        
-          Commonwealth Bank
-          ANZ
-          Westpac
-          NAB
-          Bendigo Bank
-          Bank of Queensland
-          Macquarie Bank
-          ING Australia
-          Suncorp
-          AMP Bank
-          HSBC Australia
-          RACQ Bank
-        
-        
-          Afterpay
-          Zip Pay / Zip Money
-          Humm
-          Latitude Financial
-          American Express
-          Citibank
-          HSBC Credit Card
-          Coles Credit Card
-          Woolworths Credit Card
-        
-        
-          CommBank Home Loan
-          ANZ Home Loan
-          Westpac Home Loan
-          NAB Home Loan
-          ING Home Loan
-          Athena Home Loans
-          Unloan
-          Ubank
-        
-        
-          Toyota Finance
-          Volkswagen Finance
-          BMW Financial Services
-          Mercedes-Benz Financial
-          Esanda / ANZ Car
-          Capital Finance
-          Angle Finance
-        
-        
-          HECS-HELP (ATO)
-          FEE-HELP
-          VET Student Loan
-          StudyLink NZ
-        
-        
-          Centrelink (Services Australia)
-          ATO Tax Debt
-          Child Support
-          State Revenue Office
-        
-        ✏️ Other / Custom…
-      
-    
-
-    
-      <label>Custom Lender Name
-      <input>
-    
-
-    
-      <label>Debt Type</label>
-      <select>
-        💳 Credit Card
-        💰 Personal Loan
-        🏠 Home Loan / Mortgage
-        🚗 Car Loan
-        🎓 Student Loan / HECS
-        🛍️ Buy Now Pay Later
-        🏛️ Tax / Government
-        📌 Other
-      
-    
-
-    
-      
-        <label>Outstanding Balance ($)</label>
-        <input>
-      
-      
-        <label>Credit Limit (if any)</label>
-        <input>
-      
-    
-
-    
-      <label>Annual Interest Rate (%)</label>
-      <input>
-      💡 Typical credit card rate: 18–22% p.a.
-    
-
-    
-      
-        <label>Min Monthly Payment ($)</label>
-        <input>
-      
-      
-        <label>Next Due Date
-        <input>
-      
-    
-
-    
-      <label>Notes (optional)</label>
-      <input>
-    
-
-    
-      <button>Cancel
-      <button>💾 Save Debt
-    
-  
-
-
-
-
-  
-    
-      💳 Make Payment
-      <button>✕
-    
-    
-  
-
-
-
-✓ Saved
-
-
-<script>
-'use strict';
-
-/* ─────────────────────────────────────────
-   STATE
-───────────────────────────────────────── */
-const DEFAULTS = {
-  ver: 4,
-  country: 'Australia',
-  currency: '$',
-  finances: { bankBalance: 0, totalSaved: 0, totalExpenses: 0 },
-  income:   { weekly: 0, extra: 0 },
-  settings: { termYears: 5, startDate: null, strategy: 'avalanche', autoInterest: false, warnings: true },
-  tracker:  { paid: {} },
-  debts:    [],
-  expenses: [],
-  salaryLog: []
-};
-
-let S = deepClone(DEFAULTS);
-let saveTimer = null;
-let trackFilter = 'all';
-let expFilter   = 'all';
-let activeTab   = 'dashboard';
-let payingDebtIdx = -1;
-
-/* ─────────────────────────────────────────
-   UTILS
-───────────────────────────────────────── */
-function deepClone(o) { return JSON.parse(JSON.stringify(o)); }
-
-function $(id) { return document.getElementById(id); }
-
-function cur(n) {
-  const sym = S.currency || '$';
-  return sym + parseFloat(n || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-
-function pct(n) { return parseFloat(n || 0).toFixed(2) + '%'; }
-
-function fmtDate(str) {
-  if (!str) return '—';
-  const d = new Date(str);
-  if (isNaN(d)) return str;
-  return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
-}
-
-function today() { return new Date().toISOString().split('T')[0]; }
-
-function showToast(msg) {
-  const t = $('toast');
-  t.textContent = msg || '✓ Saved';
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2200);
-}
-
-/* ─────────────────────────────────────────
-   STORAGE  (IndexedDB via in-page minimal shim)
-───────────────────────────────────────── */
-const DB_NAME  = 'DebtDestroyerPro';
-const DB_STORE = 'state';
-const DB_KEY   = 'appState';
-
-let db = null;
-
-function openDB() {
-  return new Promise((res, rej) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = e => {
-      e.target.result.createObjectStore(DB_STORE);
-    };
-    req.onsuccess = e => { db = e.target.result; res(db); };
-    req.onerror   = e => rej(e);
-  });
-}
-
-function dbSave(data) {
-  return new Promise((res, rej) => {
-    if (!db) { localStorage.setItem(DB_KEY, JSON.stringify(data)); res(); return; }
-    const tx = db.transaction(DB_STORE, 'readwrite');
-    tx.objectStore(DB_STORE).put(data, DB_KEY);
-    tx.oncomplete = res;
-    tx.onerror    = rej;
-  });
-}
-
-function dbLoad() {
-  return new Promise((res, rej) => {
-    if (!db) {
-      try {
-        const raw = localStorage.getItem(DB_KEY);
-        res(raw ? JSON.parse(raw) : null);
-      } catch(e) { res(null); }
-      return;
-    }
-    const tx  = db.transaction(DB_STORE, 'readonly');
-    const req = tx.objectStore(DB_STORE).get(DB_KEY);
-    req.onsuccess = e => res(e.target.result || null);
-    req.onerror   = rej;
-  });
-}
-
-function scheduleSave() {
-  clearTimeout(saveTimer);
-  saveTimer = setTimeout(async () => {
-    await dbSave(S);
-    showToast('✓ Saved');
-    $('hdrStatus').textContent = 'Saved ' + new Date().toLocaleTimeString();
-  }, 700);
-}
-
-/* ─────────────────────────────────────────
-   CALCULATIONS
-───────────────────────────────────────── */
-function totalDebt() {
-  return S.debts.reduce((a, d) => a + (parseFloat(d.balance) || 0), 0);
-}
-function totalMinMonthly() {
-  return S.debts.reduce((a, d) => a + (parseFloat(d.minPay) || 0), 0);
-}
-function weeklyIncome() {
-  return (parseFloat(S.income.weekly) || 0) + (parseFloat(S.income.extra) || 0);
-}
-function avgRate() {
-  const tb = totalDebt();
-  if (!tb) return 0;
-  return S.debts.reduce((a, d) => a + (parseFloat(d.rate) || 0) * (parseFloat(d.balance) || 0), 0) / tb;
-}
-function weeklyPayment() {
-  const td = totalDebt();
-  const wk = (S.settings.termYears || 5) * 52;
-  const r  = avgRate() / 100 / 52;
-  if (!td || !wk) return 0;
-  if (!r) return td / wk;
-  const p = td * r * Math.pow(1 + r, wk) / (Math.pow(1 + r, wk) - 1);
-  return isFinite(p) ? p : td / wk;
-}
-function weeksLeft() {
-  const wp = weeklyPayment();
-  const td = totalDebt();
-  if (!wp || !td) return 0;
-  return Math.ceil(td / wp);
-}
-function debtFreeDate() {
-  const wl = weeksLeft();
-  if (!wl) return 'N/A';
-  const d = new Date();
-  d.setDate(d.getDate() + wl * 7);
-  return d.toLocaleDateString('en-AU', { month: 'short', year: 'numeric' });
-}
-function sortedDebts() {
-  const arr = [...S.debts];
-  const st  = S.settings.strategy;
-  if (st === 'avalanche') return arr.sort((a, b) => (parseFloat(b.rate) || 0) - (parseFloat(a.rate) || 0));
-  if (st === 'snowball')  return arr.sort((a, b) => (parseFloat(a.balance) || 0) - (parseFloat(b.balance) || 0));
-  return arr;
-}
-function weekExpenses(type) {
-  const now  = new Date();
-  const wStart = new Date(now); wStart.setDate(now.getDate() - now.getDay()); wStart.setHours(0,0,0,0);
-  const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
-  return S.expenses.filter(e => {
-    const d = new Date(e.date);
-    if (type === 'week')  return d >= wStart;
-    if (type === 'month') return d >= mStart;
-    return true;
-  }).reduce((a, e) => a + (parseFloat(e.amount) || 0), 0);
-}
-
-/* ─────────────────────────────────────────
-   GENERATE WEEKLY PLAN
-───────────────────────────────────────── */
-function buildWeeklyPlan() {
-  if (!S.settings.startDate || !S.debts.length) return [];
-  const start = new Date(S.settings.startDate);
-  const totalWk = (S.settings.termYears || 5) * 52;
-  const wPay    = weeklyPayment();
-  const ordered = sortedDebts().map(d => ({ ...d, rem: parseFloat(d.balance) || 0 }));
-  const plan    = [];
-  let di = 0;
-
-  for (let i = 0; i < Math.min(totalWk, 520) && di < ordered.length; i++) {
-    while (di < ordered.length && ordered[di].rem <= 0.005) di++;
-    if (di >= ordered.length) break;
-
-    const dt = new Date(start);
-    dt.setDate(start.getDate() + i * 7);
-    const key    = dt.toISOString().split('T')[0];
-    const pmt    = Math.min(wPay, ordered[di].rem);
-    ordered[di].rem -= pmt;
-
-    plan.push({
-      key,
-      label: `Week ${i + 1} — ${fmtDate(key)}`,
-      debt:  ordered[di].bank,
-      amount: pmt,
-      num: i + 1
+        <input type="date" id="fExpDate">
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="fExpCat">
+          <option value="🛒 Food & Groceries">🛒 Food & Groceries</option>
+          <option value="⛽ Fuel">⛽ Fuel</option>
+          <option value="🚌 Transport">🚌 Transport</option>
+          <option value="💡 Utilities">💡 Utilities</option>
+          <option value="🎬 Entertainment">🎬 Entertainment</option>
+          <option value="🏥 Health">🏥 Health</option>
+          <option value="🛍️ Shopping">🛍️ Shopping</option>
+          <option value="☕ Coffee & Dining">☕ Coffee & Dining</option>
+          <option value="📱 Subscriptions">📱 Subscriptions</option>
+          <option value="📌 Other">📌 Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Note (optional)</label>
+        <input type="text" id="fExpNote" placeholder="e.g. Weekly shop, Netflix">
+      </div>
+      <button class="btn btn-primary" id="btnAddExp">➕ Log Expense</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 Expense Summary</div>
+      <div id="expSummary"></div>
+      <div class="chips" id="expChips"></div>
+      <div id="expList"></div>
+    </div>
+  </div>
+
+  <div class="page" id="pg-tracker">
+    <div class="card">
+      <div class="card-title">📅 Payment Tracker</div>
+      <div id="trackSummary"></div>
+      <div class="chips" id="trackChips">
+        <div class="chip active" data-f="all">All</div>
+        <div class="chip" data-f="paid">Paid ✓</div>
+        <div class="chip" data-f="unpaid">Unpaid</div>
+      </div>
+      <div id="trackList"></div>
+    </div>
+  </div>
+
+  <div class="page" id="pg-plan">
+    <div class="card">
+      <div class="card-title">📊 Plan Summary</div>
+      <div id="planSummary"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚙️ Plan Settings</div>
+      <div class="form-group">
+        <label>Plan Start Date</label>
+        <input type="date" id="fPlanStart">
+      </div>
+      <div class="form-group">
+        <label>Target Term</label>
+        <select id="fPlanTerm">
+          <option value="1">1 Year</option>
+          <option value="2">2 Years</option>
+          <option value="3">3 Years</option>
+          <option value="4">4 Years</option>
+          <option value="5" selected>5 Years</option>
+          <option value="7">7 Years</option>
+          <option value="10">10 Years</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Strategy</label>
+        <select id="fPlanStrat">
+          <option value="avalanche">Avalanche — Highest Interest First</option>
+          <option value="snowball">Snowball — Lowest Balance First</option>
+          <option value="equal">Equal Distribution</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="btnSavePlan">💾 Save Plan Settings</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🎯 Payoff Order</div>
+      <div id="payoffOrder"></div>
+    </div>
+  </div>
+
+  <div class="page" id="pg-salary">
+    <div class="card">
+      <div class="card-title">📈 Income Overview</div>
+      <div id="salSummary"></div>
+    </div>
+    <div id="salList"></div>
+  </div>
+
+  <div class="page" id="pg-settings">
+    <div class="card">
+      <div class="card-title">🌏 Region</div>
+      <div class="form-group">
+        <label>Country</label>
+        <select id="fCountry">
+          <option value="Australia">🇦🇺 Australia</option>
+          <option value="United States">🇺🇸 United States</option>
+          <option value="United Kingdom">🇬🇧 United Kingdom</option>
+          <option value="New Zealand">🇳🇿 New Zealand</option>
+          <option value="Canada">🇨🇦 Canada</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Currency Symbol</label>
+        <select id="fCurrency">
+          <option value="$">$ Dollar</option>
+          <option value="£">£ Pound</option>
+          <option value="€">€ Euro</option>
+          <option value="¥">¥ Yen</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="btnSaveSettings">💾 Save Settings</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">🔔 Preferences</div>
+      <div class="toggle-row">
+        <span>Auto-apply Monthly Interest</span>
+        <label class="tog">
+          <input type="checkbox" id="tInterest">
+          <span class="tog-sl"></span>
+        </label>
+      </div>
+      <div class="toggle-row">
+        <span>Show Balance Warnings</span>
+        <label class="tog">
+          <input type="checkbox" id="tWarnings" checked>
+          <span class="tog-sl"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">💾 Data</div>
+      <button class="btn btn-outline btn-sm" id="btnExport">📤 Export Backup (JSON)</button>
+      <div class="form-group">
+        <label>Import Backup</label>
+        <input type="file" id="fImport" accept=".json">
+      </div>
+      <button class="btn btn-outline btn-sm" id="btnImportTrig">📥 Import Backup</button>
+      <button class="btn btn-red btn-sm" id="btnReset">🗑️ Factory Reset</button>
+    </div>
+
+    <div class="card">
+      <div class="card-title">ℹ️ App Info</div>
+      <div id="appInfo"></div>
+    </div>
+  </div>
+
+  <!-- MODAL: ADD DEBT -->
+  <div class="overlay" id="mdDebt">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>➕ Add Debt</h3>
+        <button class="modal-close" data-close="mdDebt">✕</button>
+      </div>
+      <div id="mdDebtBody">
+        <div class="form-group">
+          <label>Bank / Lender</label>
+          <select id="dBank">
+            <option value="">— Select Lender —</option>
+            <option value="Commonwealth Bank">Commonwealth Bank</option>
+            <option value="ANZ">ANZ</option>
+            <option value="Westpac">Westpac</option>
+            <option value="NAB">NAB</option>
+            <option value="Bendigo Bank">Bendigo Bank</option>
+            <option value="Bank of Queensland">Bank of Queensland</option>
+            <option value="Macquarie Bank">Macquarie Bank</option>
+            <option value="ING Australia">ING Australia</option>
+            <option value="Suncorp">Suncorp</option>
+            <option value="AMP Bank">AMP Bank</option>
+            <option value="HSBC Australia">HSBC Australia</option>
+            <option value="RACQ Bank">RACQ Bank</option>
+            <option value="__custom__">✏️ Other / Custom…</option>
+          </select>
+        </div>
+        <div class="form-group" id="dCustomWrap" style="display:none;">
+          <label>Custom Lender Name</label>
+          <input type="text" id="dCustomBank" placeholder="Enter custom lender name">
+        </div>
+        <div class="form-group">
+          <label>Debt Type</label>
+          <select id="dType">
+            <option value="credit">💳 Credit Card</option>
+            <option value="personal">💰 Personal Loan</option>
+            <option value="home">🏠 Home Loan / Mortgage</option>
+            <option value="car">🚗 Car Loan</option>
+            <option value="student">🎓 Student Loan / HECS</option>
+            <option value="bnpl">🛍️ Buy Now Pay Later</option>
+            <option value="tax">🏛️ Tax / Government</option>
+            <option value="other">📌 Other</option>
+          </select>
+        </div>
+        <div class="hint" id="rateHint"></div>
+        <div class="row2">
+          <div class="form-group">
+            <label>Outstanding Balance ($)</label>
+            <input type="number" id="dBalance" placeholder="e.g. 5000" inputmode="decimal">
+          </div>
+          <div class="form-group">
+            <label>Credit Limit (if any)</label>
+            <input type="number" id="dLimit" placeholder="e.g. 10000" inputmode="decimal">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Annual Interest Rate (%)</label>
+          <input type="number" id="dRate" placeholder="e.g. 19.99" inputmode="decimal">
+          <span class="hint">💡 Typical credit card rate: 18–22% p.a.</span>
+        </div>
+        <div class="row2">
+          <div class="form-group">
+            <label>Min Monthly Payment ($)</label>
+            <input type="number" id="dMinPay" placeholder="e.g. 150" inputmode="decimal">
+          </div>
+          <div class="form-group">
+            <label>Next Due Date</label>
+            <input type="date" id="dDueDate">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Notes (optional)</label>
+          <input type="text" id="dNotes" placeholder="e.g. For car repairs">
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-outline" data-close="mdDebt">Cancel</button>
+          <button class="btn btn-primary" id="btnSaveDebt">💾 Save Debt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MAKE PAYMENT -->
+  <div class="overlay" id="mdPay">
+    <div class="modal">
+      <div class="modal-head">
+        <h3>💳 Make Payment</h3>
+        <button class="modal-close" data-close="mdPay">✕</button>
+      </div>
+      <div id="mdPayBody"></div>
+      <div class="btn-row">
+        <button class="btn btn-outline" data-close="mdPay">Cancel</button>
+        <button class="btn btn-success" id="btnConfirmPay">✅ Confirm Payment</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast">✓ Saved</div>
+
+  <script>
+  'use strict';
+
+  /* ─────────────────────────────────────────
+     STATE
+  ───────────────────────────────────────── */
+  const DEFAULTS = {
+    ver: 4,
+    country: 'Australia',
+    currency: '$',
+    finances: { bankBalance: 0, totalSaved: 0, totalExpenses: 0 },
+    income:   { weekly: 0, extra: 0 },
+    settings: { termYears: 5, startDate: null, strategy: 'avalanche', autoInterest: false, warnings: true },
+    tracker:  { paid: {} },
+    debts:    [],
+    expenses: [],
+    salaryLog: []
+  };
+
+  let S = deepClone(DEFAULTS);
+  let saveTimer = null;
+  let trackFilter = 'all';
+  let expFilter   = 'all';
+  let activeTab   = 'dashboard';
+  let payingDebtIdx = -1;
+
+  /* ─────────────────────────────────────────
+     UTILS
+  ───────────────────────────────────────── */
+  function deepClone(o) { return JSON.parse(JSON.stringify(o)); }
+
+  function $(id) { return document.getElementById(id); }
+
+  function cur(n) {
+    const sym = S.currency || '$';
+    return sym + parseFloat(n || 0).toLocaleString('en-AU', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function pct(n) { return parseFloat(n || 0).toFixed(2) + '%'; }
+
+  function fmtDate(str) {
+    if (!str) return '—';
+    const d = new Date(str);
+    if (isNaN(d)) return str;
+    return d.toLocaleDateString('en-AU', { day: 'numeric', month: 'short', year: 'numeric' });
+  }
+
+  function today() { return new Date().toISOString().split('T')[0]; }
+
+  function showToast(msg) {
+    const t = $('toast');
+    t.textContent = msg || '✓ Saved';
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+  }
+
+  /* ─────────────────────────────────────────
+     STORAGE  (IndexedDB with localStorage fallback)
+  ───────────────────────────────────────── */
+  const DB_NAME  = 'DebtDestroyerPro';
+  const DB_STORE = 'state';
+  const DB_KEY   = 'appState';
+
+  let db = null;
+
+  function openDB() {
+    return new Promise((res, rej) => {
+      const req = indexedDB.open(DB_NAME, 1);
+      req.onupgradeneeded = e => {
+        e.target.result.createObjectStore(DB_STORE);
+      };
+      req.onsuccess = e => { db = e.target.result; res(db); };
+      req.onerror   = e => rej(e);
     });
   }
-  return plan;
-}
 
-/* ─────────────────────────────────────────
-   TABS
-───────────────────────────────────────── */
-function initTabs() {
-  $('tabBar').addEventListener('click', e => {
-    const btn = e.target.closest('.tab-btn');
-    if (!btn) return;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    btn.classList.add('active');
-    const tab = btn.dataset.tab;
-    activeTab = tab;
-    $('pg-' + tab).classList.add('active');
-    renderTab(tab);
-  });
-}
+  function dbSave(data) {
+    return new Promise((res, rej) => {
+      if (!db) { localStorage.setItem(DB_KEY, JSON.stringify(data)); res(); return; }
+      const tx = db.transaction(DB_STORE, 'readwrite');
+      tx.objectStore(DB_STORE).put(data, DB_KEY);
+      tx.oncomplete = res;
+      tx.onerror    = rej;
+    });
+  }
 
-function renderTab(tab) {
-  const fn = {
-    dashboard: renderDashboard,
-    debts:     renderDebts,
-    income:    renderIncome,
-    expenses:  renderExpenses,
-    tracker:   renderTracker,
-    plan:      renderPlan,
-    salary:    renderSalary,
-    settings:  renderSettings
-  };
-  if (fn[tab]) fn[tab]();
-}
+  function dbLoad() {
+    return new Promise((res, rej) => {
+      if (!db) {
+        try {
+          const raw = localStorage.getItem(DB_KEY);
+          res(raw ? JSON.parse(raw) : null);
+        } catch(e) { res(null); }
+        return;
+      }
+      const tx  = db.transaction(DB_STORE, 'readonly');
+      const req = tx.objectStore(DB_STORE).get(DB_KEY);
+      req.onsuccess = e => res(e.target.result || null);
+      req.onerror   = rej;
+    });
+  }
 
-function renderAll() {
-  renderTab(activeTab);
-}
+  function scheduleSave() {
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(async () => {
+      await dbSave(S);
+      showToast('✓ Saved');
+      $('hdrStatus').textContent = 'Saved ' + new Date().toLocaleTimeString();
+    }, 700);
+  }
 
-/* ─────────────────────────────────────────
-   DASHBOARD
-───────────────────────────────────────── */
-function renderDashboard() {
-  const td   = totalDebt();
-  const bb   = S.finances.bankBalance || 0;
-  const wp   = weeklyPayment();
-  const wl   = weeksLeft();
-  const te   = weekExpenses('all');
-  const ts   = S.finances.totalSaved || 0;
+  /* ─────────────────────────────────────────
+     CALCULATIONS
+  ───────────────────────────────────────── */
+  function totalDebt() {
+    return S.debts.reduce((a, d) => a + (parseFloat(d.balance) || 0), 0);
+  }
+  function totalMinMonthly() {
+    return S.debts.reduce((a, d) => a + (parseFloat(d.minPay) || 0), 0);
+  }
+  function weeklyIncome() {
+    return (parseFloat(S.income.weekly) || 0) + (parseFloat(S.income.extra) || 0);
+  }
+  function avgRate() {
+    const tb = totalDebt();
+    if (!tb) return 0;
+    return S.debts.reduce((a, d) => a + (parseFloat(d.rate) || 0) * (parseFloat(d.balance) || 0), 0) / tb;
+  }
+  function weeklyPayment() {
+    const td = totalDebt();
+    const wk = (S.settings.termYears || 5) * 52;
+    const r  = avgRate() / 100 / 52;
+    if (!td || !wk) return 0;
+    if (!r) return td / wk;
+    const p = td * r * Math.pow(1 + r, wk) / (Math.pow(1 + r, wk) - 1);
+    return isFinite(p) ? p : td / wk;
+  }
+  function weeksLeft() {
+    const wp = weeklyPayment();
+    const td = totalDebt();
+    if (!wp || !td) return 0;
+    return Math.ceil(td / wp);
+  }
+  function debtFreeDate() {
+    const wl = weeksLeft();
+    if (!wl) return 'N/A';
+    const d = new Date();
+    d.setDate(d.getDate() + wl * 7);
+    return d.toLocaleDateString('en-AU', { month: 'short', year: 'numeric' });
+  }
+  function sortedDebts() {
+    const arr = [...S.debts];
+    const st  = S.settings.strategy;
+    if (st === 'avalanche') return arr.sort((a, b) => (parseFloat(b.rate) || 0) - (parseFloat(a.rate) || 0));
+    if (st === 'snowball')  return arr.sort((a, b) => (parseFloat(a.balance) || 0) - (parseFloat(b.balance) || 0));
+    return arr;
+  }
+  function weekExpenses(type) {
+    const now  = new Date();
+    const wStart = new Date(now); wStart.setDate(now.getDate() - now.getDay()); wStart.setHours(0,0,0,0);
+    const mStart = new Date(now.getFullYear(), now.getMonth(), 1);
+    return S.expenses.filter(e => {
+      const d = new Date(e.date);
+      if (type === 'week')  return d >= wStart;
+      if (type === 'month') return d >= mStart;
+      return true;
+    }).reduce((a, e) => a + (parseFloat(e.amount) || 0), 0);
+  }
 
-  $('heroGrid').innerHTML = `
-    <div class="hero-card"><div class="hero-label">Total Debt</div><div class="hero-value c-red">${cur(td)}</div></div>
-    <div class="hero-card"><div class="hero-label">Bank Balance</div><div class="hero-value c-green">${cur(bb)}</div></div>
-    <div class="hero-card"><div class="hero-label">Weekly Payment</div><div class="hero-value c-purple">${cur(wp)}</div></div>
-    <div class="hero-card"><div class="hero-label">Weeks Left</div><div class="hero-value c-yellow">${wl || '—'}</div></div>
-    <div class="hero-card"><div class="hero-label">Daily Expenses</div><div class="hero-value c-red">${cur(te)}</div></div>
-    <div class="hero-card"><div class="hero-label">Total Saved</div><div class="hero-value c-green">${cur(ts)}</div></div>
-  `;
+  /* ─────────────────────────────────────────
+     GENERATE WEEKLY PLAN
+  ───────────────────────────────────────── */
+  function buildWeeklyPlan() {
+    if (!S.settings.startDate || !S.debts.length) return [];
+    const start = new Date(S.settings.startDate);
+    const totalWk = (S.settings.termYears || 5) * 52;
+    const wPay    = weeklyPayment();
+    const ordered = sortedDebts().map(d => ({ ...d, rem: parseFloat(d.balance) || 0 }));
+    const plan    = [];
+    let di = 0;
 
-  // Alerts
-  let alerts = '';
-  if (!S.debts.length)              alerts += `<div class="alert alert-yellow">💡 Add your debts in the Debts tab to start your plan</div>`;
-  if (!S.income.weekly)             alerts += `<div class="alert alert-yellow">💡 Set your income in the Income tab</div>`;
-  if (bb < wp && wp > 0)            alerts += `<div class="alert alert-red">⚠️ Bank balance may be too low for next payment</div>`;
-  if (S.debts.some(d => d.rate > 20)) alerts += `<div class="alert alert-red">🔥 One or more debts have interest above 20% p.a.</div>`;
-  $('dashAlerts').innerHTML = alerts;
+    for (let i = 0; i < Math.min(totalWk, 520) && di < ordered.length; i++) {
+      while (di < ordered.length && ordered[di].rem <= 0.005) di++;
+      if (di >= ordered.length) break;
 
-  // Debt snapshot
-  if (!S.debts.length) {
-    $('dashDebts').innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">No debts added yet</div>`;
-  } else {
-    $('dashDebts').innerHTML = S.debts.map(d => {
-      const pct = d.origBal > 0 ? Math.max(0, Math.min(100, (d.origBal - d.balance) / d.origBal * 100)) : 0;
+      const dt = new Date(start);
+      dt.setDate(start.getDate() + i * 7);
+      const key    = dt.toISOString().split('T')[0];
+      const pmt    = Math.min(wPay, ordered[di].rem);
+      ordered[di].rem -= pmt;
+
+      plan.push({
+        key,
+        label: `Week ${i + 1} — ${fmtDate(key)}`,
+        debt:  ordered[di].bank,
+        amount: pmt,
+        num: i + 1
+      });
+    }
+    return plan;
+  }
+
+  /* ─────────────────────────────────────────
+     TABS
+  ───────────────────────────────────────── */
+  function initTabs() {
+    $('tabBar').addEventListener('click', e => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      const tab = btn.dataset.tab;
+      activeTab = tab;
+      $('pg-' + tab).classList.add('active');
+      renderTab(tab);
+    });
+  }
+
+  function renderTab(tab) {
+    const fn = {
+      dashboard: renderDashboard,
+      debts:     renderDebts,
+      income:    renderIncome,
+      expenses:  renderExpenses,
+      tracker:   renderTracker,
+      plan:      renderPlan,
+      salary:    renderSalary,
+      settings:  renderSettings
+    };
+    if (fn[tab]) fn[tab]();
+  }
+
+  function renderAll() {
+    renderTab(activeTab);
+  }
+
+  /* ─────────────────────────────────────────
+     DASHBOARD
+  ───────────────────────────────────────── */
+  function renderDashboard() {
+    const td   = totalDebt();
+    const bb   = S.finances.bankBalance || 0;
+    const wp   = weeklyPayment();
+    const wl   = weeksLeft();
+    const te   = weekExpenses('all');
+    const ts   = S.finances.totalSaved || 0;
+
+    $('heroGrid').innerHTML = `
+      <div class="hero-card"><div class="hero-label">Total Debt</div><div class="hero-value c-red">${cur(td)}</div></div>
+      <div class="hero-card"><div class="hero-label">Bank Balance</div><div class="hero-value c-green">${cur(bb)}</div></div>
+      <div class="hero-card"><div class="hero-label">Weekly Payment</div><div class="hero-value c-purple">${cur(wp)}</div></div>
+      <div class="hero-card"><div class="hero-label">Weeks Left</div><div class="hero-value c-yellow">${wl || '—'}</div></div>
+      <div class="hero-card"><div class="hero-label">Daily Expenses</div><div class="hero-value c-red">${cur(te)}</div></div>
+      <div class="hero-card"><div class="hero-label">Total Saved</div><div class="hero-value c-green">${cur(ts)}</div></div>
+    `;
+
+    // Alerts
+    let alerts = '';
+    if (!S.debts.length)              alerts += `<div class="alert alert-yellow">💡 Add your debts in the Debts tab to start your plan</div>`;
+    if (!S.income.weekly)             alerts += `<div class="alert alert-yellow">💡 Set your income in the Income tab</div>`;
+    if (bb < wp && wp > 0)            alerts += `<div class="alert alert-red">⚠️ Bank balance may be too low for next payment</div>`;
+    if (S.debts.some(d => d.rate > 20)) alerts += `<div class="alert alert-red">🔥 One or more debts have interest above 20% p.a.</div>`;
+    $('dashAlerts').innerHTML = alerts;
+
+    // Debt snapshot
+    if (!S.debts.length) {
+      $('dashDebts').innerHTML = `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">No debts added yet</div>`;
+    } else {
+      $('dashDebts').innerHTML = S.debts.map(d => {
+        const pctPaid  = d.origBal > 0 ? Math.max(0, Math.min(100, (d.origBal - d.balance) / d.origBal * 100)) : 0;
+        return `
+          <div style="margin-bottom:11px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px">
+              <span style="font-weight:700;font-size:13px">${d.bank}</span>
+              <span style="font-size:13px;color:var(--red);font-weight:700">${cur(d.balance)}</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px">
+              <span>${d.typeLabel} • ${pct_(d.rate)} p.a.</span>
+              <span>${pctPaid.toFixed(0)}% paid off</span>
+            </div>
+            <div class="prog-wrap"><div class="prog-fill" style="width:${pctPaid}%"></div></div>
+          </div>`;
+      }).join('');
+    }
+
+    // Next actions
+    const od = sortedDebts();
+    $('dashActions').innerHTML = od.length ? `
+      <div class="plan-row"><span class="pl">🎯 Focus Debt</span><span class="pv c-purple">${od[0].bank}</span></div>
+      <div class="plan-row"><span class="pl">💳 Weekly Payment</span><span class="pv">${cur(wp)}</span></div>
+      <div class="plan-row"><span class="pl">📅 Debt-Free Date</span><span class="pv c-green">${debtFreeDate()}</span></div>
+      <div class="plan-row"><span class="pl">📈 Avg Interest Rate</span><span class="pv c-yellow">${pct_(avgRate())}</span></div>
+    ` : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Add debts and income to see your action plan</div>`;
+  }
+
+  function pct_(n) { return parseFloat(n || 0).toFixed(2) + '%'; }
+
+  /* ─────────────────────────────────────────
+     DEBTS
+  ───────────────────────────────────────── */
+  function renderDebts() {
+    if (!S.debts.length) {
+      $('debtList').innerHTML = `<div class="empty"><div class="ei">💳</div><p>No debts added yet.<br>Tap "Add New Debt" above.</p></div>`;
+      return;
+    }
+
+    const badgeMap = { credit:'b-credit', personal:'b-personal', home:'b-home', car:'b-car', student:'b-student', bnpl:'b-bnpl', tax:'b-tax', other:'b-other' };
+
+    $('debtList').innerHTML = S.debts.map((d, i) => {
+      const pctPaid  = d.origBal > 0 ? Math.max(0, Math.min(100, (d.origBal - d.balance) / d.origBal * 100)) : 0;
+      const mInterest = parseFloat(d.balance) * (parseFloat(d.rate) / 100 / 12);
+      const bc = badgeMap[d.typeKey] || 'b-other';
       return `
-        <div style="margin-bottom:11px">
-          <div style="display:flex;justify-content:space-between;margin-bottom:3px">
-            <span style="font-weight:700;font-size:13px">${d.bank}</span>
-            <span style="font-size:13px;color:var(--red);font-weight:700">${cur(d.balance)}</span>
+        <div class="list-item">
+          <button class="del-btn" onclick="deleteDebt(${i})">✕</button>
+          <div class="list-item-title">${d.bank}</div>
+          <div class="list-item-sub">
+            <span class="badge ${bc}">${d.typeLabel}</span>
+            ${d.dueDate ? `<span style="margin-left:8px;font-size:11px">📅 Due ${fmtDate(d.dueDate)}</span>` : ''}
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px">
-            <span>${d.typeLabel} • ${pct_(d.rate)} p.a.</span>
-            <span>${pct.toFixed(0)}% paid off</span>
+          <div class="stats-row">
+            <div class="stat-box"><div class="stat-label">Balance</div><div class="stat-value c-red">${cur(d.balance)}</div></div>
+            <div class="stat-box"><div class="stat-label">Rate p.a.</div><div class="stat-value c-yellow">${pct_(d.rate)}</div></div>
+            <div class="stat-box"><div class="stat-label">Min / mo</div><div class="stat-value">${cur(d.minPay)}</div></div>
           </div>
-          <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%"></div></div>
+          <div style="margin-top:7px;font-size:11px;color:var(--muted)">
+            Monthly interest cost: <span style="color:var(--red)">${cur(mInterest)}</span>
+            ${d.limit > 0 ? ` &nbsp;|&nbsp; Utilisation: ${((d.balance/d.limit)*100).toFixed(0)}%` : ''}
+          </div>
+          ${d.notes ? `<div style="margin-top:5px;font-size:11px;color:var(--muted)">📝 ${d.notes}</div>` : ''}
+          <div class="prog-wrap"><div class="prog-fill" style="width:${pctPaid}%"></div></div>
+          <div class="btn-row" style="margin-top:9px">
+            <button class="btn btn-green btn-sm" onclick="openPayModal(${i})">💳 Make Payment</button>
+            <button class="btn btn-outline btn-sm" onclick="applyInterest(${i})">📊 Apply Interest</button>
+          </div>
         </div>`;
     }).join('');
   }
 
-  // Next actions
-  const od = sortedDebts();
-  $('dashActions').innerHTML = od.length ? `
-    <div class="plan-row"><span class="pl">🎯 Focus Debt</span><span class="pv c-purple">${od[0].bank}</span></div>
-    <div class="plan-row"><span class="pl">💳 Weekly Payment</span><span class="pv">${cur(wp)}</span></div>
-    <div class="plan-row"><span class="pl">📅 Debt-Free Date</span><span class="pv c-green">${debtFreeDate()}</span></div>
-    <div class="plan-row"><span class="pl">📈 Avg Interest Rate</span><span class="pv c-yellow">${pct_(avgRate())}</span></div>
-  ` : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Add debts and income to see your action plan</div>`;
-}
-
-function pct_(n) { return parseFloat(n || 0).toFixed(2) + '%'; }
-
-/* ─────────────────────────────────────────
-   DEBTS
-───────────────────────────────────────── */
-function renderDebts() {
-  if (!S.debts.length) {
-    $('debtList').innerHTML = `<div class="empty"><div class="ei">💳</div><p>No debts added yet.<br>Tap "Add New Debt" above.</p></div>`;
-    return;
-  }
-
-  const badgeMap = { credit:'b-credit', personal:'b-personal', home:'b-home', car:'b-car', student:'b-student', bnpl:'b-bnpl', tax:'b-tax', other:'b-other' };
-
-  $('debtList').innerHTML = S.debts.map((d, i) => {
-    const pctPaid  = d.origBal > 0 ? Math.max(0, Math.min(100, (d.origBal - d.balance) / d.origBal * 100)) : 0;
-    const mInterest = parseFloat(d.balance) * (parseFloat(d.rate) / 100 / 12);
-    const bc = badgeMap[d.typeKey] || 'b-other';
-    return `
-      <div class="list-item">
-        <button class="del-btn" onclick="deleteDebt(${i})">✕</button>
-        <div class="list-item-title">${d.bank}</div>
-        <div class="list-item-sub">
-          <span class="badge ${bc}">${d.typeLabel}</span>
-          ${d.dueDate ? `<span style="margin-left:8px;font-size:11px">📅 Due ${fmtDate(d.dueDate)}</span>` : ''}
-        </div>
-        <div class="stats-row">
-          <div class="stat-box"><div class="stat-label">Balance</div><div class="stat-value c-red">${cur(d.balance)}</div></div>
-          <div class="stat-box"><div class="stat-label">Rate p.a.</div><div class="stat-value c-yellow">${pct_(d.rate)}</div></div>
-          <div class="stat-box"><div class="stat-label">Min / mo</div><div class="stat-value">${cur(d.minPay)}</div></div>
-        </div>
-        <div style="margin-top:7px;font-size:11px;color:var(--muted)">
-          Monthly interest cost: <span style="color:var(--red)">${cur(mInterest)}</span>
-          ${d.limit > 0 ? ` &nbsp;|&nbsp; Utilisation: ${((d.balance/d.limit)*100).toFixed(0)}%` : ''}
-        </div>
-        ${d.notes ? `<div style="margin-top:5px;font-size:11px;color:var(--muted)">📝 ${d.notes}</div>` : ''}
-        <div class="prog-wrap"><div class="prog-fill" style="width:${pctPaid}%"></div></div>
-        <div class="btn-row" style="margin-top:9px">
-          <button class="btn btn-green btn-sm" onclick="openPayModal(${i})">💳 Make Payment</button>
-          <button class="btn btn-outline btn-sm" onclick="applyInterest(${i})">📊 Apply Interest</button>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function deleteDebt(i) {
-  if (!confirm(`Delete "${S.debts[i].bank}"? This cannot be undone.`)) return;
-  S.debts.splice(i, 1);
-  scheduleSave();
-  renderAll();
-}
-
-function openPayModal(i) {
-  payingDebtIdx = i;
-  const d = S.debts[i];
-  $('mdPayBody').innerHTML = `
-    <div style="margin-bottom:12px">
-      <div style="font-size:15px;font-weight:700">${d.bank}</div>
-      <div style="font-size:12px;color:var(--muted)">${d.typeLabel} &nbsp;|&nbsp; Balance: ${cur(d.balance)}</div>
-    </div>
-    <div class="form-group">
-      <label>Payment Amount ($)</label>
-      <input type="number" id="pmtAmt" value="${d.minPay || ''}" placeholder="Amount" inputmode="decimal">
-    </div>
-    <div class="form-group">
-      <label>Date</label>
-      <input type="date" id="pmtDate" value="${today()}">
-    </div>
-    <div class="form-group">
-      <label>Note (optional)</label>
-      <input type="text" id="pmtNote" placeholder="e.g. Monthly minimum">
-    </div>
-    <div class="btn-row">
-      <button class="btn btn-outline" data-close="mdPay">Cancel</button>
-      <button class="btn btn-green" id="btnConfirmPay">✅ Confirm Payment</button>
-    </div>
-  `;
-  $('btnConfirmPay').onclick = confirmPayment;
-  openOverlay('mdPay');
-}
-
-function confirmPayment() {
-  const amt  = parseFloat($('pmtAmt').value);
-  const dt   = $('pmtDate').value;
-  const note = $('pmtNote').value.trim();
-  if (!amt || amt <= 0)  { alert('Enter a valid amount'); return; }
-  const d = S.debts[payingDebtIdx];
-  d.balance = Math.max(0, (parseFloat(d.balance) || 0) - amt);
-  d.payments = d.payments || [];
-  d.payments.push({ amt, dt, note });
-  S.finances.bankBalance = Math.max(0, (S.finances.bankBalance || 0) - amt);
-  S.finances.totalSaved  = (S.finances.totalSaved || 0) + amt;
-  closeOverlay('mdPay');
-  scheduleSave();
-  renderAll();
-  showToast(`${cur(amt)} applied to ${d.bank}`);
-}
-
-function applyInterest(i) {
-  const d  = S.debts[i];
-  const r  = parseFloat(d.rate) / 100 / 12;
-  const mi = parseFloat(d.balance) * r;
-  if (!confirm(`Apply 1 month interest (${cur(mi)}) to ${d.bank}?`)) return;
-  d.balance = (parseFloat(d.balance) || 0) + mi;
-  scheduleSave();
-  renderAll();
-  showToast('Interest applied');
-}
-
-/* Add Debt */
-function initDebtModal() {
-  $('btnAddDebt').onclick = () => openOverlay('mdDebt');
-
-  $('dBank').addEventListener('change', function () {
-    $('dCustomWrap').style.display = this.value === '__custom__' ? 'block' : 'none';
-  });
-
-  $('dType').addEventListener('change', function () {
-    const hints = {
-      credit:   '💡 Typical credit card: 18–22% p.a.',
-      personal: '💡 Typical personal loan: 8–15% p.a.',
-      home:     '💡 Typical home loan: 5–7% p.a.',
-      car:      '💡 Typical car loan: 6–12% p.a.',
-      student:  '💡 HECS indexed to CPI (~4–7%). Private higher.',
-      bnpl:     '💡 BNPL: 0% if on time; late fees apply.',
-      tax:      '💡 ATO general interest charge ~11% p.a.',
-      other:    ''
-    };
-    $('rateHint').textContent = hints[this.value] || '';
-  });
-
-  $('btnSaveDebt').onclick = saveDebt;
-}
-
-function saveDebt() {
-  const bankRaw = $('dBank').value;
-  const bank = bankRaw === '__custom__' ? $('dCustomBank').value.trim() : bankRaw;
-  const typeKey = $('dType').value;
-  const typeLabels = { credit:'Credit Card', personal:'Personal Loan', home:'Home Loan', car:'Car Loan', student:'Student Loan', bnpl:'Buy Now Pay Later', tax:'Tax / Gov Debt', other:'Other' };
-  const balance = parseFloat($('dBalance').value);
-
-  if (!bank)                     { alert('Please select a bank / lender'); return; }
-  if (!balance || balance <= 0)  { alert('Please enter a valid balance'); return; }
-
-  S.debts.push({
-    id:       Date.now(),
-    bank,
-    typeKey,
-    typeLabel: typeLabels[typeKey] || typeKey,
-    balance,
-    origBal:  balance,
-    limit:    parseFloat($('dLimit').value)  || 0,
-    rate:     parseFloat($('dRate').value)   || 0,
-    minPay:   parseFloat($('dMinPay').value) || 0,
-    dueDate:  $('dDueDate').value || null,
-    notes:    $('dNotes').value.trim(),
-    addedOn:  today(),
-    payments: []
-  });
-
-  // clear form
-  ['dBank','dCustomBank','dBalance','dLimit','dRate','dMinPay','dDueDate','dNotes'].forEach(id => { $(id).value = ''; });
-  $('dCustomWrap').style.display = 'none';
-  closeOverlay('mdDebt');
-  scheduleSave();
-  renderAll();
-  showToast('Debt added ✓');
-}
-
-/* ─────────────────────────────────────────
-   INCOME
-───────────────────────────────────────── */
-function renderIncome() {
-  $('fWeeklySal').value = S.income.weekly || '';
-  $('fAddWeekly').value = S.income.extra  || '';
-  $('fBankBal').value   = S.finances.bankBalance || '';
-  $('incBal').textContent = cur(S.finances.bankBalance || 0);
-  if (!$('fSalDate').value) $('fSalDate').value = today();
-}
-
-function initIncome() {
-  $('btnSaveIncome').onclick = () => {
-    S.income.weekly = parseFloat($('fWeeklySal').value) || 0;
-    S.income.extra  = parseFloat($('fAddWeekly').value) || 0;
+  function deleteDebt(i) {
+    if (!confirm(`Delete "${S.debts[i].bank}"? This cannot be undone.`)) return;
+    S.debts.splice(i, 1);
     scheduleSave();
     renderAll();
-    showToast('Income saved ✓');
-  };
-  $('btnSetBal').onclick = () => {
-    const v = parseFloat($('fBankBal').value);
-    if (isNaN(v)) { alert('Enter a valid amount'); return; }
-    S.finances.bankBalance = v;
-    scheduleSave();
-    renderIncome();
-    renderDashboard();
-    showToast('Balance updated ✓');
-  };
-  $('btnRecordSal').onclick = () => {
-    const amt = parseFloat($('fSalAmt').value);
-    const dt  = $('fSalDate').value;
-    if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
-    if (!dt) { alert('Select a date'); return; }
-    S.finances.bankBalance = (S.finances.bankBalance || 0) + amt;
-    S.salaryLog.unshift({ amt, dt, type: 'salary', note: 'Salary' });
-    $('fSalAmt').value = '';
-    scheduleSave();
-    renderAll();
-    showToast(`${cur(amt)} added to balance ✓`);
-  };
-  $('btnAddSav').onclick = () => {
-    const amt  = parseFloat($('fSavAmt').value);
-    const note = $('fSavNote').value.trim();
-    if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
-    S.finances.bankBalance = (S.finances.bankBalance || 0) + amt;
-    S.finances.totalSaved  = (S.finances.totalSaved  || 0) + amt;
-    S.salaryLog.unshift({ amt, dt: today(), type: 'savings', note: note || 'Savings Added' });
-    $('fSavAmt').value  = '';
-    $('fSavNote').value = '';
-    scheduleSave();
-    renderAll();
-    showToast(`${cur(amt)} saved ✓`);
-  };
-}
-
-/* ─────────────────────────────────────────
-   EXPENSES
-───────────────────────────────────────── */
-function renderExpenses() {
-  if (!$('fExpDate').value) $('fExpDate').value = today();
-  renderExpSummary();
-  renderExpChips();
-  renderExpList();
-}
-
-function renderExpSummary() {
-  $('expSummary').innerHTML = `
-    <div class="row3">
-      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Week</div><div style="font-size:18px;font-weight:800;color:var(--yellow)">${cur(weekExpenses('week'))}</div></div>
-      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Month</div><div style="font-size:18px;font-weight:800;color:var(--yellow)">${cur(weekExpenses('month'))}</div></div>
-      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">All Time</div><div style="font-size:18px;font-weight:800;color:var(--red)">${cur(weekExpenses('all'))}</div></div>
-    </div>`;
-}
-
-function renderExpChips() {
-  const cats = ['all', ...new Set(S.expenses.map(e => e.cat))];
-  $('expChips').innerHTML = cats.map(c => `<div class="chip${c === expFilter ? ' active' : ''}" onclick="setExpFilter('${c}',this)">${c === 'all' ? 'All' : c}</div>`).join('');
-}
-
-function setExpFilter(f, el) {
-  expFilter = f;
-  document.querySelectorAll('#expChips .chip').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  renderExpList();
-}
-
-function renderExpList() {
-  let list = [...S.expenses].reverse();
-  if (expFilter !== 'all') list = list.filter(e => e.cat === expFilter);
-  if (!list.length) {
-    $('expList').innerHTML = `<div class="empty"><div class="ei">🧾</div><p>No expenses logged yet</p></div>`;
-    return;
-  }
-  $('expList').innerHTML = list.map((e, ri) => {
-    const realIdx = S.expenses.length - 1 - ri;
-    return `
-      <div class="exp-item">
-        <div class="exp-left">
-          <div class="exp-name">${e.cat}${e.note ? ' — ' + e.note : ''}</div>
-          <div class="exp-date">${fmtDate(e.date)}</div>
-        </div>
-        <div class="exp-right">
-          <div class="exp-amount">−${cur(e.amount)}</div>
-          <button class="del-btn" style="position:static" onclick="deleteExp(${realIdx})">✕</button>
-        </div>
-      </div>`;
-  }).join('');
-}
-
-function initExpenses() {
-  $('btnAddExp').onclick = () => {
-    const amt  = parseFloat($('fExpAmt').value);
-    const date = $('fExpDate').value;
-    const cat  = $('fExpCat').value;
-    const note = $('fExpNote').value.trim();
-    if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
-    if (!date) { alert('Select a date'); return; }
-    S.expenses.push({ amount: amt, date, cat, note, id: Date.now() });
-    S.finances.bankBalance  = Math.max(0, (S.finances.bankBalance  || 0) - amt);
-    S.finances.totalExpenses = (S.finances.totalExpenses || 0) + amt;
-    $('fExpAmt').value  = '';
-    $('fExpNote').value = '';
-    scheduleSave();
-    renderAll();
-    showToast(`${cur(amt)} logged ✓`);
-  };
-}
-
-function deleteExp(i) {
-  if (!confirm('Delete this expense?')) return;
-  const e = S.expenses[i];
-  S.finances.bankBalance = (S.finances.bankBalance || 0) + (parseFloat(e.amount) || 0);
-  S.expenses.splice(i, 1);
-  scheduleSave();
-  renderAll();
-}
-
-/* ─────────────────────────────────────────
-   TRACKER
-───────────────────────────────────────── */
-function renderTracker() {
-  renderTrackerSummary();
-  renderTrackerList();
-}
-
-function renderTrackerSummary() {
-  const plan  = buildWeeklyPlan();
-  const paid  = plan.filter(w => S.tracker.paid[w.key]);
-  const paidAmt = paid.reduce((a, w) => a + w.amount, 0);
-  const next  = plan.find(w => !S.tracker.paid[w.key]);
-  $('trackSummary').innerHTML = `
-    <div class="row3">
-      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Paid</div><div style="font-size:20px;font-weight:800;color:var(--green)">${paid.length}</div></div>
-      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Remaining</div><div style="font-size:20px;font-weight:800;color:var(--yellow)">${plan.length - paid.length}</div></div>
-      <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Amount Paid</div><div style="font-size:20px;font-weight:800;color:var(--green)">${cur(paidAmt)}</div></div>
-    </div>
-    ${next ? `<div style="margin-top:11px;padding:9px 12px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.3);border-radius:10px;font-size:13px"><strong>Next:</strong> ${next.label} → ${cur(next.amount)} to <strong>${next.debt}</strong></div>` : ''}
-  `;
-}
-
-function renderTrackerList() {
-  const plan = buildWeeklyPlan();
-
-  if (!S.settings.startDate) {
-    $('trackList').innerHTML = `<div class="empty"><div class="ei">📅</div><p>Set a Plan Start Date in the Plan tab to generate your tracker</p></div>`;
-    return;
-  }
-  if (!S.debts.length) {
-    $('trackList').innerHTML = `<div class="empty"><div class="ei">💳</div><p>Add debts first</p></div>`;
-    return;
   }
 
-  let view = plan;
-  if (trackFilter === 'paid')   view = plan.filter(w =>  S.tracker.paid[w.key]);
-  if (trackFilter === 'unpaid') view = plan.filter(w => !S.tracker.paid[w.key]);
-
-  const show = view.slice(0, 104);
-  $('trackList').innerHTML = show.map(w => {
-    const isPaid = !!S.tracker.paid[w.key];
-    return `
-      <div class="track-item${isPaid ? ' paid-row' : ''}">
-        <div class="track-left">
-          <div class="tw-week">${w.label}</div>
-          <div class="tw-debt">🎯 ${w.debt}</div>
-        </div>
-        <div class="track-right">
-          <div class="track-amount">${cur(w.amount)}</div>
-          ${isPaid
-            ? `<span class="badge-paid">✓ PAID</span>`
-            : `<button class="badge-unpaid" onclick="markPaid('${w.key}')">Mark Paid</button>`}
-        </div>
-      </div>`;
-  }).join('') + (view.length > 104 ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px">Showing 104 of ${view.length} weeks</div>` : '');
-}
-
-function markPaid(key) {
-  S.tracker.paid[key] = true;
-  const plan = buildWeeklyPlan();
-  const w    = plan.find(x => x.key === key);
-  if (w) {
-    S.finances.bankBalance = Math.max(0, (S.finances.bankBalance || 0) - w.amount);
-    S.finances.totalSaved  = (S.finances.totalSaved || 0) + w.amount;
-    const di = S.debts.findIndex(d => d.bank === w.debt);
-    if (di >= 0) S.debts[di].balance = Math.max(0, (parseFloat(S.debts[di].balance) || 0) - w.amount);
-  }
-  scheduleSave();
-  renderAll();
-}
-
-function initTracker() {
-  $('trackChips').addEventListener('click', e => {
-    const chip = e.target.closest('.chip');
-    if (!chip) return;
-    trackFilter = chip.dataset.f;
-    document.querySelectorAll('#trackChips .chip').forEach(c => c.classList.remove('active'));
-    chip.classList.add('active');
-    renderTrackerList();
-  });
-}
-
-/* ─────────────────────────────────────────
-   PLAN
-───────────────────────────────────────── */
-function renderPlan() {
-  $('fPlanStart').value = S.settings.startDate || '';
-  $('fPlanTerm').value  = S.settings.termYears || 5;
-  $('fPlanStrat').value = S.settings.strategy  || 'avalanche';
-  renderPlanSummary();
-  renderPayoffOrder();
-}
-
-function renderPlanSummary() {
-  const td   = totalDebt();
-  const wp   = weeklyPayment();
-  const mp   = wp * 52 / 12;
-  const wk   = (S.settings.termYears || 5) * 52;
-  const tot  = wp * wk;
-  const int_ = Math.max(0, tot - td);
-  $('planSummary').innerHTML = `
-    <div class="plan-row"><span class="pl">Total Debt</span><span class="pv c-red">${cur(td)}</span></div>
-    <div class="plan-row"><span class="pl">Avg Interest Rate</span><span class="pv c-yellow">${pct_(avgRate())}</span></div>
-    <div class="plan-row"><span class="pl">Weekly Payment</span><span class="pv c-purple">${cur(wp)}</span></div>
-    <div class="plan-row"><span class="pl">Monthly Equivalent</span><span class="pv">${cur(mp)}</span></div>
-    <div class="plan-row"><span class="pl">Est. Total Interest</span><span class="pv c-red">${cur(int_)}</span></div>
-    <div class="plan-row"><span class="pl">Debt-Free Date</span><span class="pv c-green">${debtFreeDate()}</span></div>
-    <div class="plan-row"><span class="pl">Strategy</span><span class="pv">${(S.settings.strategy || 'Avalanche')}</span></div>
-  `;
-}
-
-function renderPayoffOrder() {
-  const od = sortedDebts();
-  $('payoffOrder').innerHTML = od.length ? od.map((d, i) => `
-    <div class="plan-row">
-      <span class="pl">${i + 1}. ${d.bank}</span>
-      <span class="pv" style="color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">${cur(d.balance)} @ ${pct_(d.rate)} ${i === 0 ? '🎯' : ''}</span>
-    </div>`).join('')
-    : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Add debts to see payoff order</div>`;
-}
-
-function initPlan() {
-  $('btnSavePlan').onclick = () => {
-    S.settings.startDate = $('fPlanStart').value || null;
-    S.settings.termYears = parseInt($('fPlanTerm').value) || 5;
-    S.settings.strategy  = $('fPlanStrat').value || 'avalanche';
-    scheduleSave();
-    renderAll();
-    showToast('Plan settings saved ✓');
-  };
-}
-
-/* ─────────────────────────────────────────
-   SALARY
-───────────────────────────────────────── */
-function renderSalary() {
-  const total = S.salaryLog.reduce((a, h) => a + (parseFloat(h.amt) || 0), 0);
-  const wi = weeklyIncome();
-  $('salSummary').innerHTML = `
-    <div class="plan-row"><span class="pl">Weekly Salary</span><span class="pv c-green">${cur(S.income.weekly)}</span></div>
-    <div class="plan-row"><span class="pl">Additional Weekly</span><span class="pv c-green">${cur(S.income.extra)}</span></div>
-    <div class="plan-row"><span class="pl">Total Weekly Income</span><span class="pv c-green">${cur(wi)}</span></div>
-    <div class="plan-row"><span class="pl">Monthly Equivalent</span><span class="pv">${cur(wi * 52 / 12)}</span></div>
-    <div class="plan-row"><span class="pl">Annual Equivalent</span><span class="pv">${cur(wi * 52)}</span></div>
-    <div class="plan-row"><span class="pl">Total Recorded</span><span class="pv">${cur(total)}</span></div>
-    <div class="plan-row"><span class="pl">Records Count</span><span class="pv">${S.salaryLog.length}</span></div>
-  `;
-
-  if (!S.salaryLog.length) {
-    $('salList').innerHTML = `<div class="empty"><div class="ei">📈</div><p>No payments recorded yet</p></div>`;
-    return;
-  }
-  $('salList').innerHTML = S.salaryLog.slice(0, 60).map(h => `
-    <div class="sal-item">
-      <div class="sal-left">
-        <div class="sal-name">${h.type === 'savings' ? '💰 ' : '💵 '}${h.note || (h.type === 'salary' ? 'Salary' : 'Payment')}</div>
-        <div class="sal-date">${fmtDate(h.dt)}</div>
+  function openPayModal(i) {
+    payingDebtIdx = i;
+    const d = S.debts[i];
+    $('mdPayBody').innerHTML = `
+      <div style="margin-bottom:12px">
+        <div style="font-size:15px;font-weight:700">${d.bank}</div>
+        <div style="font-size:12px;color:var(--muted)">${d.typeLabel} &nbsp;|&nbsp; Balance: ${cur(d.balance)}</div>
       </div>
-      <div class="sal-amount">+${cur(h.amt)}</div>
-    </div>`).join('');
-}
+      <div class="form-group">
+        <label>Payment Amount ($)</label>
+        <input type="number" id="pmtAmt" value="${d.minPay || ''}" placeholder="Amount" inputmode="decimal">
+      </div>
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" id="pmtDate" value="${today()}">
+      </div>
+      <div class="form-group">
+        <label>Note (optional)</label>
+        <input type="text" id="pmtNote" placeholder="e.g. Monthly minimum">
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-outline" data-close="mdPay">Cancel</button>
+        <button class="btn btn-green" id="btnConfirmPay">✅ Confirm Payment</button>
+      </div>
+    `;
+    $('btnConfirmPay').onclick = confirmPayment;
+    openOverlay('mdPay');
+  }
 
-/* ─────────────────────────────────────────
-   SETTINGS
-───────────────────────────────────────── */
-function renderSettings() {
-  $('fCountry').value  = S.country   || 'Australia';
-  $('fCurrency').value = S.currency  || '$';
-  $('tInterest').checked = S.settings.autoInterest || false;
-  $('tWarnings').checked = S.settings.warnings !== false;
-  $('appInfo').innerHTML = `
-    Debt Destroyer Pro v4.0<br>
-    Storage: IndexedDB (Safari-safe)<br>
-    Debts: ${S.debts.length} &nbsp;|&nbsp; Expenses: ${S.expenses.length} &nbsp;|&nbsp; Records: ${S.salaryLog.length}<br>
-    Auto-clears 1 year after plan end date
-  `;
-}
-
-function initSettings() {
-  $('btnSaveSettings').onclick = () => {
-    S.country  = $('fCountry').value;
-    S.currency = $('fCurrency').value;
-    S.settings.autoInterest = $('tInterest').checked;
-    S.settings.warnings     = $('tWarnings').checked;
+  function confirmPayment() {
+    const amt  = parseFloat($('pmtAmt').value);
+    const dt   = $('pmtDate').value;
+    const note = $('pmtNote').value.trim();
+    if (!amt || amt <= 0)  { alert('Enter a valid amount'); return; }
+    const d = S.debts[payingDebtIdx];
+    d.balance = Math.max(0, (parseFloat(d.balance) || 0) - amt);
+    d.payments = d.payments || [];
+    d.payments.push({ amt, dt, note });
+    S.finances.bankBalance = Math.max(0, (S.finances.bankBalance || 0) - amt);
+    S.finances.totalSaved  = (S.finances.totalSaved || 0) + amt;
+    closeOverlay('mdPay');
     scheduleSave();
     renderAll();
-    showToast('Settings saved ✓');
-  };
-  $('btnExport').onclick = () => {
-    const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
-    const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href = url;
-    a.download = `debt-destroyer-${today()}.json`;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-  $('btnImportTrig').onclick = () => $('fImport').click();
-  $('fImport').onchange = e => {
-    const f = e.target.files[0];
-    if (!f) return;
-    const r = new FileReader();
-    r.onload = ev => {
-      try {
-        const data = JSON.parse(ev.target.result);
-        if (confirm('Replace all current data with imported backup?')) {
-          S = data;
-          dbSave(S);
-          renderAll();
-          showToast('Import successful ✓');
-        }
-      } catch { alert('Invalid JSON file'); }
+    showToast(`${cur(amt)} applied to ${d.bank}`);
+  }
+
+  function applyInterest(i) {
+    const d  = S.debts[i];
+    const r  = parseFloat(d.rate) / 100 / 12;
+    const mi = parseFloat(d.balance) * r;
+    if (!confirm(`Apply 1 month interest (${cur(mi)}) to ${d.bank}?`)) return;
+    d.balance = (parseFloat(d.balance) || 0) + mi;
+    scheduleSave();
+    renderAll();
+    showToast('Interest applied');
+  }
+
+  /* Add Debt */
+  function initDebtModal() {
+    $('btnAddDebt').onclick = () => openOverlay('mdDebt');
+
+    $('dBank').addEventListener('change', function () {
+      $('dCustomWrap').style.display = this.value === '__custom__' ? 'block' : 'none';
+    });
+
+    $('dType').addEventListener('change', function () {
+      const hints = {
+        credit:   '💡 Typical credit card: 18–22% p.a.',
+        personal: '💡 Typical personal loan: 8–15% p.a.',
+        home:     '💡 Typical home loan: 5–7% p.a.',
+        car:      '💡 Typical car loan: 6–12% p.a.',
+        student:  '💡 HECS indexed to CPI (~4–7%). Private higher.',
+        bnpl:     '💡 BNPL: 0% if on time; late fees apply.',
+        tax:      '💡 ATO general interest charge ~11% p.a.',
+        other:    ''
+      };
+      $('rateHint').textContent = hints[this.value] || '';
+    });
+
+    $('btnSaveDebt').onclick = saveDebt;
+  }
+
+  function saveDebt() {
+    const bankRaw = $('dBank').value;
+    const bank = bankRaw === '__custom__' ? $('dCustomBank').value.trim() : bankRaw;
+    const typeKey = $('dType').value;
+    const typeLabels = { credit:'Credit Card', personal:'Personal Loan', home:'Home Loan', car:'Car Loan', student:'Student Loan', bnpl:'Buy Now Pay Later', tax:'Tax / Gov Debt', other:'Other' };
+    const balance = parseFloat($('dBalance').value);
+
+    if (!bank)                     { alert('Please select a bank / lender'); return; }
+    if (!balance || balance <= 0)  { alert('Please enter a valid balance'); return; }
+
+    S.debts.push({
+      id:       Date.now(),
+      bank,
+      typeKey,
+      typeLabel: typeLabels[typeKey] || typeKey,
+      balance,
+      origBal:  balance,
+      limit:    parseFloat($('dLimit').value)  || 0,
+      rate:     parseFloat($('dRate').value)   || 0,
+      minPay:   parseFloat($('dMinPay').value) || 0,
+      dueDate:  $('dDueDate').value || null,
+      notes:    $('dNotes').value.trim(),
+      addedOn:  today(),
+      payments: []
+    });
+
+    // clear form
+    ['dBank','dCustomBank','dBalance','dLimit','dRate','dMinPay','dDueDate','dNotes'].forEach(id => { $(id).value = ''; });
+    $('dCustomWrap').style.display = 'none';
+    closeOverlay('mdDebt');
+    scheduleSave();
+    renderAll();
+    showToast('Debt added ✓');
+  }
+
+  /* ─────────────────────────────────────────
+     INCOME
+  ───────────────────────────────────────── */
+  function renderIncome() {
+    $('fWeeklySal').value = S.income.weekly || '';
+    $('fAddWeekly').value = S.income.extra  || '';
+    $('fBankBal').value   = S.finances.bankBalance || '';
+    $('incBal').textContent = cur(S.finances.bankBalance || 0);
+    if (!$('fSalDate').value) $('fSalDate').value = today();
+  }
+
+  function initIncome() {
+    $('btnSaveIncome').onclick = () => {
+      S.income.weekly = parseFloat($('fWeeklySal').value) || 0;
+      S.income.extra  = parseFloat($('fAddWeekly').value) || 0;
+      scheduleSave();
+      renderAll();
+      showToast('Income saved ✓');
     };
-    r.readAsText(f);
-    e.target.value = '';
-  };
-  $('btnReset').onclick = () => {
-    if (confirm('⚠️ FACTORY RESET\n\nThis permanently deletes ALL data.\n\nTap OK to confirm.')) {
+    $('btnSetBal').onclick = () => {
+      const v = parseFloat($('fBankBal').value);
+      if (isNaN(v)) { alert('Enter a valid amount'); return; }
+      S.finances.bankBalance = v;
+      scheduleSave();
+      renderIncome();
+      renderDashboard();
+      showToast('Balance updated ✓');
+    };
+    $('btnRecordSal').onclick = () => {
+      const amt = parseFloat($('fSalAmt').value);
+      const dt  = $('fSalDate').value;
+      if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+      if (!dt) { alert('Select a date'); return; }
+      S.finances.bankBalance = (S.finances.bankBalance || 0) + amt;
+      S.salaryLog.unshift({ amt, dt, type: 'salary', note: 'Salary' });
+      $('fSalAmt').value = '';
+      scheduleSave();
+      renderAll();
+      showToast(`${cur(amt)} added to balance ✓`);
+    };
+    $('btnAddSav').onclick = () => {
+      const amt  = parseFloat($('fSavAmt').value);
+      const note = $('fSavNote').value.trim();
+      if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+      S.finances.bankBalance = (S.finances.bankBalance || 0) + amt;
+      S.finances.totalSaved  = (S.finances.totalSaved  || 0) + amt;
+      S.salaryLog.unshift({ amt, dt: today(), type: 'savings', note: note || 'Savings Added' });
+      $('fSavAmt').value  = '';
+      $('fSavNote').value = '';
+      scheduleSave();
+      renderAll();
+      showToast(`${cur(amt)} saved ✓`);
+    };
+  }
+
+  /* ─────────────────────────────────────────
+     EXPENSES
+  ───────────────────────────────────────── */
+  function renderExpenses() {
+    if (!$('fExpDate').value) $('fExpDate').value = today();
+    renderExpSummary();
+    renderExpChips();
+    renderExpList();
+  }
+
+  function renderExpSummary() {
+    $('expSummary').innerHTML = `
+      <div class="row3">
+        <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Week</div><div style="font-size:18px;font-weight:800;color:var(--yellow)">${cur(weekExpenses('week'))}</div></div>
+        <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">This Month</div><div style="font-size:18px;font-weight:800;color:var(--yellow)">${cur(weekExpenses('month'))}</div></div>
+        <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">All Time</div><div style="font-size:18px;font-weight:800;color:var(--red)">${cur(weekExpenses('all'))}</div></div>
+      </div>`;
+  }
+
+  function renderExpChips() {
+    const cats = ['all', ...new Set(S.expenses.map(e => e.cat))];
+    $('expChips').innerHTML = cats.map(c => `<div class="chip${c === expFilter ? ' active' : ''}" onclick="setExpFilter('${c}',this)">${c === 'all' ? 'All' : c}</div>`).join('');
+  }
+
+  function setExpFilter(f, el) {
+    expFilter = f;
+    document.querySelectorAll('#expChips .chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    renderExpList();
+  }
+
+  function renderExpList() {
+    let list = [...S.expenses].reverse();
+    if (expFilter !== 'all') list = list.filter(e => e.cat === expFilter);
+    if (!list.length) {
+      $('expList').innerHTML = `<div class="empty"><div class="ei">🧾</div><p>No expenses logged yet</p></div>`;
+      return;
+    }
+    $('expList').innerHTML = list.map((e, ri) => {
+      const realIdx = S.expenses.length - 1 - ri;
+      return `
+        <div class="exp-item">
+          <div class="exp-left">
+            <div class="exp-name">${e.cat}${e.note ? ' — ' + e.note : ''}</div>
+            <div class="exp-date">${fmtDate(e.date)}</div>
+          </div>
+          <div class="exp-right">
+            <div class="exp-amount">−${cur(e.amount)}</div>
+            <button class="del-btn" style="position:static" onclick="deleteExp(${realIdx})">✕</button>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  function initExpenses() {
+    $('btnAddExp').onclick = () => {
+      const amt  = parseFloat($('fExpAmt').value);
+      const date = $('fExpDate').value;
+      const cat  = $('fExpCat').value;
+      const note = $('fExpNote').value.trim();
+      if (!amt || amt <= 0) { alert('Enter a valid amount'); return; }
+      if (!date) { alert('Select a date'); return; }
+      S.expenses.push({ amount: amt, date, cat, note, id: Date.now() });
+      S.finances.bankBalance  = Math.max(0, (S.finances.bankBalance  || 0) - amt);
+      S.finances.totalExpenses = (S.finances.totalExpenses || 0) + amt;
+      $('fExpAmt').value  = '';
+      $('fExpNote').value = '';
+      scheduleSave();
+      renderAll();
+      showToast(`${cur(amt)} logged ✓`);
+    };
+  }
+
+  function deleteExp(i) {
+    if (!confirm('Delete this expense?')) return;
+    const e = S.expenses[i];
+    S.finances.bankBalance = (S.finances.bankBalance || 0) + (parseFloat(e.amount) || 0);
+    S.expenses.splice(i, 1);
+    scheduleSave();
+    renderAll();
+  }
+
+  /* ─────────────────────────────────────────
+     TRACKER
+  ───────────────────────────────────────── */
+  function renderTracker() {
+    renderTrackerSummary();
+    renderTrackerList();
+  }
+
+  function renderTrackerSummary() {
+    const plan  = buildWeeklyPlan();
+    const paid  = plan.filter(w => S.tracker.paid[w.key]);
+    const paidAmt = paid.reduce((a, w) => a + w.amount, 0);
+    const next  = plan.find(w => !S.tracker.paid[w.key]);
+    $('trackSummary').innerHTML = `
+      <div class="row3">
+        <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Paid</div><div style="font-size:20px;font-weight:800;color:var(--green)">${paid.length}</div></div>
+        <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Remaining</div><div style="font-size:20px;font-weight:800;color:var(--yellow)">${plan.length - paid.length}</div></div>
+        <div style="text-align:center"><div style="font-size:10px;color:var(--muted);text-transform:uppercase">Amount Paid</div><div style="font-size:20px;font-weight:800;color:var(--green)">${cur(paidAmt)}</div></div>
+      </div>
+      ${next ? `<div style="margin-top:11px;padding:9px 12px;background:rgba(108,99,255,.1);border:1px solid rgba(108,99,255,.3);border-radius:10px;font-size:13px"><strong>Next:</strong> ${next.label} → ${cur(next.amount)} to <strong>${next.debt}</strong></div>` : ''}
+    `;
+  }
+
+  function renderTrackerList() {
+    const plan = buildWeeklyPlan();
+
+    if (!S.settings.startDate) {
+      $('trackList').innerHTML = `<div class="empty"><div class="ei">📅</div><p>Set a Plan Start Date in the Plan tab to generate your tracker</p></div>`;
+      return;
+    }
+    if (!S.debts.length) {
+      $('trackList').innerHTML = `<div class="empty"><div class="ei">💳</div><p>Add debts first</p></div>`;
+      return;
+    }
+
+    let view = plan;
+    if (trackFilter === 'paid')   view = plan.filter(w =>  S.tracker.paid[w.key]);
+    if (trackFilter === 'unpaid') view = plan.filter(w => !S.tracker.paid[w.key]);
+
+    const show = view.slice(0, 104);
+    $('trackList').innerHTML = show.map(w => {
+      const isPaid = !!S.tracker.paid[w.key];
+      return `
+        <div class="track-item${isPaid ? ' paid-row' : ''}">
+          <div class="track-left">
+            <div class="tw-week">${w.label}</div>
+            <div class="tw-debt">🎯 ${w.debt}</div>
+          </div>
+          <div class="track-right">
+            <div class="track-amount">${cur(w.amount)}</div>
+            ${isPaid
+              ? `<span class="badge-paid">✓ PAID</span>`
+              : `<button class="badge-unpaid" onclick="markPaid('${w.key}')">Mark Paid</button>`}
+          </div>
+        </div>`;
+    }).join('') + (view.length > 104 ? `<div style="text-align:center;color:var(--muted);font-size:12px;padding:10px">Showing 104 of ${view.length} weeks</div>` : '');
+  }
+
+  function markPaid(key) {
+    S.tracker.paid[key] = true;
+    const plan = buildWeeklyPlan();
+    const w    = plan.find(x => x.key === key);
+    if (w) {
+      S.finances.bankBalance = Math.max(0, (S.finances.bankBalance || 0) - w.amount);
+      S.finances.totalSaved  = (S.finances.totalSaved || 0) + w.amount;
+      const di = S.debts.findIndex(d => d.bank === w.debt);
+      if (di >= 0) S.debts[di].balance = Math.max(0, (parseFloat(S.debts[di].balance) || 0) - w.amount);
+    }
+    scheduleSave();
+    renderAll();
+  }
+
+  function initTracker() {
+    $('trackChips').addEventListener('click', e => {
+      const chip = e.target.closest('.chip');
+      if (!chip) return;
+      trackFilter = chip.dataset.f;
+      document.querySelectorAll('#trackChips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      renderTrackerList();
+    });
+  }
+
+  /* ─────────────────────────────────────────
+     PLAN
+  ───────────────────────────────────────── */
+  function renderPlan() {
+    $('fPlanStart').value = S.settings.startDate || '';
+    $('fPlanTerm').value  = S.settings.termYears || 5;
+    $('fPlanStrat').value = S.settings.strategy  || 'avalanche';
+    renderPlanSummary();
+    renderPayoffOrder();
+  }
+
+  function renderPlanSummary() {
+    const td   = totalDebt();
+    const wp   = weeklyPayment();
+    const mp   = wp * 52 / 12;
+    const wk   = (S.settings.termYears || 5) * 52;
+    const tot  = wp * wk;
+    const int_ = Math.max(0, tot - td);
+    $('planSummary').innerHTML = `
+      <div class="plan-row"><span class="pl">Total Debt</span><span class="pv c-red">${cur(td)}</span></div>
+      <div class="plan-row"><span class="pl">Avg Interest Rate</span><span class="pv c-yellow">${pct_(avgRate())}</span></div>
+      <div class="plan-row"><span class="pl">Weekly Payment</span><span class="pv c-purple">${cur(wp)}</span></div>
+      <div class="plan-row"><span class="pl">Monthly Equivalent</span><span class="pv">${cur(mp)}</span></div>
+      <div class="plan-row"><span class="pl">Est. Total Interest</span><span class="pv c-red">${cur(int_)}</span></div>
+      <div class="plan-row"><span class="pl">Debt-Free Date</span><span class="pv c-green">${debtFreeDate()}</span></div>
+      <div class="plan-row"><span class="pl">Strategy</span><span class="pv">${(S.settings.strategy || 'Avalanche')}</span></div>
+    `;
+  }
+
+  function renderPayoffOrder() {
+    const od = sortedDebts();
+    $('payoffOrder').innerHTML = od.length ? od.map((d, i) => `
+      <div class="plan-row">
+        <span class="pl">${i + 1}. ${d.bank}</span>
+        <span class="pv" style="color:${i === 0 ? 'var(--accent)' : 'var(--text)'}">${cur(d.balance)} @ ${pct_(d.rate)} ${i === 0 ? '🎯' : ''}</span>
+      </div>`).join('')
+      : `<div style="color:var(--muted);font-size:13px;text-align:center;padding:14px">Add debts to see payoff order</div>`;
+  }
+
+  function initPlan() {
+    $('btnSavePlan').onclick = () => {
+      S.settings.startDate = $('fPlanStart').value || null;
+      S.settings.termYears = parseInt($('fPlanTerm').value) || 5;
+      S.settings.strategy  = $('fPlanStrat').value || 'avalanche';
+      scheduleSave();
+      renderAll();
+      showToast('Plan settings saved ✓');
+    };
+  }
+
+  /* ─────────────────────────────────────────
+     SALARY
+  ───────────────────────────────────────── */
+  function renderSalary() {
+    const total = S.salaryLog.reduce((a, h) => a + (parseFloat(h.amt) || 0), 0);
+    const wi = weeklyIncome();
+    $('salSummary').innerHTML = `
+      <div class="plan-row"><span class="pl">Weekly Salary</span><span class="pv c-green">${cur(S.income.weekly)}</span></div>
+      <div class="plan-row"><span class="pl">Additional Weekly</span><span class="pv c-green">${cur(S.income.extra)}</span></div>
+      <div class="plan-row"><span class="pl">Total Weekly Income<span class="pv c-green">${cur(wi)}</span></div>
+      <div class="plan-row"><span class="pl">Monthly Equivalent</span><span class="pv">${cur(wi * 52 / 12)}</span></div>
+      <div class="plan-row"><span class="pl">Annual Equivalent</span><span class="pv">${cur(wi * 52)}</span></div>
+      <div class="plan-row"><span class="pl">Total Recorded</span><span class="pv">${cur(total)}</span></div>
+      <div class="plan-row"><span class="pl">Records Count</span><span class="pv">${S.salaryLog.length}</span></div>
+    `;
+
+    if (!S.salaryLog.length) {
+      $('salList').innerHTML = `<div class="empty"><div class="ei">📈</div><p>No payments recorded yet</p></div>`;
+      return;
+    }
+    $('salList').innerHTML = S.salaryLog.slice(0, 60).map(h => `
+      <div class="sal-item">
+        <div class="sal-left">
+          <div class="sal-name">${h.type === 'savings' ? '💰 ' : '💵 '}${h.note || (h.type === 'salary' ? 'Salary' : 'Payment')}</div>
+          <div class="sal-date">${fmtDate(h.dt)}</div>
+        </div>
+        <div class="sal-amount">+${cur(h.amt)}</div>
+      </div>`).join('');
+  }
+
+  /* ─────────────────────────────────────────
+     SETTINGS
+  ───────────────────────────────────────── */
+  function renderSettings() {
+    $('fCountry').value  = S.country   || 'Australia';
+    $('fCurrency').value = S.currency  || '$';
+    $('tInterest').checked = S.settings.autoInterest || false;
+    $('tWarnings').checked = S.settings.warnings !== false;
+    $('appInfo').innerHTML = `
+      Debt Destroyer Pro v4.0<br>
+      Storage: IndexedDB (Safari-safe)<br>
+      Debts: ${S.debts.length} &nbsp;|&nbsp; Expenses: ${S.expenses.length} &nbsp;|&nbsp; Records: ${S.salaryLog.length}<br>
+      Auto-clears 1 year after plan end date
+    `;
+  }
+
+  function initSettings() {
+    $('btnSaveSettings').onclick = () => {
+      S.country  = $('fCountry').value;
+      S.currency = $('fCurrency').value;
+      S.settings.autoInterest = $('tInterest').checked;
+      S.settings.warnings     = $('tWarnings').checked;
+      scheduleSave();
+      renderAll();
+      showToast('Settings saved ✓');
+    };
+    $('btnExport').onclick = () => {
+      const blob = new Blob([JSON.stringify(S, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url;
+      a.download = `debt-destroyer-${today()}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    };
+    $('btnImportTrig').onclick = () => $('fImport').click();
+    $('fImport').onchange = e => {
+      const f = e.target.files[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = ev => {
+        try {
+          const data = JSON.parse(ev.target.result);
+          if (confirm('Replace all current data with imported backup?')) {
+            S = deepClone(data); // Use deepClone to avoid reference issues
+            dbSave(S);
+            renderAll();
+            showToast('Import successful ✓');
+          }
+        } catch { alert('Invalid JSON file'); }
+      };
+      r.readAsText(f);
+      e.target.value = '';
+    };
+    $('btnReset').onclick = () => {
+      if (confirm('⚠️ FACTORY RESET\n\nThis permanently deletes ALL data.\n\nTap OK to confirm.')) {
+        S = deepClone(DEFAULTS);
+        dbSave(S);
+        renderAll();
+        showToast('App reset');
+      }
+    };
+  }
+
+  /* ─────────────────────────────────────────
+     MODALS
+  ───────────────────────────────────────── */
+  function openOverlay(id)  { $(id).classList.add('open'); }
+  function closeOverlay(id) { $(id).classList.remove('open'); }
+
+  function initModals() {
+    document.addEventListener('click', e => {
+      const closeBtn = e.target.closest('[data-close]');
+      if (closeBtn) closeOverlay(closeBtn.dataset.close);
+      if (e.target.classList.contains('overlay')) closeOverlay(e.target.id);
+    });
+  }
+
+  /* ─────────────────────────────────────────
+     AUTO CLEANUP
+  ───────────────────────────────────────── */
+  function checkCleanup() {
+    if (!S.settings.startDate) return;
+    const end = new Date(S.settings.startDate);
+    end.setFullYear(end.getFullYear() + (S.settings.termYears || 5) + 1);
+    if (new Date() > end && confirm('Your debt plan period has ended. Clear all data and start fresh?')) {
       S = deepClone(DEFAULTS);
       dbSave(S);
       renderAll();
-      showToast('App reset');
     }
-  };
-}
-
-/* ─────────────────────────────────────────
-   MODALS
-───────────────────────────────────────── */
-function openOverlay(id)  { $(id).classList.add('open'); }
-function closeOverlay(id) { $(id).classList.remove('open'); }
-
-function initModals() {
-  document.addEventListener('click', e => {
-    const closeBtn = e.target.closest('[data-close]');
-    if (closeBtn) closeOverlay(closeBtn.dataset.close);
-    if (e.target.classList.contains('overlay')) closeOverlay(e.target.id);
-  });
-}
-
-/* ─────────────────────────────────────────
-   AUTO CLEANUP
-───────────────────────────────────────── */
-function checkCleanup() {
-  if (!S.settings.startDate) return;
-  const end = new Date(S.settings.startDate);
-  end.setFullYear(end.getFullYear() + (S.settings.termYears || 5) + 1);
-  if (new Date() > end && confirm('Your debt plan period has ended. Clear all data and start fresh?')) {
-    S = deepClone(DEFAULTS);
-    dbSave(S);
-    renderAll();
-  }
-}
-
-/* ─────────────────────────────────────────
-   BOOT
-───────────────────────────────────────── */
-async function boot() {
-  try {
-    await openDB();
-  } catch (e) {
-    console.warn('IndexedDB unavailable, using localStorage fallback', e);
   }
 
-  try {
-    const saved = await dbLoad();
-    if (saved) {
-      // Merge saved state into defaults to fill any missing keys
-      S = Object.assign(deepClone(DEFAULTS), saved);
-      S.finances = Object.assign(deepClone(DEFAULTS.finances), saved.finances || {});
-      S.income   = Object.assign(deepClone(DEFAULTS.income),   saved.income   || {});
-      S.settings = Object.assign(deepClone(DEFAULTS.settings), saved.settings || {});
-      S.tracker  = Object.assign(deepClone(DEFAULTS.tracker),  saved.tracker  || {});
-      if (!S.tracker.paid) S.tracker.paid = {};
-      if (!Array.isArray(S.debts))     S.debts     = [];
-      if (!Array.isArray(S.expenses))  S.expenses  = [];
-      if (!Array.isArray(S.salaryLog)) S.salaryLog = [];
+  /* ─────────────────────────────────────────
+     BOOT
+  ───────────────────────────────────────── */
+  async function boot() {
+    try {
+      await openDB();
+    } catch (e) {
+      console.warn('IndexedDB unavailable, using localStorage fallback', e);
     }
-  } catch (e) {
-    console.error('Load failed', e);
+
+    try {
+      const saved = await dbLoad();
+      if (saved) {
+        // Deep merge to avoid reference leaks
+        S = deepClone(Object.assign(deepClone(DEFAULTS), saved));
+        S.finances = deepClone(Object.assign(deepClone(DEFAULTS.finances), saved.finances || {}));
+        S.income   = deepClone(Object.assign(deepClone(DEFAULTS.income),   saved.income   || {}));
+        S.settings = deepClone(Object.assign(deepClone(DEFAULTS.settings), saved.settings || {}));
+        S.tracker  = deepClone(Object.assign(deepClone(DEFAULTS.tracker),  saved.tracker  || {}));
+        if (!S.tracker.paid) S.tracker.paid = {};
+        if (!Array.isArray(S.debts))     S.debts     = [];
+        if (!Array.isArray(S.expenses))  S.expenses  = [];
+        if (!Array.isArray(S.salaryLog)) S.salaryLog = [];
+      }
+    } catch (e) {
+      console.error('Load failed', e);
+      S = deepClone(DEFAULTS); // fallback to defaults on error
+    }
+
+    checkCleanup();
+
+    // Set default dates
+    $('fExpDate').value  = today();
+    $('fSalDate').value  = today();
+
+    // Init all event listeners
+    initTabs();
+    initDebtModal();
+    initIncome();
+    initExpenses();
+    initTracker();
+    initPlan();
+    initSettings();
+    initModals();
+
+    // First render - ensure dashboard is active
+    document.querySelectorAll('.tab-btn')[0].classList.add('active'); // Activate first tab
+    document.querySelectorAll('.page')[0].classList.add('active');
+    activeTab = 'dashboard';
+    renderDashboard();
+
+    $('hdrStatus').textContent = 'Ready';
   }
 
-  checkCleanup();
-
-  // Set default dates
-  $('fExpDate').value  = today();
-  $('fSalDate').value  = today();
-
-  // Init all event listeners
-  initTabs();
-  initDebtModal();
-  initIncome();
-  initExpenses();
-  initTracker();
-  initPlan();
-  initSettings();
-  initModals();
-
-  // First render
-  renderDashboard();
-
-  $('hdrStatus').textContent = 'Ready';
-}
-
-// Start the app
-boot().catch(err => {
-  console.error('Boot error', err);
-  $('hdrStatus').textContent = 'Error — check console';
-});
-</script>
+  // Start the app after DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+  

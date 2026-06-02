@@ -1,3 +1,652 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Debt Freedom Planner | Australian Debt Repayment Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --bg: #0a0c12;
+      --surface: #11141c;
+      --surface2: #1a1f2c;
+      --primary: #3b82f6;
+      --primary-dark: #2563eb;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+      --text: #f1f5f9;
+      --text2: #94a3b8;
+      --border: #1e293b;
+      --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    body.light {
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --surface2: #f1f5f9;
+      --text: #0f172a;
+      --text2: #475569;
+      --border: #e2e8f0;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Header */
+    .hero {
+      background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+      border-radius: 24px;
+      padding: 24px;
+      margin-bottom: 24px;
+      border: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .hero-card {
+      text-align: center;
+      padding: 16px;
+      background: var(--bg);
+      border-radius: 16px;
+    }
+
+    .hero-card h3 {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--text2);
+      margin-bottom: 12px;
+    }
+
+    .hero-card .value {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .tab-btn {
+      background: transparent;
+      border: none;
+      padding: 12px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--text2);
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.2s;
+    }
+
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .tab-btn:hover:not(.active) {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    /* Debt Table */
+    .debt-table {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      color: var(--text2);
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    select, input {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      width: 100%;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--primary);
+    }
+
+    .btn-sm {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.2s;
+    }
+
+    .btn-sm:hover {
+      background: var(--primary-dark);
+      transform: translateY(-1px);
+    }
+
+    .btn-danger {
+      background: var(--danger);
+    }
+
+    .btn-danger:hover {
+      background: #dc2626;
+    }
+
+    /* Plan Steps */
+    .plan-steps {
+      display: grid;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .plan-step {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      padding: 16px;
+      background: var(--surface2);
+      border-radius: 12px;
+    }
+
+    .step-num {
+      width: 40px;
+      height: 40px;
+      background: var(--primary);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+    }
+
+    .step-body h4 {
+      margin-bottom: 4px;
+    }
+
+    .highlight {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .good {
+      color: var(--success);
+    }
+
+    /* Weekly Tracker */
+    .weekly-tracker {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 12px;
+      max-height: 400px;
+      overflow-y: auto;
+      padding: 8px;
+    }
+
+    .week-chip {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .week-chip:hover {
+      background: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    .week-chip .wk {
+      font-size: 0.75rem;
+      color: var(--text2);
+      margin-bottom: 4px;
+    }
+
+    .week-chip .amt {
+      font-weight: bold;
+      font-size: 0.9rem;
+    }
+
+    /* Progress Bar */
+    .progress-container {
+      background: var(--surface2);
+      border-radius: 20px;
+      padding: 4px;
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      background: var(--success);
+      height: 40px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      transition: width 0.3s;
+      width: 0%;
+    }
+
+    /* Budget Grid */
+    .budget-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .budget-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: var(--surface2);
+      border-radius: 12px;
+    }
+
+    .budget-item label {
+      font-weight: 500;
+    }
+
+    .budget-item input {
+      width: 120px;
+      text-align: right;
+    }
+
+    /* Buttons */
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: var(--surface2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 12px 24px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 20px;
+    }
+
+    /* Banner */
+    .debt-free-banner {
+      display: none;
+      background: linear-gradient(135deg, var(--success), #059669);
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .debt-free-banner.visible {
+      display: block;
+      animation: fadeIn 0.5s;
+    }
+
+    /* Tip */
+    .tip {
+      background: var(--surface2);
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      color: var(--text2);
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        padding: 12px;
+      }
+      
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      
+      th, td {
+        padding: 8px;
+        font-size: 0.85rem;
+      }
+      
+      .tab-btn {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <!-- Hero Section -->
+  <div class="hero">
+    <div class="hero-card">
+      <h3>💳 Total Debt</h3>
+      <div class="value" id="heroTotalDebt">$0</div>
+    </div>
+    <div class="hero-card">
+      <h3>🏦 Bank Balance</h3>
+      <div class="value" id="heroBankDisplay">$0</div>
+    </div>
+    <div class="hero-card">
+      <h3>💰 Monthly Surplus</h3>
+      <div class="value" id="heroSurplus">$0</div>
+    </div>
+    <div class="hero-card">
+      <h3>⚡ Weekly Payment</h3>
+      <div class="value" id="heroWeeklyPayment">$0</div>
+    </div>
+  </div>
+
+  <!-- Debt Free Banner -->
+  <div id="debtFreeBanner" class="debt-free-banner">
+    🎉 CONGRATULATIONS! 🎉<br>
+    You're completely debt-free! Amazing work! 🎊
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="dashboard">📊 Dashboard</button>
+    <button class="tab-btn" data-tab="debts">💳 Debts</button>
+    <button class="tab-btn" data-tab="budget">📝 Budget</button>
+    <button class="tab-btn" data-tab="plan">🎯 Payoff Plan</button>
+    <button class="tab-btn" data-tab="settings">⚙️ Settings</button>
+  </div>
+
+  <!-- Dashboard Tab -->
+  <div id="dashboard" class="tab-panel active">
+    <div class="card">
+      <h2>📈 Progress Overview</h2>
+      <div class="progress-container">
+        <div class="progress-bar" id="progressBar">0%</div>
+      </div>
+      <p id="progressPercent" style="text-align: center; margin-top: 12px;">0% paid off</p>
+      
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 30px;">
+        <div>
+          <h3>📅 Weeks Remaining</h3>
+          <p style="font-size: 2rem; font-weight: bold;" id="weeksRemaining">--</p>
+        </div>
+        <div>
+          <h3>🎯 Target Date</h3>
+          <p style="font-size: 1.2rem;" id="planTargetDate">—</p>
+        </div>
+        <div>
+          <h3>💰 Total Saved</h3>
+          <p style="font-size: 1.5rem; font-weight: bold; color: var(--success);" id="totalSavingsDisplay">$0</p>
+        </div>
+        <div>
+          <h3>📋 Debts Count</h3>
+          <p style="font-size: 1.5rem;" id="debtCountBadge">0</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📅 Weekly Payment Schedule</h2>
+      <p>Click any week to make payment: <strong id="autoPaymentPreview">$0</strong>/week</p>
+      <div id="weeklyTracker" class="weekly-tracker"></div>
+    </div>
+  </div>
+
+  <!-- Debts Tab -->
+  <div id="debts" class="tab-panel">
+    <div class="card">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px;">
+        <h2>💸 Your Debts</h2>
+        <div class="button-group" style="margin: 0;">
+          <button id="addDebtRowBtn" class="btn-primary">+ Add Debt</button>
+          <button id="quickAddPaymentBtn" class="btn-secondary">💵 Quick Pay</button>
+        </div>
+      </div>
+      <div class="debt-table">
+        <table>
+          <thead>
+            <tr>
+              <th>Bank</th>
+              <th>Product</th>
+              <th>Balance ($)</th>
+              <th>Rate (%)</th>
+              <th>Min Payment</th>
+              <th>Action</th>
+              <th>Delete</th>
+            </tr>
+          </thead>
+          <tbody id="debtTableBody">
+            <tr><td colspan="7" style="text-align: center;">Loading debts...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Budget Tab -->
+  <div id="budget" class="tab-panel">
+    <div class="card">
+      <h2>💰 Income & Expenses</h2>
+      <div class="budget-grid">
+        <div class="budget-item">
+          <label>Weekly Salary ($)</label>
+          <input type="number" id="weeklySalary" placeholder="0" value="1500">
+        </div>
+        <div class="budget-item">
+          <label>Additional Monthly Income ($)</label>
+          <input type="number" id="additionalIncome" placeholder="0" value="0">
+        </div>
+        <div class="budget-item">
+          <label>Rent/Mortgage ($)</label>
+          <input type="number" id="rent" placeholder="0" value="2000">
+        </div>
+        <div class="budget-item">
+          <label>Car Loan Payment ($)</label>
+          <input type="number" id="carLoan" placeholder="0" value="400">
+        </div>
+        <div class="budget-item">
+          <label>Other Loan Payments ($)</label>
+          <input type="number" id="loanPayment" placeholder="0" value="0">
+        </div>
+        <div class="budget-item">
+          <label>Coffee/Takeaway ($)</label>
+          <input type="number" id="coffee" placeholder="0" value="100">
+        </div>
+        <div class="budget-item">
+          <label>Zip/Afterpay ($)</label>
+          <input type="number" id="zip" placeholder="0" value="0">
+        </div>
+        <div class="budget-item">
+          <label>Other Expenses ($)</label>
+          <input type="number" id="other" placeholder="0" value="300">
+        </div>
+        <div class="budget-item">
+          <label>Extra Expense 1 ($)</label>
+          <input type="number" id="extra1" placeholder="0" value="0">
+        </div>
+        <div class="budget-item">
+          <label>Extra Expense 2 ($)</label>
+          <input type="number" id="extra2" placeholder="0" value="0">
+        </div>
+      </div>
+      
+      <div style="margin-top: 30px; padding: 20px; background: var(--surface2); border-radius: 16px;">
+        <h3>📊 Monthly Summary</h3>
+        <p>Total Income: <strong id="totalIncomeDisplay">$0</strong></p>
+        <p>Total Expenses: <strong id="totalExpensesDisplay">$0</strong></p>
+        <p style="font-size: 1.2rem;">Monthly Surplus: <strong id="surplusDisplay" style="color: var(--success);">$0</strong></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payoff Plan Tab -->
+  <div id="plan" class="tab-panel">
+    <div class="card">
+      <h2>🎯 Debt Avalanche Strategy</h2>
+      <p>Highest interest rate first - saves you the most money!</p>
+      
+      <div style="background: var(--surface2); padding: 16px; border-radius: 12px; margin: 20px 0;">
+        <p>Total Debt: <strong id="planTotalDebt">$0</strong></p>
+        <p>Recommended Weekly Payment: <strong id="planRequiredWeekly">$0</strong></p>
+        <p id="targetDateLabel">Target: —</p>
+      </div>
+      
+      <h3>🔥 Priority Order</h3>
+      <div id="planStepsContainer" class="plan-steps"></div>
+      
+      <div id="strategyComparison" class="tip" style="margin-top: 20px;"></div>
+    </div>
+  </div>
+
+  <!-- Settings Tab -->
+  <div id="settings" class="tab-panel">
+    <div class="card">
+      <h2>⚙️ Preferences</h2>
+      
+      <div style="display: flex; flex-direction: column; gap: 24px;">
+        <div>
+          <button id="darkToggleBtn" class="btn-primary">🌙 Dark</button>
+        </div>
+        
+        <div>
+          <h3>🏦 Bank Balance</h3>
+          <input type="number" id="bankBalanceInput" placeholder="Current balance" style="width: 200px;">
+          <button id="updateBankBtn" class="btn-sm">Update Balance</button>
+          <button id="manualSalaryBtn" class="btn-sm">+ Add Weekly Salary</button>
+        </div>
+        
+        <div>
+          <h3>🎯 Savings Goal</h3>
+          <input type="number" id="savingsGoalInput" placeholder="Weekly savings goal" style="width: 200px;">
+          <button id="updateSavingsGoalBtn" class="btn-sm">Set Goal</button>
+        </div>
+        
+        <div>
+          <h3>📅 Plan Start Date</h3>
+          <input type="date" id="planStartDate" style="width: 200px;">
+          <p id="startDatePreview" style="margin-top: 8px; color: var(--text2);"></p>
+        </div>
+        
+        <div>
+          <h3>⏱️ Repayment Term</h3>
+          <select id="termSelector" style="width: 200px;">
+            <option value="1">1 Year</option>
+            <option value="2">2 Years</option>
+            <option value="3">3 Years</option>
+            <option value="5" selected>5 Years</option>
+          </select>
+          <button id="updateTermBtn" class="btn-sm">Update Plan</button>
+        </div>
+        
+        <div>
+          <h3>🔐 Passcode</h3>
+          <input type="password" id="newPasscodeInput" placeholder="4-digit code" maxlength="4" style="width: 200px;">
+          <button id="changePasscodeBtn" class="btn-sm">Change Passcode</button>
+        </div>
+        
+        <div style="border-top: 1px solid var(--border); padding-top: 20px;">
+          <h3 style="color: var(--danger);">⚠️ Danger Zone</h3>
+          <div class="button-group">
+            <button id="resetDebtBtnSettings" class="btn-danger">Reset All Debts</button>
+            <button id="resetFullBtnSettings" class="btn-danger">Factory Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 const australianBanks = {
   'CommBank': {
@@ -584,3 +1233,5 @@ document.addEventListener('DOMContentLoaded', () => {
   saveAll();
 });
 </script>
+</body>
+</html>

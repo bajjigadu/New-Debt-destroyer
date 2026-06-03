@@ -34,6 +34,8 @@
         .btn-sm:hover { background:var(--primary-dark); transform:translateY(-1px); }
         .btn-danger { background:var(--danger); }
         .btn-danger:hover { background:#dc2626; }
+        .btn-pay { background:var(--success); color:white; border:none; padding:6px 12px; border-radius:8px; cursor:pointer; font-size:.85rem; transition:all .2s; }
+        .btn-pay:hover { background:#0e9f6e; transform:translateY(-1px); }
         .plan-steps { display:grid; gap:12px; margin-top:20px; }
         .plan-step { display:flex; gap:16px; align-items:center; padding:16px; background:var(--surface2); border-radius:12px; }
         .step-num { width:40px; height:40px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.2rem; color:white; flex-shrink:0; }
@@ -64,6 +66,7 @@
         .daily-expense-row .expense-date { width:150px; }
         .daily-expense-row .expense-amount { width:130px; }
         .daily-expense-row .expense-note { flex:1; min-width:140px; }
+        .payment-status { font-size:12px; margin-top:4px; color:var(--text2); }
         @media (max-width:768px) { .container { padding:12px; } .hero { grid-template-columns:1fr; } th, td { padding:8px; font-size:.85rem; } .tab-btn { padding:8px 16px; font-size:.9rem; } }
     </style>
 </head>
@@ -127,27 +130,26 @@
         </div>
     </div>
 
-    <!-- Debts Tab (Fixed: real-time updates without losing focus) -->
+    <!-- Debts Tab -->
     <div id="debts" class="tab-panel">
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;">
                 <h2>💸 Your Debts</h2>
                 <div class="button-group" style="margin:0;">
                     <button id="addDebtRowBtn" class="btn-primary">+ Add Debt</button>
-                    <button id="quickAddPaymentBtn" class="btn-secondary">💵 Quick Pay</button>
-                    <button id="payMinimumsBtn" class="btn-secondary" style="background:var(--success); color:white;">💰 Pay Minimum Payments (Monthly)</button>
+                    <button id="quickAddPaymentBtn" class="btn-secondary">💵 Quick Pay (Avalanche)</button>
                 </div>
             </div>
             <div class="debt-table">
                 <table id="debtsTable">
                     <thead>
-                        <tr><th>Bank</th><th>Product</th><th>Balance ($)</th><th>Rate (%)</th><th>Min Payment ($)</th><th>Due Day</th><th>Delete</th></tr>
+                        <tr><th>Bank</th><th>Product</th><th>Balance ($)</th><th>Rate (%)</th><th>Min Payment ($)</th><th>Due Day</th><th>Pay</th><th>Delete</th></tr>
                     </thead>
                     <tbody id="debtTableBody"></tbody>
                 </table>
             </div>
             <div class="tip" style="margin-top:16px;">
-                💡 Minimum payments auto-calculate as you type. Click "Pay Minimum Payments" to deduct total monthly minimum from bank balance.
+                💡 Click <strong>Pay</strong> next to any debt to make a manual payment (from your bank balance). Minimum payments auto-calculate as you edit.
             </div>
         </div>
     </div>
@@ -330,28 +332,39 @@ function updateAllDisplays() {
     } else { document.getElementById('weeksRemaining').textContent = '--'; document.getElementById('planTargetDate').textContent = '—'; document.getElementById('targetDateLabel').textContent = 'Select term'; }
 }
 
-// ========== PAY MINIMUM PAYMENTS ==========
-function payMinimumPayments() {
-    if (debts.length === 0) { alert('No debts to pay.'); return; }
-    let totalMinDue = totalMinMonthly();
-    if (totalMinDue <= 0) { alert('No minimum payments due (all debts zero).'); return; }
-    if (currentBankBalance < totalMinDue) {
-        alert(`Insufficient bank balance. Needed: ${money(totalMinDue)}, Available: ${money(currentBankBalance)}`);
+// PER-DEBT PAYMENT FUNCTION
+function makeDebtPayment(debtIndex) {
+    const debt = debts[debtIndex];
+    if (!debt) return;
+    if (debt.balance <= 0) {
+        alert(`✅ ${debt.bank} - ${debt.product} is already paid off!`);
         return;
     }
-    for (let d of debts) {
-        let payment = Math.min(d.minPayment, d.balance);
-        d.balance -= payment;
-        currentBankBalance -= payment;
-        totalSaved += payment;
+    const maxPay = Math.min(debt.balance, currentBankBalance);
+    if (maxPay <= 0) {
+        alert(`❌ Insufficient bank balance. Available: ${money(currentBankBalance)}. Add funds or reduce expenses.`);
+        return;
     }
-    recalcAllMinPayments();
-    renderDebtTable();  // re-render to update min payment fields and balances
+    const amountStr = prompt(`Enter payment amount for ${debt.bank} - ${debt.product} (Balance: ${money(debt.balance)} | Max: ${money(maxPay)})`, Math.min(50, maxPay).toString());
+    if (amountStr === null) return;
+    let amount = parseFloat(amountStr);
+    if (isNaN(amount) || amount <= 0) { alert("Invalid amount. Enter positive number."); return; }
+    if (amount > debt.balance) { alert(`Payment cannot exceed debt balance of ${money(debt.balance)}`); return; }
+    if (amount > currentBankBalance) { alert(`Insufficient bank balance. You have ${money(currentBankBalance)}.`); return; }
+    
+    // Apply payment
+    debt.balance -= amount;
+    currentBankBalance -= amount;
+    totalSaved += amount;
+    debt.minPayment = calcMinPayment(debt.balance, debt.rate);
+    recalcAllMinPayments();  // ensures min payments sync
+    
     updateAllDisplays();
+    saveAll();
+    renderDebtTable();       // refresh table with updated balances
     buildPlanView();
     renderWeeklyTracker();
-    saveAll();
-    alert(`Successfully paid total minimum payments of ${money(totalMinDue)}.`);
+    alert(`✅ Paid ${money(amount)} to ${debt.bank} - ${debt.product}. New balance: ${money(debt.balance)}`);
 }
 
 // ========== DAILY EXPENSES ==========
@@ -411,13 +424,13 @@ function addDailyExpense() {
     saveAll();
 }
 
-// ========== DEBT TABLE - REAL-TIME UPDATE WITHOUT LOSING FOCUS ==========
+// ========== DEBT TABLE WITH PER-DEBT PAY BUTTON ==========
 function renderDebtTable() {
     const tbody = document.getElementById('debtTableBody');
     if (!tbody) return;
     tbody.innerHTML = '';
     if (!debts.length) {
-        tbody.innerHTML = '<tr><td colspan="7" style="padding:16px; text-align:center;">📋 Click + Add Debt to get started</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="8" style="padding:16px; text-align:center;">📋 Click + Add Debt to get started</td></tr>';
         updateAllDisplays();
         buildPlanView();
         renderWeeklyTracker();
@@ -428,7 +441,6 @@ function renderDebtTable() {
     debts.forEach((row, idx) => {
         const tr = document.createElement('tr');
         
-        // Bank dropdown
         const tdBank = document.createElement('td');
         const bankSel = document.createElement('select');
         Object.keys(australianBanks).forEach(b => {
@@ -439,45 +451,47 @@ function renderDebtTable() {
         });
         tdBank.appendChild(bankSel);
         
-        // Product dropdown
         const tdProd = document.createElement('td');
         const prodSel = document.createElement('select');
         tdProd.appendChild(prodSel);
         
-        // Balance input (updates in real-time)
         const tdBal = document.createElement('td');
         const balInp = document.createElement('input');
         balInp.type = 'number'; balInp.value = row.balance; balInp.step = '10';
         tdBal.appendChild(balInp);
         
-        // Rate input
         const tdRate = document.createElement('td');
         const rateInp = document.createElement('input');
         rateInp.type = 'number'; rateInp.value = row.rate; rateInp.step = '0.1';
         tdRate.appendChild(rateInp);
         
-        // Min payment (readonly)
         const tdMin = document.createElement('td');
         const minInp = document.createElement('input');
         minInp.type = 'number'; minInp.value = row.minPayment; minInp.readOnly = true;
         tdMin.appendChild(minInp);
         
-        // Due day
         const tdDue = document.createElement('td');
         const dueInp = document.createElement('input');
         dueInp.type = 'number'; dueInp.value = row.dueDay || 1; dueInp.min = 1; dueInp.max = 28; dueInp.style.width = '80px';
         tdDue.appendChild(dueInp);
         
-        // Delete button
+        // PAY BUTTON COLUMN
+        const tdPay = document.createElement('td');
+        const payBtn = document.createElement('button');
+        payBtn.textContent = '💵 Pay';
+        payBtn.className = 'btn-pay';
+        payBtn.style.padding = '6px 12px';
+        payBtn.onclick = (function(index) { return function() { makeDebtPayment(index); }; })(idx);
+        tdPay.appendChild(payBtn);
+        
         const tdDel = document.createElement('td');
         const delBtn = document.createElement('button');
         delBtn.textContent = '✖'; delBtn.className = 'btn-sm btn-danger';
         tdDel.appendChild(delBtn);
         
-        tr.append(tdBank, tdProd, tdBal, tdRate, tdMin, tdDue, tdDel);
+        tr.append(tdBank, tdProd, tdBal, tdRate, tdMin, tdDue, tdPay, tdDel);
         tbody.appendChild(tr);
         
-        // Helper to update product list based on bank
         function refreshProducts() {
             const bank = bankSel.value;
             prodSel.innerHTML = '';
@@ -494,7 +508,6 @@ function renderDebtTable() {
             if (!isOthers) rateInp.value = australianBanks[bank]?.[prodSel.value] ?? 0;
         }
         
-        // Update row data and UI from current inputs
         function updateRowAndGlobals() {
             const newBank = bankSel.value;
             const newProd = prodSel.value;
@@ -510,28 +523,19 @@ function renderDebtTable() {
             row.minPayment = calcMinPayment(newBalance, newRate);
             
             minInp.value = row.minPayment;
-            
-            // Refresh products if bank changed (ensures product list matches)
             refreshProducts();
-            
-            // Update global displays and plans
             updateAllDisplays();
             buildPlanView();
             renderWeeklyTracker();
             saveAll();
         }
         
-        // Event listeners - updates happen without re-rendering table
         bankSel.onchange = () => { refreshProducts(); updateRowAndGlobals(); };
         prodSel.onchange = updateRowAndGlobals;
         balInp.oninput = updateRowAndGlobals;
         rateInp.oninput = () => { if (bankSel.value === 'Others') updateRowAndGlobals(); };
         dueInp.oninput = updateRowAndGlobals;
-        delBtn.onclick = () => { 
-            debts.splice(idx, 1); 
-            renderDebtTable();  // only re-render on delete
-        };
-        
+        delBtn.onclick = () => { debts.splice(idx, 1); renderDebtTable(); };
         refreshProducts();
     });
 }
@@ -566,7 +570,6 @@ function renderWeeklyTracker() {
     if(!tracker) return; 
     tracker.innerHTML = ''; 
     const autoPay = getAutoWeeklyPayment(); 
-    const start = new Date(planStartDate); 
     for(let i=0;i<156;i++){ 
         const chip = document.createElement('div'); 
         chip.className = 'week-chip'; 
@@ -627,8 +630,7 @@ window.onload = () => {
     document.getElementById('addDailyExpenseBtn').onclick = addDailyExpense;
     document.getElementById('updateTermBtn').onclick = () => { selectedTermYears = parseInt(document.getElementById('termSelector').value,10); updateAllDisplays(); renderWeeklyTracker(); saveAll(); };
     document.getElementById('manualSalaryBtn').onclick = () => { const sal = parseFloat(document.getElementById('weeklySalary').value||0); currentBankBalance += sal; updateAllDisplays(); saveAll(); alert(`Added weekly salary: ${money(sal)}`); };
-    document.getElementById('quickAddPaymentBtn').onclick = () => { const amt = parseFloat(prompt('Extra payment amount:','50')||'0'); if(amt>0) applyPayment(amt); };
-    document.getElementById('payMinimumsBtn').onclick = payMinimumPayments;
+    document.getElementById('quickAddPaymentBtn').onclick = () => { const amt = parseFloat(prompt('Extra payment amount (avalanche method):','50')||'0'); if(amt>0) { applyPayment(amt); updateAllDisplays(); renderDebtTable(); saveAll(); } };
     document.getElementById('resetDebtBtnSettings').onclick = resetDebts;
     document.getElementById('resetFullBtnSettings').onclick = factoryReset;
     document.getElementById('updateBankBtn').onclick = () => { currentBankBalance = parseFloat(document.getElementById('bankBalanceInput').value||0); updateAllDisplays(); saveAll(); };

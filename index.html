@@ -54,7 +54,7 @@
         .budget-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(250px, 1fr)); gap:16px; }
         .budget-item { display:flex; justify-content:space-between; align-items:center; padding:12px; background:var(--surface2); border-radius:12px; }
         .budget-item label { font-weight:500; margin-right:12px; }
-        .budget-item input { width:120px; text-align:right; }
+        .budget-item input { width:140px; text-align:right; }
         .btn-primary { background:var(--primary); color:white; border:none; padding:12px 24px; border-radius:12px; font-size:1rem; font-weight:600; cursor:pointer; transition:all .2s; }
         .btn-primary:hover { background:var(--primary-dark); transform:translateY(-2px); }
         .btn-secondary { background:var(--surface2); color:var(--text); border:1px solid var(--border); padding:12px 24px; border-radius:12px; cursor:pointer; }
@@ -71,6 +71,8 @@
         .record-card h3 { font-size:1rem; color:var(--text2); margin-bottom:8px; }
         .record-card .record-value { font-size:2rem; font-weight:700; color:var(--primary); }
         .record-card .record-sub { font-size:0.8rem; color:var(--text2); margin-top:6px; }
+        .summary-highlight { background:var(--surface); border-radius:12px; padding:12px; margin-top:12px; }
+        .mini-stat { color:var(--success); font-weight:bold; }
         @media (max-width:768px) { .container { padding:12px; } .hero { grid-template-columns:1fr; } th, td { padding:8px; font-size:.85rem; } .tab-btn { padding:8px 16px; font-size:.9rem; } }
     </style>
 </head>
@@ -79,7 +81,7 @@
     <div class="hero">
         <div class="hero-card"><h3>💳 Total Debt</h3><div class="value" id="heroTotalDebt">$0</div><div class="small-value" id="heroMinMonthly">Min monthly: $0</div></div>
         <div class="hero-card"><h3>🏦 Bank Balance</h3><div class="value" id="heroBankDisplay">$0</div></div>
-        <div class="hero-card"><h3>💰 Monthly Surplus</h3><div class="value" id="heroSurplus">$0</div></div>
+        <div class="hero-card"><h3>💰 True Monthly Surplus</h3><div class="value" id="heroSurplus">$0</div><div class="small-value">After min debt payments</div></div>
         <div class="hero-card"><h3>⚡ Weekly Payment</h3><div class="value" id="heroWeeklyPayment">$0</div></div>
     </div>
 
@@ -128,7 +130,7 @@
                 <button id="addDailyExpenseBtn" class="btn-primary">+ Add Expense</button>
             </div>
             <div style="margin-top:20px; padding:16px; background:var(--surface2); border-radius:12px;">
-                <p><strong>Total Daily Expenses (since start date):</strong> <span id="dailyExpensesTotal" style="color:var(--danger);">$0</span></p>
+                <p><strong>Total Daily Expenses (since plan start):</strong> <span id="dailyExpensesTotal" style="color:var(--danger);">$0</span></p>
                 <p><strong>Plan started:</strong> <span id="dailyExpensesSince"></span></p>
                 <p class="tip" style="margin-top:8px;">💡 Edit amount/date/note → automatically updates bank balance & totals.</p>
             </div>
@@ -147,39 +149,33 @@
             </div>
             <div class="debt-table">
                 <table id="debtsTable">
-                    <thead>
-                        <tr><th>Bank</th><th>Product</th><th>Balance ($)</th><th>Rate (%)</th><th>Min Payment ($)</th><th>Due Day</th><th>Pay</th><th>Delete</th></tr>
-                    </thead>
+                    <thead><tr><th>Bank</th><th>Product</th><th>Balance ($)</th><th>Rate (%)</th><th>Min Payment ($)</th><th>Due Day</th><th>Pay</th><th>Delete</th></tr></thead>
                     <tbody id="debtTableBody"></tbody>
                 </table>
             </div>
-            <div class="tip" style="margin-top:16px;">
-                💡 Click <strong>Pay</strong> next to any debt to make a manual payment (from your bank balance). Minimum payments auto-calculate as you edit.
-            </div>
+            <div class="tip">💡 Click <strong>Pay</strong> to make manual payments (from bank balance). Minimum payments are automatically deducted from surplus calculation.</div>
         </div>
     </div>
 
-    <!-- Budget Tab -->
+    <!-- Budget Tab: Only FIXED expenses (removed coffee/zip/other/extra) -->
     <div id="budget" class="tab-panel">
         <div class="card">
-            <h2>💰 Income & Expenses</h2>
+            <h2>💰 Fixed Income & Expenses</h2>
+            <p class="tip" style="margin-bottom:16px;">📌 Only recurring fixed expenses shown below. Variable spending (coffee, takeaway, etc.) should be tracked via Daily Expenses tab.</p>
             <div class="budget-grid">
                 <div class="budget-item"><label>Weekly Salary ($)</label><input type="number" id="weeklySalary" placeholder="0" value="1500"></div>
                 <div class="budget-item"><label>Additional Weekly Income ($)</label><input type="number" id="additionalIncome" placeholder="0" value="0"></div>
-                <div class="budget-item"><label>Rent/Mortgage ($)</label><input type="number" id="rent" placeholder="0" value="2000"></div>
-                <div class="budget-item"><label>Car Loan Payment ($)</label><input type="number" id="carLoan" placeholder="0" value="400"></div>
-                <div class="budget-item"><label>Other Loan Payments ($)</label><input type="number" id="loanPayment" placeholder="0" value="0"></div>
-                <div class="budget-item"><label>Coffee/Takeaway ($)</label><input type="number" id="coffee" placeholder="0" value="100"></div>
-                <div class="budget-item"><label>Zip/Afterpay ($)</label><input type="number" id="zip" placeholder="0" value="0"></div>
-                <div class="budget-item"><label>Other Expenses ($)</label><input type="number" id="other" placeholder="0" value="300"></div>
-                <div class="budget-item"><label>Extra Expense 1 ($)</label><input type="number" id="extra1" placeholder="0" value="0"></div>
-                <div class="budget-item"><label>Extra Expense 2 ($)</label><input type="number" id="extra2" placeholder="0" value="0"></div>
+                <div class="budget-item"><label>🏠 Rent / Mortgage ($)</label><input type="number" id="rent" placeholder="0" value="2000"></div>
+                <div class="budget-item"><label>🚗 Car Loan Payment (Fixed)</label><input type="number" id="carLoan" placeholder="0" value="400"></div>
+                <div class="budget-item"><label>📄 Other Loan Payment ($)</label><input type="number" id="loanPayment" placeholder="0" value="0"></div>
             </div>
             <div style="margin-top:30px; padding:20px; background:var(--surface2); border-radius:16px;">
-                <h3>📊 Monthly Summary</h3>
-                <p>Total Income: <strong id="totalIncomeDisplay">$0</strong></p>
-                <p>Total Expenses: <strong id="totalExpensesDisplay">$0</strong></p>
-                <p style="font-size:1.2rem;">Monthly Surplus: <strong id="surplusDisplay" style="color:var(--success);">$0</strong></p>
+                <h3>📊 True Monthly Cashflow</h3>
+                <p>Total Monthly Income: <strong id="totalIncomeDisplay">$0</strong></p>
+                <p>Total Fixed Expenses: <strong id="totalFixedExpensesDisplay">$0</strong></p>
+                <p>📉 Minimum Debt Payments (All Debts): <strong id="totalMinDebtPaymentsDisplay" style="color:var(--warning);">$0</strong></p>
+                <div class="summary-highlight"><span style="font-size:1.2rem;">✨ Net Monthly Surplus (after min debts): </span><strong id="surplusDisplay" style="color:var(--success); font-size:1.5rem;">$0</strong></div>
+                <p class="tip" style="margin-top:12px;">💡 Your true surplus = Income − Fixed Expenses − Total Minimum Debt Payments. This is the real amount available for extra debt repayments or savings.</p>
             </div>
         </div>
     </div>
@@ -200,21 +196,18 @@
         </div>
     </div>
 
-    <!-- RECORDS TAB: Salaries, Car Loans Paid, Other Expenses -->
+    <!-- RECORDS TAB -->
     <div id="records" class="tab-panel">
         <div class="card">
             <h2>📜 Financial Records</h2>
-            <p>Track your progress over time: salaries added, car loans fully repaid, and expense summaries.</p>
+            <p>Track your progress: salaries added, car loans fully repaid, and expense summaries.</p>
             <div class="records-grid">
                 <div class="record-card"><h3>💰 Salaries Received</h3><div class="record-value" id="salaryCountDisplay">0</div><div class="record-sub">Since plan start (manual adds)</div></div>
                 <div class="record-card"><h3>🚗 Car Loans Fully Paid</h3><div class="record-value" id="carLoanPaidCountDisplay">0</div><div class="record-sub">Number of car loan debts cleared</div></div>
                 <div class="record-card"><h3>💵 Total Payments Made</h3><div class="record-value" id="totalPaymentsCountDisplay">0</div><div class="record-sub">Individual debt payments</div></div>
                 <div class="record-card"><h3>🏦 Total Amount Paid Off</h3><div class="record-value" id="totalSavedAmountDisplay">$0</div><div class="record-sub">Cumulative debt reduction</div></div>
                 <div class="record-card"><h3>📅 Daily Expenses (Total)</h3><div class="record-value" id="recordsDailyExpenses">$0</div><div class="record-sub">Since plan start date</div></div>
-                <div class="record-card"><h3>📋 Monthly Budgeted Expenses</h3><div class="record-value" id="monthlyBudgetExpensesDisplay">$0</div><div class="record-sub">Rent + Car loan + Other recurring</div></div>
-            </div>
-            <div class="tip" style="margin-top:20px;">
-                💡 Salaries are counted each time you click <strong>“+ Add Weekly Salary”</strong> in Settings. Car loans paid count increments whenever a debt with product “Car Loan” reaches $0 balance.
+                <div class="record-card"><h3>📋 Fixed Monthly Expenses</h3><div class="record-value" id="monthlyBudgetExpensesDisplay">$0</div><div class="record-sub">Rent + Car Loan + Other fixed</div></div>
             </div>
         </div>
     </div>
@@ -226,7 +219,7 @@
             <div style="display:flex; flex-direction:column; gap:24px;">
                 <div><button id="darkToggleBtn" class="btn-primary">🌙 Dark</button></div>
                 <div><h3>🏦 Bank Balance</h3><input type="number" id="bankBalanceInput" placeholder="Current balance" style="width:200px;"><button id="updateBankBtn" class="btn-sm">Update Balance</button><button id="manualSalaryBtn" class="btn-sm">+ Add Weekly Salary</button></div>
-                <div><h3>🎯 Savings Goal</h3><input type="number" id="savingsGoalInput" placeholder="Weekly savings goal" style="width:200px;"><button id="updateSavingsGoalBtn" class="btn-sm">Set Goal</button></div>
+                <div><h3>🎯 Savings Goal (Weekly)</h3><input type="number" id="savingsGoalInput" placeholder="Weekly savings goal" style="width:200px;"><button id="updateSavingsGoalBtn" class="btn-sm">Set Goal</button></div>
                 <div><h3>📅 Plan Start Date</h3><input type="date" id="planStartDate" style="width:200px;"><p id="startDatePreview" style="margin-top:8px; color:var(--text2);"></p></div>
                 <div><h3>⏱️ Repayment Term</h3><select id="termSelector" style="width:200px;"><option value="1">1 Year</option><option value="2">2 Years</option><option value="3">3 Years</option><option value="5" selected>5 Years</option></select><button id="updateTermBtn" class="btn-sm">Update Plan</button></div>
                 <div><h3>🔐 Passcode</h3><input type="password" id="newPasscodeInput" placeholder="4-digit code" maxlength="4" style="width:200px;"><button id="changePasscodeBtn" class="btn-sm">Change Passcode</button></div>
@@ -236,27 +229,8 @@
     </div>
 </div>
 <script>
-// ========== AUTO-RECOVERY & GLOBALS ==========
-(function() {
-    try { if (localStorage.getItem('debtsData')) JSON.parse(localStorage.getItem('debtsData')); } catch(e) { localStorage.clear(); }
-})();
-
-const australianBanks = {
-    'CommBank': { 'Credit Card': 18.2, 'Personal Loan': 9.5, 'Car Loan': 7.2, 'Home Loan': 6.8, 'BNPL': 0 },
-    'NAB': { 'Credit Card': 16.5, 'Personal Loan': 9.8, 'Car Loan': 7.5, 'Home Loan': 6.9, 'BNPL': 0 },
-    'Westpac': { 'Credit Card': 15.99, 'Personal Loan': 10.2, 'Car Loan': 7.8, 'Home Loan': 7.0, 'BNPL': 0 },
-    'ANZ': { 'Credit Card': 17.8, 'Personal Loan': 9.9, 'Car Loan': 7.6, 'Home Loan': 6.85, 'BNPL': 0 },
-    'HSBC': { 'Credit Card': 14.9, 'Personal Loan': 8.9, 'Car Loan': 7.1, 'Home Loan': 6.7, 'BNPL': 0 },
-    'Coles Credit': { 'Credit Card': 19.99, 'BNPL': 0 },
-    'Kogan Card': { 'Credit Card': 22.9, 'BNPL': 0 },
-    'Afterpay': { 'BNPL': 0, 'Buy Now Pay Later': 0 },
-    'Zip Pay': { 'BNPL': 0, 'Buy Now Pay Later': 0 },
-    'Latitude': { 'BNPL': 21.5, 'Buy Now Pay Later': 21.5 },
-    'Flexi Loan': { 'Personal Loan': 17.5, 'Short Term Loan': 17.5 },
-    'Boost': { 'Personal Loan': 16.9 },
-    'Mozo': { 'Personal Loan': 15.5 },
-    'Others': { 'Custom Debt': 0 }
-};
+// ========== Core Data & Helpers ==========
+const australianBanks = { 'CommBank': { 'Credit Card': 18.2, 'Personal Loan': 9.5, 'Car Loan': 7.2, 'Home Loan': 6.8, 'BNPL': 0 }, 'NAB': { 'Credit Card': 16.5, 'Personal Loan': 9.8, 'Car Loan': 7.5, 'Home Loan': 6.9, 'BNPL': 0 }, 'Westpac': { 'Credit Card': 15.99, 'Personal Loan': 10.2, 'Car Loan': 7.8, 'Home Loan': 7.0, 'BNPL': 0 }, 'ANZ': { 'Credit Card': 17.8, 'Personal Loan': 9.9, 'Car Loan': 7.6, 'Home Loan': 6.85, 'BNPL': 0 }, 'HSBC': { 'Credit Card': 14.9, 'Personal Loan': 8.9, 'Car Loan': 7.1, 'Home Loan': 6.7, 'BNPL': 0 }, 'Coles Credit': { 'Credit Card': 19.99, 'BNPL': 0 }, 'Kogan Card': { 'Credit Card': 22.9, 'BNPL': 0 }, 'Afterpay': { 'BNPL': 0, 'Buy Now Pay Later': 0 }, 'Zip Pay': { 'BNPL': 0, 'Buy Now Pay Later': 0 }, 'Latitude': { 'BNPL': 21.5, 'Buy Now Pay Later': 21.5 }, 'Flexi Loan': { 'Personal Loan': 17.5, 'Short Term Loan': 17.5 }, 'Boost': { 'Personal Loan': 16.9 }, 'Mozo': { 'Personal Loan': 15.5 }, 'Others': { 'Custom Debt': 0 } };
 const money = n => '$' + Math.round(Number(n || 0)).toLocaleString('en-AU');
 let RESET_PASSCODE = localStorage.getItem('appPasscode') || '1234';
 let currentBankBalance = parseFloat(localStorage.getItem('bankBalance') || '0');
@@ -269,16 +243,10 @@ let selectedTermYears = parseInt(localStorage.getItem('termYears') || '5', 10);
 let debts = [];
 let dailyExpenses = [];
 let paidWeeks = [];
-
-// NEW RECORDS COUNTERS
 let salaryCount = parseInt(localStorage.getItem('salaryCount') || '0', 10);
 let carLoanPaidCount = parseInt(localStorage.getItem('carLoanPaidCount') || '0', 10);
 let totalPaymentsCount = parseInt(localStorage.getItem('totalPaymentsCount') || '0', 10);
-
-let budgetValues = {
-    weeklySalary: 1500, additionalIncome: 0, rent: 2000, carLoan: 400, loanPayment: 0,
-    coffee: 100, zip: 0, other: 300, extra1: 0, extra2: 0
-};
+let budgetValues = { weeklySalary: 1500, additionalIncome: 0, rent: 2000, carLoan: 400, loanPayment: 0 };
 
 function saveAll() {
     localStorage.setItem('bankBalance', String(currentBankBalance));
@@ -297,7 +265,6 @@ function saveAll() {
     localStorage.setItem('carLoanPaidCount', String(carLoanPaidCount));
     localStorage.setItem('totalPaymentsCount', String(totalPaymentsCount));
 }
-
 function loadState() {
     const savedDebts = localStorage.getItem('debtsData');
     debts = savedDebts ? JSON.parse(savedDebts) : [];
@@ -308,37 +275,29 @@ function loadState() {
     if (savedBudget) budgetValues = { ...budgetValues, ...JSON.parse(savedBudget) };
     Object.keys(budgetValues).forEach(id => { const el = document.getElementById(id); if(el) el.value = budgetValues[id]; });
 }
-
-function calcMinPayment(balance, rate) { 
-    if (balance <= 0) return 0; 
-    const monthlyInt = balance * (rate / 100 / 12); 
-    const monthlyPrin = balance * 0.02; 
-    return Math.max(Math.ceil(monthlyInt + monthlyPrin), 25); 
-}
-
-function recalcAllMinPayments() { 
-    debts = debts.map(d => { 
-        const rate = d.bank === 'Others' ? Number(d.rate||0) : (australianBanks[d.bank]?.[d.product]||0); 
-        return {...d, rate, minPayment: calcMinPayment(Number(d.balance||0), rate)};
-    }); 
-}
-
+function calcMinPayment(balance, rate) { if (balance <= 0) return 0; const monthlyInt = balance * (rate / 100 / 12); const monthlyPrin = balance * 0.02; return Math.max(Math.ceil(monthlyInt + monthlyPrin), 25); }
+function recalcAllMinPayments() { debts = debts.map(d => { const rate = d.bank === 'Others' ? Number(d.rate||0) : (australianBanks[d.bank]?.[d.product]||0); return {...d, rate, minPayment: calcMinPayment(Number(d.balance||0), rate)}; }); }
 function totalDebtBalance() { return debts.reduce((s,d)=> s + Number(d.balance||0), 0); }
 function totalMinMonthly() { return debts.reduce((s,d)=> s + Number(d.minPayment||0), 0); }
 function totalDailyExpensesSinceStart() { const start = new Date(planStartDate); return dailyExpenses.filter(e => new Date(e.date) >= start).reduce((s,e)=> s + Number(e.amount||0), 0); }
 function getAutoWeeklyPayment() { const total = totalDebtBalance(); if (total <= 0) return 0; const avgRate = debts.length ? debts.reduce((s,d)=> s + Number(d.rate||0),0)/debts.length : 10; const totalWithInterest = total * (1 + (avgRate/100)); return Math.ceil(totalWithInterest / (selectedTermYears * 52)); }
-function getMonthlySurplus() { const salary = parseFloat(document.getElementById('weeklySalary')?.value||0); const addInc = parseFloat(document.getElementById('additionalIncome')?.value||0); const monthlyIncome = (salary*52/12)+(addInc*52/12); const expenses = ['rent','carLoan','loanPayment','coffee','zip','other','extra1','extra2'].reduce((s,id)=> s+(parseFloat(document.getElementById(id)?.value||0)||0),0); document.getElementById('totalIncomeDisplay').textContent = money(Math.round(monthlyIncome)); document.getElementById('totalExpensesDisplay').textContent = money(Math.round(expenses)); document.getElementById('surplusDisplay').textContent = money(Math.round(monthlyIncome - expenses)); return monthlyIncome - expenses; }
+function getFixedMonthlyExpenses() { return (parseFloat(budgetValues.rent||0) + parseFloat(budgetValues.carLoan||0) + parseFloat(budgetValues.loanPayment||0)); }
+function getMonthlyIncome() { const weeklySal = parseFloat(budgetValues.weeklySalary||0); const addInc = parseFloat(budgetValues.additionalIncome||0); return (weeklySal * 52 / 12) + (addInc * 52 / 12); }
+function getTrueMonthlySurplus() { const income = getMonthlyIncome(); const fixedExpenses = getFixedMonthlyExpenses(); const minDebtPayments = totalMinMonthly(); return income - fixedExpenses - minDebtPayments; }
 
 function updateAllDisplays() {
+    recalcAllMinPayments();
     const totalBal = totalDebtBalance();
     const autoPay = getAutoWeeklyPayment();
     const dailyExp = totalDailyExpensesSinceStart();
-    const monthlySurplus = getMonthlySurplus();
-    const totalMin = totalMinMonthly();
+    const fixedExpensesTotal = getFixedMonthlyExpenses();
+    const monthlyIncomeVal = getMonthlyIncome();
+    const minDebtTotal = totalMinMonthly();
+    const trueSurplus = getTrueMonthlySurplus();
     document.getElementById('heroTotalDebt').innerHTML = `${money(totalBal)}`;
-    document.getElementById('heroMinMonthly').innerHTML = `Min monthly: ${money(totalMin)}`;
+    document.getElementById('heroMinMonthly').innerHTML = `Min monthly: ${money(minDebtTotal)}`;
     document.getElementById('heroBankDisplay').textContent = money(currentBankBalance);
-    document.getElementById('heroSurplus').textContent = money(monthlySurplus);
+    document.getElementById('heroSurplus').textContent = money(trueSurplus);
     document.getElementById('heroWeeklyPayment').textContent = money(autoPay);
     document.getElementById('totalSavingsDisplay').textContent = money(totalSaved);
     document.getElementById('totalDailyExpensesDisplay').textContent = money(dailyExp);
@@ -348,6 +307,10 @@ function updateAllDisplays() {
     document.getElementById('autoPaymentPreview').textContent = money(autoPay);
     document.getElementById('dailyExpensesTotal').textContent = money(dailyExp);
     document.getElementById('dailyExpensesSince').textContent = planStartDate.toLocaleDateString('en-AU');
+    document.getElementById('totalIncomeDisplay').textContent = money(monthlyIncomeVal);
+    document.getElementById('totalFixedExpensesDisplay').textContent = money(fixedExpensesTotal);
+    document.getElementById('totalMinDebtPaymentsDisplay').textContent = money(minDebtTotal);
+    document.getElementById('surplusDisplay').textContent = money(trueSurplus);
     if (!debtOriginal || debtOriginal < totalBal) debtOriginal = totalBal || 1;
     const paidPct = Math.min(100, Math.round(((debtOriginal - totalBal)/debtOriginal)*100));
     const progressBar = document.getElementById('progressBar');
@@ -362,45 +325,24 @@ function updateAllDisplays() {
         document.getElementById('planTargetDate').textContent = target.toLocaleDateString('en-AU');
         document.getElementById('targetDateLabel').textContent = `Target: ${target.toLocaleDateString('en-AU')}`;
     } else { document.getElementById('weeksRemaining').textContent = '--'; document.getElementById('planTargetDate').textContent = '—'; document.getElementById('targetDateLabel').textContent = 'Select term'; }
-    
-    // UPDATE RECORDS TAB DISPLAYS
     document.getElementById('salaryCountDisplay').innerText = salaryCount;
     document.getElementById('carLoanPaidCountDisplay').innerText = carLoanPaidCount;
     document.getElementById('totalPaymentsCountDisplay').innerText = totalPaymentsCount;
     document.getElementById('totalSavedAmountDisplay').innerHTML = money(totalSaved);
     document.getElementById('recordsDailyExpenses').innerHTML = money(dailyExp);
-    const budgetExpenses = (parseFloat(document.getElementById('rent')?.value||0) + parseFloat(document.getElementById('carLoan')?.value||0) + parseFloat(document.getElementById('loanPayment')?.value||0) + parseFloat(document.getElementById('coffee')?.value||0) + parseFloat(document.getElementById('zip')?.value||0) + parseFloat(document.getElementById('other')?.value||0) + parseFloat(document.getElementById('extra1')?.value||0) + parseFloat(document.getElementById('extra2')?.value||0));
-    document.getElementById('monthlyBudgetExpensesDisplay').innerHTML = money(budgetExpenses);
+    document.getElementById('monthlyBudgetExpensesDisplay').innerHTML = money(fixedExpensesTotal);
 }
 
-// TRACK CAR LOAN COMPLETIONS
-function checkCarLoanCompletion(prevBalance, currentBalance, product) {
-    if (prevBalance > 0 && currentBalance === 0 && product === 'Car Loan') {
-        carLoanPaidCount++;
-        saveAll();
-    }
-}
-
-// PER-DEBT PAYMENT WITH TRACKING
+function checkCarLoanCompletion(prevBalance, currentBalance, product) { if (prevBalance > 0 && currentBalance === 0 && product === 'Car Loan') { carLoanPaidCount++; saveAll(); } }
 function makeDebtPayment(debtIndex) {
     const debt = debts[debtIndex];
-    if (!debt) return;
-    if (debt.balance <= 0) {
-        alert(`✅ ${debt.bank} - ${debt.product} is already paid off!`);
-        return;
-    }
+    if (!debt || debt.balance <= 0) { alert(`✅ Already paid off!`); return; }
     const maxPay = Math.min(debt.balance, currentBankBalance);
-    if (maxPay <= 0) {
-        alert(`❌ Insufficient bank balance. Available: ${money(currentBankBalance)}.`);
-        return;
-    }
-    const amountStr = prompt(`Enter payment amount for ${debt.bank} - ${debt.product} (Balance: ${money(debt.balance)} | Max: ${money(maxPay)})`, Math.min(50, maxPay).toString());
-    if (amountStr === null) return;
+    if (maxPay <= 0) { alert(`❌ Insufficient bank balance. Available: ${money(currentBankBalance)}.`); return; }
+    const amountStr = prompt(`Payment for ${debt.bank} - ${debt.product} (Balance: ${money(debt.balance)} | Max: ${money(maxPay)})`, Math.min(50, maxPay).toString());
+    if (!amountStr) return;
     let amount = parseFloat(amountStr);
-    if (isNaN(amount) || amount <= 0) { alert("Invalid amount."); return; }
-    if (amount > debt.balance) { alert(`Amount exceeds balance.`); return; }
-    if (amount > currentBankBalance) { alert(`Insufficient funds.`); return; }
-    
+    if (isNaN(amount) || amount <= 0 || amount > debt.balance || amount > currentBankBalance) { alert("Invalid amount."); return; }
     const oldBalance = debt.balance;
     debt.balance -= amount;
     currentBankBalance -= amount;
@@ -414,146 +356,40 @@ function makeDebtPayment(debtIndex) {
     renderDebtTable();
     buildPlanView();
     renderWeeklyTracker();
-    alert(`✅ Paid ${money(amount)} to ${debt.bank} - ${debt.product}. New balance: ${money(debt.balance)}`);
+    alert(`✅ Paid ${money(amount)} to ${debt.bank} - ${debt.product}.`);
 }
-
-function applyPayment(amount) { 
-    let remaining = Number(amount||0); 
-    if(remaining<=0 || totalDebtBalance()<=0) return; 
-    const sorted = [...debts].sort((a,b)=>b.rate-a.rate); 
-    for(let d of sorted) { 
-        if(remaining<=0) break; 
-        const oldBal = d.balance;
-        const pay = Math.min(d.balance, remaining); 
-        d.balance -= pay; 
-        if (pay > 0) totalPaymentsCount++;
-        checkCarLoanCompletion(oldBal, d.balance, d.product);
-        remaining -= pay; 
-    } 
-    recalcAllMinPayments(); 
-    renderDebtTable(); 
-}
-
-// Salary addition with counter
-function addWeeklySalary() {
-    const weeklySal = parseFloat(document.getElementById('weeklySalary').value || 0);
-    if (weeklySal > 0) {
-        currentBankBalance += weeklySal;
-        salaryCount++;
-        updateAllDisplays();
-        saveAll();
-        alert(`Added weekly salary: ${money(weeklySal)}. Total salaries received: ${salaryCount}`);
-    } else {
-        alert("Please set a weekly salary amount in Budget tab first.");
-    }
-}
-
-function renderDailyExpenses() { /* unchanged logic */ 
-    const container = document.getElementById('dailyExpensesList');
-    if (!container) return;
-    container.innerHTML = '';
-    dailyExpenses.sort((a,b) => new Date(b.date) - new Date(a.date)).forEach((exp, idx) => {
-        const div = document.createElement('div');
-        div.className = 'daily-expense-row';
-        div.innerHTML = `
-            <input type="date" class="expense-date" value="${exp.date}" data-idx="${idx}" data-field="date">
-            <input type="number" class="expense-amount" value="${exp.amount}" step="0.01" data-idx="${idx}" data-field="amount" placeholder="Amount">
-            <input type="text" class="expense-note" value="${exp.note||''}" data-idx="${idx}" data-field="note" placeholder="Note">
-            <button class="btn-sm btn-danger" data-delete-idx="${idx}">✖ Delete</button>
-        `;
-        container.appendChild(div);
-    });
-    document.querySelectorAll('.expense-date, .expense-amount, .expense-note').forEach(el => {
-        el.removeEventListener('change', handleExpenseChange);
-        el.addEventListener('change', handleExpenseChange);
-    });
-    document.querySelectorAll('[data-delete-idx]').forEach(btn => {
-        btn.removeEventListener('click', handleExpenseDelete);
-        btn.addEventListener('click', handleExpenseDelete);
-    });
+function applyPayment(amount) { let remaining = Number(amount||0); if(remaining<=0 || totalDebtBalance()<=0) return; const sorted = [...debts].sort((a,b)=>b.rate-a.rate); for(let d of sorted) { if(remaining<=0) break; const oldBal = d.balance; const pay = Math.min(d.balance, remaining); d.balance -= pay; if (pay > 0) totalPaymentsCount++; checkCarLoanCompletion(oldBal, d.balance, d.product); remaining -= pay; } recalcAllMinPayments(); renderDebtTable(); updateAllDisplays(); }
+function addWeeklySalary() { const weeklySal = parseFloat(budgetValues.weeklySalary || 0); if (weeklySal > 0) { currentBankBalance += weeklySal; salaryCount++; updateAllDisplays(); saveAll(); alert(`Added salary: ${money(weeklySal)}. Total salaries: ${salaryCount}`); } else alert("Set weekly salary in Budget tab."); }
+function renderDailyExpenses() { /* same robust logic */ const container = document.getElementById('dailyExpensesList'); if(!container) return; container.innerHTML=''; dailyExpenses.sort((a,b)=>new Date(b.date)-new Date(a.date)).forEach((exp,idx)=>{ const div=document.createElement('div'); div.className='daily-expense-row'; div.innerHTML=`<input type="date" class="expense-date" value="${exp.date}" data-idx="${idx}" data-field="date"><input type="number" class="expense-amount" value="${exp.amount}" step="0.01" data-idx="${idx}" data-field="amount"><input type="text" class="expense-note" value="${exp.note||''}" data-idx="${idx}" data-field="note"><button class="btn-sm btn-danger" data-delete-idx="${idx}">✖ Delete</button>`; container.appendChild(div); });
+    document.querySelectorAll('.expense-date, .expense-amount, .expense-note').forEach(el=>{ el.removeEventListener('change', handleExpenseChange); el.addEventListener('change', handleExpenseChange); });
+    document.querySelectorAll('[data-delete-idx]').forEach(btn=>{ btn.removeEventListener('click', handleExpenseDelete); btn.addEventListener('click', handleExpenseDelete); });
     updateAllDisplays();
 }
-function handleExpenseChange(e) { /* same as before */
-    const idx = parseInt(e.target.getAttribute('data-idx'));
-    const field = e.target.getAttribute('data-field');
-    if (field === 'amount') {
-        const oldAmount = Number(dailyExpenses[idx]?.amount || 0);
-        const newAmount = parseFloat(e.target.value) || 0;
-        currentBankBalance = currentBankBalance + oldAmount - newAmount;
-        dailyExpenses[idx].amount = newAmount;
-    } else if (field === 'date') dailyExpenses[idx].date = e.target.value;
-    else if (field === 'note') dailyExpenses[idx].note = e.target.value;
-    saveAll();
-    renderDailyExpenses();
+function handleExpenseChange(e) { const idx=parseInt(e.target.dataset.idx), field=e.target.dataset.field; if(field==='amount'){ const old=Number(dailyExpenses[idx]?.amount||0); const newAmt=parseFloat(e.target.value)||0; currentBankBalance=currentBankBalance+old-newAmt; dailyExpenses[idx].amount=newAmt; } else if(field==='date') dailyExpenses[idx].date=e.target.value; else if(field==='note') dailyExpenses[idx].note=e.target.value; saveAll(); renderDailyExpenses(); }
+function handleExpenseDelete(e) { const idx=parseInt(e.target.dataset.deleteIdx); if(isNaN(idx)) return; currentBankBalance+=Number(dailyExpenses[idx]?.amount||0); dailyExpenses.splice(idx,1); saveAll(); renderDailyExpenses(); }
+function addDailyExpense() { dailyExpenses.push({ id:crypto.randomUUID(), date:new Date().toISOString().slice(0,10), amount:0, note:'' }); renderDailyExpenses(); saveAll(); }
+function renderDebtTable() { /* full render with payment callback */ const tbody=document.getElementById('debtTableBody'); if(!tbody) return; tbody.innerHTML=''; if(!debts.length){ tbody.innerHTML='<tr><td colspan="8">📋 Add a debt to start</td></tr>'; updateAllDisplays(); return; }
+    debts.forEach((row,idx)=>{ const tr=document.createElement('tr'); const tdBank=document.createElement('td'); const bankSel=document.createElement('select'); Object.keys(australianBanks).forEach(b=>{ const opt=document.createElement('option'); opt.value=b; opt.textContent=b; if(b===row.bank) opt.selected=true; bankSel.appendChild(opt); }); tdBank.appendChild(bankSel);
+    const tdProd=document.createElement('td'); const prodSel=document.createElement('select'); tdProd.appendChild(prodSel);
+    const tdBal=document.createElement('td'); const balInp=document.createElement('input'); balInp.type='number'; balInp.value=row.balance; tdBal.appendChild(balInp);
+    const tdRate=document.createElement('td'); const rateInp=document.createElement('input'); rateInp.type='number'; rateInp.value=row.rate; tdRate.appendChild(rateInp);
+    const tdMin=document.createElement('td'); const minInp=document.createElement('input'); minInp.type='number'; minInp.value=row.minPayment; minInp.readOnly=true; tdMin.appendChild(minInp);
+    const tdDue=document.createElement('td'); const dueInp=document.createElement('input'); dueInp.type='number'; dueInp.value=row.dueDay||1; tdDue.appendChild(dueInp);
+    const tdPay=document.createElement('td'); const payBtn=document.createElement('button'); payBtn.textContent='💵 Pay'; payBtn.className='btn-pay'; payBtn.onclick=(function(i){ return function(){ makeDebtPayment(i); }; })(idx); tdPay.appendChild(payBtn);
+    const tdDel=document.createElement('td'); const delBtn=document.createElement('button'); delBtn.textContent='✖'; delBtn.className='btn-sm btn-danger'; tdDel.appendChild(delBtn);
+    tr.append(tdBank, tdProd, tdBal, tdRate, tdMin, tdDue, tdPay, tdDel); tbody.appendChild(tr);
+    function refreshProducts(){ const bank=bankSel.value; prodSel.innerHTML=''; const products=australianBanks[bank]||{}; Object.keys(products).forEach(p=>{const opt=document.createElement('option'); opt.value=p; opt.textContent=p; if(p===row.product) opt.selected=true; prodSel.appendChild(opt);}); rateInp.readOnly=bank!=='Others'; if(bank!=='Others') rateInp.value=australianBanks[bank]?.[prodSel.value]??0; }
+    function updateRow(){ row.bank=bankSel.value; row.product=prodSel.value; row.balance=Number(balInp.value); row.rate=row.bank==='Others'?Number(rateInp.value):(australianBanks[row.bank]?.[row.product]||0); row.dueDay=Number(dueInp.value); row.minPayment=calcMinPayment(row.balance,row.rate); minInp.value=row.minPayment; refreshProducts(); updateAllDisplays(); buildPlanView(); renderWeeklyTracker(); saveAll(); }
+    bankSel.onchange=()=>{refreshProducts(); updateRow();}; prodSel.onchange=updateRow; balInp.oninput=updateRow; rateInp.oninput=()=>{if(bankSel.value==='Others') updateRow();}; dueInp.oninput=updateRow; delBtn.onclick=()=>{debts.splice(idx,1); renderDebtTable();}; refreshProducts(); });
 }
-function handleExpenseDelete(e) {
-    const idx = parseInt(e.target.getAttribute('data-delete-idx'));
-    if (isNaN(idx)) return;
-    const amount = Number(dailyExpenses[idx]?.amount || 0);
-    currentBankBalance += amount;
-    dailyExpenses.splice(idx, 1);
-    saveAll();
-    renderDailyExpenses();
-}
-function addDailyExpense() {
-    dailyExpenses.push({ id: crypto.randomUUID(), date: new Date().toISOString().slice(0,10), amount: 0, note: '' });
-    renderDailyExpenses();
-    saveAll();
-}
-function renderDebtTable() { /* same robust table with pay button calling makeDebtPayment */
-    const tbody = document.getElementById('debtTableBody');
-    if (!tbody) return;
-    tbody.innerHTML = '';
-    if (!debts.length) { tbody.innerHTML = '<tr><td colspan="8">📋 Add a debt to start</td></tr>'; updateAllDisplays(); return; }
-    debts.forEach((row, idx) => {
-        const tr = document.createElement('tr');
-        const tdBank = document.createElement('td'); const bankSel = document.createElement('select');
-        Object.keys(australianBanks).forEach(b => { const opt = document.createElement('option'); opt.value=b; opt.textContent=b; if(b===row.bank) opt.selected=true; bankSel.appendChild(opt); });
-        tdBank.appendChild(bankSel);
-        const tdProd = document.createElement('td'); const prodSel = document.createElement('select'); tdProd.appendChild(prodSel);
-        const tdBal = document.createElement('td'); const balInp = document.createElement('input'); balInp.type='number'; balInp.value=row.balance; tdBal.appendChild(balInp);
-        const tdRate = document.createElement('td'); const rateInp = document.createElement('input'); rateInp.type='number'; rateInp.value=row.rate; tdRate.appendChild(rateInp);
-        const tdMin = document.createElement('td'); const minInp = document.createElement('input'); minInp.type='number'; minInp.value=row.minPayment; minInp.readOnly=true; tdMin.appendChild(minInp);
-        const tdDue = document.createElement('td'); const dueInp = document.createElement('input'); dueInp.type='number'; dueInp.value=row.dueDay||1; tdDue.appendChild(dueInp);
-        const tdPay = document.createElement('td'); const payBtn = document.createElement('button'); payBtn.textContent='💵 Pay'; payBtn.className='btn-pay'; payBtn.onclick = (function(i){ return function(){ makeDebtPayment(i); }; })(idx); tdPay.appendChild(payBtn);
-        const tdDel = document.createElement('td'); const delBtn = document.createElement('button'); delBtn.textContent='✖'; delBtn.className='btn-sm btn-danger'; tdDel.appendChild(delBtn);
-        tr.append(tdBank, tdProd, tdBal, tdRate, tdMin, tdDue, tdPay, tdDel);
-        tbody.appendChild(tr);
-        function refreshProducts() { const bank=bankSel.value; prodSel.innerHTML=''; const products=australianBanks[bank]||{}; Object.keys(products).forEach(p=>{const opt=document.createElement('option'); opt.value=p; opt.textContent=p; if(p===row.product) opt.selected=true; prodSel.appendChild(opt);}); rateInp.readOnly=bank!=='Others'; if(bank!=='Others') rateInp.value=australianBanks[bank]?.[prodSel.value]??0; }
-        function updateRow() { row.bank=bankSel.value; row.product=prodSel.value; row.balance=Number(balInp.value); row.rate=row.bank==='Others'?Number(rateInp.value):(australianBanks[row.bank]?.[row.product]||0); row.dueDay=Number(dueInp.value); row.minPayment=calcMinPayment(row.balance,row.rate); minInp.value=row.minPayment; refreshProducts(); updateAllDisplays(); buildPlanView(); renderWeeklyTracker(); saveAll(); }
-        bankSel.onchange=()=>{refreshProducts(); updateRow();}; prodSel.onchange=updateRow; balInp.oninput=updateRow; rateInp.oninput=()=>{if(bankSel.value==='Others') updateRow();}; dueInp.oninput=updateRow; delBtn.onclick=()=>{debts.splice(idx,1); renderDebtTable();}; refreshProducts();
-    });
-}
-function buildPlanView() { /* same */ const active = debts.filter(d=>d.balance>0).sort((a,b)=>b.rate-a.rate); const container=document.getElementById('planStepsContainer'); if(!active.length){ container.innerHTML='<div class="tip">Add debts</div>'; return; } container.innerHTML=active.map((r,i)=>`<div class="plan-step"><div class="step-num">${i+1}</div><div class="step-body"><h4>${r.bank} – ${r.product}</h4><p>Balance: ${money(r.balance)} | Rate: ${r.rate}%</p></div></div>`).join(''); }
+function buildPlanView() { const active=debts.filter(d=>d.balance>0).sort((a,b)=>b.rate-a.rate); const container=document.getElementById('planStepsContainer'); if(!active.length){ container.innerHTML='<div class="tip">Add debts</div>'; return; } container.innerHTML=active.map((r,i)=>`<div class="plan-step"><div class="step-num">${i+1}</div><div class="step-body"><h4>${r.bank} – ${r.product}</h4><p>Balance: ${money(r.balance)} | Rate: ${r.rate}%</p></div></div>`).join(''); }
 function renderWeeklyTracker() { const tracker=document.getElementById('weeklyTracker'); if(!tracker) return; tracker.innerHTML=''; const autoPay=getAutoWeeklyPayment(); for(let i=0;i<156;i++){ const chip=document.createElement('div'); chip.className='week-chip'; if(paidWeeks.includes(i)) chip.classList.add('paid'); chip.innerHTML=`<div class="wk">Week ${i+1}</div><div class="amt">${money(autoPay)}</div>`; chip.onclick=()=>{ if(paidWeeks.includes(i)){alert('Already paid'); return;} if(currentBankBalance>=autoPay && autoPay>0){ currentBankBalance-=autoPay; totalSaved+=autoPay; paidWeeks.push(i); applyPayment(autoPay); updateAllDisplays(); renderWeeklyTracker(); saveAll(); } else alert('Insufficient balance.'); }; tracker.appendChild(chip); } }
 function setTheme() { document.body.classList.toggle('light', isLight); document.getElementById('darkToggleBtn').textContent = isLight ? '🌙 Dark' : '☀️ Light'; }
 function resetDebts() { debts = debts.map(d=>({...d, balance:0, minPayment:0})); renderDebtTable(); updateAllDisplays(); saveAll(); alert('Debts cleared'); }
-function factoryReset() { if(!confirm('⚠️ FACTORY RESET')) return; debts=[]; dailyExpenses=[]; paidWeeks=[]; currentBankBalance=0; totalSaved=0; savingsGoal=0; debtOriginal=0; salaryCount=0; carLoanPaidCount=0; totalPaymentsCount=0; selectedTermYears=5; planStartDate=new Date(); document.getElementById('termSelector').value='5'; document.getElementById('planStartDate').value=planStartDate.toISOString().slice(0,10); Object.keys(budgetValues).forEach(id=>{const el=document.getElementById(id); if(el) el.value=0;}); document.getElementById('bankBalanceInput').value=0; saveAll(); renderDebtTable(); renderDailyExpenses(); updateAllDisplays(); buildPlanView(); renderWeeklyTracker(); alert('Factory reset complete.'); }
-function bindBudgetInputs() { ['weeklySalary','additionalIncome','rent','carLoan','loanPayment','coffee','zip','other','extra1','extra2'].forEach(id=>{const el=document.getElementById(id); if(el) el.addEventListener('input',()=>{budgetValues[id]=parseFloat(el.value)||0; updateAllDisplays(); saveAll();});}); }
-function switchTab(tabId) { document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(tabId)?.classList.add('active'); const btn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`); if(btn) btn.classList.add('active'); if(tabId === 'daily') renderDailyExpenses(); if(tabId === 'records') updateAllDisplays(); }
-
-window.onload = () => {
-    loadState(); setTheme(); renderDebtTable(); renderDailyExpenses(); updateAllDisplays(); buildPlanView(); renderWeeklyTracker();
-    document.getElementById('planStartDate').value = planStartDate.toISOString().slice(0,10);
-    document.getElementById('termSelector').value = String(selectedTermYears);
-    document.getElementById('bankBalanceInput').value = String(currentBankBalance);
-    document.getElementById('savingsGoalInput').value = String(savingsGoal);
-    document.getElementById('startDatePreview').textContent = planStartDate.toLocaleDateString('en-AU');
-    document.getElementById('darkToggleBtn').onclick = () => { isLight = !isLight; setTheme(); saveAll(); };
-    document.getElementById('addDebtRowBtn').onclick = () => { addNewDebt(); };
-    document.getElementById('addDailyExpenseBtn').onclick = addDailyExpense;
-    document.getElementById('updateTermBtn').onclick = () => { selectedTermYears = parseInt(document.getElementById('termSelector').value,10); updateAllDisplays(); renderWeeklyTracker(); saveAll(); };
-    document.getElementById('manualSalaryBtn').onclick = addWeeklySalary;
-    document.getElementById('quickAddPaymentBtn').onclick = () => { const amt = parseFloat(prompt('Extra payment amount (avalanche):','50')||'0'); if(amt>0) { applyPayment(amt); updateAllDisplays(); renderDebtTable(); saveAll(); } };
-    document.getElementById('resetDebtBtnSettings').onclick = resetDebts;
-    document.getElementById('resetFullBtnSettings').onclick = factoryReset;
-    document.getElementById('updateBankBtn').onclick = () => { currentBankBalance = parseFloat(document.getElementById('bankBalanceInput').value||0); updateAllDisplays(); saveAll(); };
-    document.getElementById('updateSavingsGoalBtn').onclick = () => { savingsGoal = parseFloat(document.getElementById('savingsGoalInput').value||0); saveAll(); };
-    document.getElementById('changePasscodeBtn').onclick = () => { const v = document.getElementById('newPasscodeInput').value.trim(); if(/^\d{4}$/.test(v)){ RESET_PASSCODE=v; saveAll(); alert('Passcode updated.'); } else alert('Enter 4-digit code.'); };
-    document.getElementById('planStartDate').addEventListener('change', e => { planStartDate = new Date(e.target.value); updateAllDisplays(); renderDailyExpenses(); renderWeeklyTracker(); saveAll(); });
-    bindBudgetInputs(); saveAll();
-    window.addNewDebt = () => { debts.push({ id:crypto.randomUUID(), bank:'CommBank', product:'Credit Card', balance:5000, rate:18.2, minPayment:0, dueDay:1 }); renderDebtTable(); };
-};
+function factoryReset() { if(!confirm('⚠️ FACTORY RESET')) return; debts=[]; dailyExpenses=[]; paidWeeks=[]; currentBankBalance=0; totalSaved=0; savingsGoal=0; debtOriginal=0; salaryCount=0; carLoanPaidCount=0; totalPaymentsCount=0; selectedTermYears=5; planStartDate=new Date(); document.getElementById('termSelector').value='5'; document.getElementById('planStartDate').value=planStartDate.toISOString().slice(0,10); Object.keys(budgetValues).forEach(id=>{const el=document.getElementById(id); if(el) el.value=0;}); budgetValues={weeklySalary:0,additionalIncome:0,rent:0,carLoan:0,loanPayment:0}; document.getElementById('bankBalanceInput').value=0; saveAll(); renderDebtTable(); renderDailyExpenses(); updateAllDisplays(); buildPlanView(); renderWeeklyTracker(); alert('Factory reset complete.'); }
+function bindBudgetInputs() { ['weeklySalary','additionalIncome','rent','carLoan','loanPayment'].forEach(id=>{ const el=document.getElementById(id); if(el) el.addEventListener('input',()=>{ budgetValues[id]=parseFloat(el.value)||0; updateAllDisplays(); saveAll(); }); }); }
+window.switchTab = function(tabId) { document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active')); document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active')); document.getElementById(tabId)?.classList.add('active'); const btn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`); if(btn) btn.classList.add('active'); if(tabId === 'daily') renderDailyExpenses(); if(tabId === 'records') updateAllDisplays(); };
+window.onload = () => { loadState(); setTheme(); renderDebtTable(); renderDailyExpenses(); updateAllDisplays(); buildPlanView(); renderWeeklyTracker(); document.getElementById('planStartDate').value=planStartDate.toISOString().slice(0,10); document.getElementById('termSelector').value=String(selectedTermYears); document.getElementById('bankBalanceInput').value=String(currentBankBalance); document.getElementById('savingsGoalInput').value=String(savingsGoal); document.getElementById('darkToggleBtn').onclick=()=>{ isLight=!isLight; setTheme(); saveAll(); }; document.getElementById('addDebtRowBtn').onclick=()=>{ debts.push({ id:crypto.randomUUID(), bank:'CommBank', product:'Credit Card', balance:5000, rate:18.2, minPayment:0, dueDay:1 }); renderDebtTable(); updateAllDisplays(); }; document.getElementById('addDailyExpenseBtn').onclick=addDailyExpense; document.getElementById('updateTermBtn').onclick=()=>{ selectedTermYears=parseInt(document.getElementById('termSelector').value,10); updateAllDisplays(); renderWeeklyTracker(); saveAll(); }; document.getElementById('manualSalaryBtn').onclick=addWeeklySalary; document.getElementById('quickAddPaymentBtn').onclick=()=>{ const amt=parseFloat(prompt('Extra payment amount (avalanche):','50')||'0'); if(amt>0) { applyPayment(amt); updateAllDisplays(); renderDebtTable(); saveAll(); } }; document.getElementById('resetDebtBtnSettings').onclick=resetDebts; document.getElementById('resetFullBtnSettings').onclick=factoryReset; document.getElementById('updateBankBtn').onclick=()=>{ currentBankBalance=parseFloat(document.getElementById('bankBalanceInput').value||0); updateAllDisplays(); saveAll(); }; document.getElementById('updateSavingsGoalBtn').onclick=()=>{ savingsGoal=parseFloat(document.getElementById('savingsGoalInput').value||0); saveAll(); }; document.getElementById('changePasscodeBtn').onclick=()=>{ const v=document.getElementById('newPasscodeInput').value.trim(); if(/^\d{4}$/.test(v)){ RESET_PASSCODE=v; saveAll(); alert('Passcode updated.'); } else alert('Enter 4-digit code.'); }; document.getElementById('planStartDate').addEventListener('change', e=>{ planStartDate=new Date(e.target.value); updateAllDisplays(); renderDailyExpenses(); renderWeeklyTracker(); saveAll(); }); bindBudgetInputs(); saveAll(); };
 </script>
 </body>
 </html>

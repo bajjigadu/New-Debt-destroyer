@@ -68,6 +68,7 @@
         .week-chip.paid { background:var(--success); color:white; }
         .summary-highlight { background:var(--surface); border-radius:12px; padding:12px; margin-top:12px; }
         .optional-note { font-size:0.8rem; color:var(--warning); margin-left:8px; }
+        .editable-min { background:var(--surface); cursor:text; }
         @media (max-width:768px) { .container { padding:12px; } .hero { grid-template-columns:1fr; } th, td { padding:8px; font-size:.85rem; } .tab-btn { padding:8px 16px; font-size:.9rem; } }
     </style>
 </head>
@@ -90,7 +91,6 @@
         <button class="tab-btn" onclick="switchTab('settings')">⚙️ Settings</button>
     </div>
 
-    <!-- Dashboard Tab -->
     <div id="dashboard" class="tab-panel active">
         <div class="card"><h2>📈 Progress Overview</h2><div class="progress-container"><div class="progress-bar" id="progressBar">0%</div></div><p id="progressPercent" style="text-align:center; margin-top:12px;">0% paid off</p>
         <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(200px,1fr)); gap:20px; margin-top:30px;">
@@ -103,20 +103,17 @@
         <div class="card"><h2>📅 Weekly Payment Schedule</h2><p>Click any week to mark as paid: <strong id="autoPaymentPreview">$0</strong>/week</p><div id="weeklyTracker" class="weekly-tracker"></div></div>
     </div>
 
-    <!-- Daily Expenses Tab -->
     <div id="daily" class="tab-panel">
         <div class="card"><h2>📅 Daily Expenses Tracker</h2><p>Track your daily spending - automatically deducts from bank balance.</p><div id="dailyExpensesList"></div><div class="button-group"><button id="addDailyExpenseBtn" class="btn-primary">+ Add Expense</button></div>
         <div style="margin-top:20px; padding:16px; background:var(--surface2); border-radius:12px;"><p><strong>Total Daily Expenses (since plan start):</strong> <span id="dailyExpensesTotal" style="color:var(--danger);">$0</span></p><p><strong>Plan started:</strong> <span id="dailyExpensesSince"></span></p></div></div>
     </div>
 
-    <!-- Debts Tab -->
     <div id="debts" class="tab-panel">
         <div class="card"><div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;"><h2>💸 Your Debts</h2><div class="button-group" style="margin:0;"><button id="addDebtRowBtn" class="btn-primary">+ Add Debt</button><button id="quickAddPaymentBtn" class="btn-secondary">💵 Quick Pay (Avalanche)</button></div></div>
         <div class="debt-table"><table id="debtsTable"><thead><tr><th>Bank</th><th>Product</th><th>Balance ($)</th><th>Rate (%)</th><th>Min Payment ($)</th><th>Due Day</th><th>Pay</th><th>Delete</th></thead><tbody id="debtTableBody"></tbody></table></div>
-        <div class="tip">💡 Click <strong>Pay</strong> to make manual payments. Minimum payment = max($25, 2% of balance).</div></div>
+        <div class="tip">💡 <strong>Min Payment is now editable!</strong> Click any min payment cell and type your desired amount. For BNPL (Zip/Afterpay) we start at $0. Changes save automatically.</div></div>
     </div>
 
-    <!-- Budget Tab: Fixed + Optional Zip/Afterpay (Manual Edit) -->
     <div id="budget" class="tab-panel">
         <div class="card"><h2>💰 Income & Expenses</h2><p class="tip" style="margin-bottom:16px;">📌 Fixed recurring expenses are always deducted. Optional Zip/Afterpay can be manually entered each month.</p>
         <div class="budget-grid">
@@ -134,16 +131,14 @@
             <p>📉 Minimum Debt Payments (All Debts): <strong id="totalMinDebtPaymentsDisplay" style="color:var(--warning);">$0</strong></p>
             <p>🟣 Optional Zip/Afterpay (manual): <strong id="zipPaymentDisplay" style="color:var(--warning);">$0</strong></p>
             <div class="summary-highlight"><span style="font-size:1.2rem;">✨ Net Monthly Surplus (after all costs): </span><strong id="surplusDisplay" style="color:var(--success); font-size:1.5rem;">$0</strong></div>
-            <p class="tip" style="margin-top:12px;">💡 Surplus = Income − Fixed Expenses − Min Debt Payments − Optional Zip/Afterpay. Enter any Zip/Afterpay amount manually – it's not fixed.</p>
+            <p class="tip" style="margin-top:12px;">💡 Surplus = Income − Fixed Expenses − Min Debt Payments − Optional Zip/Afterpay.</p>
         </div></div>
     </div>
 
-    <!-- Plan Tab -->
     <div id="plan" class="tab-panel">
         <div class="card"><h2>🎯 Debt Avalanche Strategy</h2><p>Highest interest rate first - saves you the most money!</p><div style="background:var(--surface2); padding:16px; border-radius:12px; margin:20px 0;"><p>Total Debt: <strong id="planTotalDebt">$0</strong></p><p>Recommended Weekly Payment: <strong id="planRequiredWeekly">$0</strong></p><p id="targetDateLabel">Target: —</p></div><h3>🔥 Payment Priority Order</h3><div id="planStepsContainer" class="plan-steps"></div></div>
     </div>
 
-    <!-- Records Tab -->
     <div id="records" class="tab-panel">
         <div class="card"><h2>📜 Financial Records</h2><div class="records-grid">
             <div class="record-card"><h3>💰 Salaries Received</h3><div class="record-value" id="salaryCountDisplay">0</div></div>
@@ -155,7 +150,6 @@
         </div></div>
     </div>
 
-    <!-- Settings Tab -->
     <div id="settings" class="tab-panel">
         <div class="card"><h2>⚙️ Preferences</h2><div style="display:flex; flex-direction:column; gap:24px;">
             <div><button id="darkToggleBtn" class="btn-primary">🌙 Dark</button></div>
@@ -212,7 +206,7 @@ function saveAll() {
 function loadState() {
     const saved = localStorage.getItem('debtsData');
     debts = saved ? JSON.parse(saved) : [];
-    debts = debts.map(d => ({ id: d.id || crypto.randomUUID(), bank: d.bank || 'CommBank', product: d.product || 'Credit Card', balance: Number(d.balance || 0), rate: Number(d.rate || 0), minPayment: Number(d.minPayment || 0), dueDay: Number(d.dueDay || 1) }));
+    debts = debts.map(d => ({ id: d.id || crypto.randomUUID(), bank: d.bank || 'CommBank', product: d.product || 'Credit Card', balance: Number(d.balance || 0), rate: Number(d.rate || 0), minPayment: Number(d.minPayment || 0), dueDay: Number(d.dueDay || 1), customMin: d.customMin || false }));
     dailyExpenses = localStorage.getItem('dailyExpenses') ? JSON.parse(localStorage.getItem('dailyExpenses')) : [];
     paidWeeks = localStorage.getItem('paidWeeks') ? JSON.parse(localStorage.getItem('paidWeeks')) : [];
     const savedBudget = localStorage.getItem('budgetValues');
@@ -222,18 +216,24 @@ function loadState() {
         if (el) el.value = budgetValues[id];
     }
 }
-function calcMinPayment(balance) { 
+// Default minimum: For BNPL (rate == 0) default to 0, otherwise 2% or $25.
+function defaultMinPayment(balance, rate) {
     if (balance <= 0) return 0;
+    if (rate === 0) return 0;  // BNPL / Zip / Afterpay default 0
     return Math.max(25, Math.ceil(balance * 0.02));
 }
-function updateDebtRatesAndMin() {
+function updateDebtRatesAndMin(respectCustom = true) {
     for (let d of debts) {
         if (d.bank === 'Others') {
             d.rate = d.rate || 0;
         } else {
             d.rate = (banks[d.bank] && banks[d.bank][d.product]) || 0;
         }
-        d.minPayment = calcMinPayment(d.balance);
+        // Only auto-update min payment if not custom OR if balance changed to zero
+        if (!respectCustom || !d.customMin || d.balance === 0) {
+            d.minPayment = defaultMinPayment(d.balance, d.rate);
+            if (d.balance === 0) d.customMin = false;
+        }
     }
 }
 function totalDebtBalance() { return debts.reduce((s,d) => s + d.balance, 0); }
@@ -260,7 +260,7 @@ function getTrueMonthlySurplus() {
 }
 
 function updateAllDisplays() {
-    updateDebtRatesAndMin();
+    updateDebtRatesAndMin(true);
     const totalBal = totalDebtBalance();
     const autoPay = getAutoWeeklyPayment();
     const dailyExp = totalDailyExpensesSinceStart();
@@ -315,12 +315,12 @@ function updateAllDisplays() {
     buildPlanView();
 }
 
-// ========== DEBT TABLE (No reset bugs) ==========
+// ========== DEBT TABLE (Min Payment EDITABLE) ==========
 function renderDebtTable() {
     const tbody = document.getElementById('debtTableBody');
     if (!tbody) return;
     tbody.innerHTML = '';
-    if (!debts.length) { tbody.innerHTML = '<tr><td colspan="8">📋 Add a debt to start</td></tr>'; return; }
+    if (!debts.length) { tbody.innerHTML = '<tr><td colspan="8">📋 Add a debt to start</td></tr>'; updateAllDisplays(); return; }
     for (let i = 0; i < debts.length; i++) {
         const d = debts[i];
         const tr = document.createElement('tr');
@@ -344,7 +344,8 @@ function renderDebtTable() {
         const rateInp = document.createElement('input'); rateInp.type = 'number'; rateInp.value = d.rate;
         tdRate.appendChild(rateInp);
         const tdMin = document.createElement('td');
-        const minInp = document.createElement('input'); minInp.type = 'number'; minInp.value = d.minPayment; minInp.readOnly = true;
+        const minInp = document.createElement('input'); minInp.type = 'number'; minInp.value = d.minPayment;
+        minInp.classList.add('editable-min');
         tdMin.appendChild(minInp);
         const tdDue = document.createElement('td');
         const dueInp = document.createElement('input'); dueInp.type = 'number'; dueInp.value = d.dueDay || 1;
@@ -375,7 +376,8 @@ function renderDebtTable() {
                 rateInp.value = banks[bank]?.[prodSel.value] || 0;
             }
         }
-        function updateDebtFromRow() {
+        function updateDebtFromRow(resetCustomMin = true) {
+            const oldBalance = d.balance;
             d.bank = bankSel.value;
             d.product = prodSel.value;
             d.balance = parseFloat(balInp.value) || 0;
@@ -386,16 +388,34 @@ function renderDebtTable() {
                 rateInp.value = d.rate;
             }
             d.dueDay = parseInt(dueInp.value) || 1;
-            d.minPayment = calcMinPayment(d.balance);
+            // If balance changed to zero, clear custom flag and recalc
+            if (oldBalance !== d.balance && d.balance === 0) {
+                d.customMin = false;
+                d.minPayment = 0;
+            } else if (resetCustomMin && (oldBalance !== d.balance || d.rate !== (d.oldRate || d.rate))) {
+                d.customMin = false;
+                d.minPayment = defaultMinPayment(d.balance, d.rate);
+            } else if (!d.customMin) {
+                d.minPayment = defaultMinPayment(d.balance, d.rate);
+            }
+            d.oldRate = d.rate;
             minInp.value = d.minPayment;
             updateAllDisplays();
             saveAll();
         }
-        bankSel.addEventListener('change', () => { refreshProducts(); updateDebtFromRow(); });
-        prodSel.addEventListener('change', updateDebtFromRow);
-        balInp.addEventListener('input', updateDebtFromRow);
-        rateInp.addEventListener('input', () => { if (bankSel.value === 'Others') updateDebtFromRow(); });
-        dueInp.addEventListener('input', updateDebtFromRow);
+        // Handle manual min payment edit
+        minInp.addEventListener('input', () => {
+            let newMin = parseFloat(minInp.value) || 0;
+            d.minPayment = newMin;
+            d.customMin = true;
+            updateAllDisplays();
+            saveAll();
+        });
+        bankSel.addEventListener('change', () => { refreshProducts(); updateDebtFromRow(true); });
+        prodSel.addEventListener('change', () => { updateDebtFromRow(true); });
+        balInp.addEventListener('input', () => { updateDebtFromRow(true); });
+        rateInp.addEventListener('input', () => { if (bankSel.value === 'Others') updateDebtFromRow(true); });
+        dueInp.addEventListener('input', () => { updateDebtFromRow(false); });
         refreshProducts();
     }
 }
@@ -421,6 +441,10 @@ function makeDebtPayment(index) {
     totalSaved += amount;
     totalPaymentsCount++;
     checkCarLoanCompletion(oldBal, debt.balance, debt.product);
+    // After payment, if balance becomes zero, clear customMin
+    if (debt.balance === 0) {
+        debt.customMin = false;
+    }
     updateAllDisplays();
     renderDebtTable();
     saveAll();
@@ -438,6 +462,7 @@ function applyPayment(amount) {
         if (pay > 0) totalPaymentsCount++;
         checkCarLoanCompletion(oldBal, d.balance, d.product);
         remaining -= pay;
+        if (d.balance === 0) d.customMin = false;
     }
     updateAllDisplays();
     renderDebtTable();
@@ -518,7 +543,7 @@ function buildPlanView() {
     const active = debts.filter(d => d.balance > 0).sort((a,b) => b.rate - a.rate);
     const container = document.getElementById('planStepsContainer');
     if (!active.length) { container.innerHTML = '<div class="tip">No active debts</div>'; return; }
-    container.innerHTML = active.map((r,i) => `<div class="plan-step"><div class="step-num">${i+1}</div><div class="step-body"><h4>${r.bank} – ${r.product}</h4><p>Balance: ${money(r.balance)} | Rate: ${r.rate}%</p></div></div>`).join('');
+    container.innerHTML = active.map((r,i) => `<div class="plan-step"><div class="step-num">${i+1}</div><div class="step-body"><h4>${r.bank} – ${r.product}</h4><p>Balance: ${money(r.balance)} | Rate: ${r.rate}% | Min: ${money(r.minPayment)}</p></div></div>`).join('');
 }
 function addWeeklySalary() {
     let weekly = budgetValues.weeklySalary;
@@ -531,7 +556,7 @@ function addWeeklySalary() {
     } else alert("Please set a weekly salary amount in Budget tab.");
 }
 function setTheme() { document.body.classList.toggle('light', isLight); document.getElementById('darkToggleBtn').textContent = isLight ? '🌙 Dark' : '☀️ Light'; }
-function resetDebts() { debts.forEach(d => { d.balance = 0; d.minPayment = 0; }); updateAllDisplays(); renderDebtTable(); saveAll(); alert("All debts cleared."); }
+function resetDebts() { debts.forEach(d => { d.balance = 0; d.minPayment = 0; d.customMin = false; }); updateAllDisplays(); renderDebtTable(); saveAll(); alert("All debts cleared."); }
 function factoryReset() {
     if (!confirm('⚠️ FACTORY RESET will erase all data. Continue?')) return;
     debts = []; dailyExpenses = []; paidWeeks = []; currentBankBalance = 0; totalSaved = 0; debtOriginal = 0;
@@ -566,7 +591,7 @@ window.onload = () => {
     document.getElementById('bankBalanceInput').value = currentBankBalance;
     document.getElementById('darkToggleBtn').onclick = () => { isLight = !isLight; setTheme(); saveAll(); };
     document.getElementById('addDebtRowBtn').onclick = () => {
-        debts.push({ id: crypto.randomUUID(), bank: 'CommBank', product: 'Credit Card', balance: 5000, rate: 18.2, minPayment: 0, dueDay: 1 });
+        debts.push({ id: crypto.randomUUID(), bank: 'CommBank', product: 'Credit Card', balance: 5000, rate: 18.2, minPayment: 0, dueDay: 1, customMin: false });
         renderDebtTable(); updateAllDisplays(); saveAll();
     };
     document.getElementById('addDailyExpenseBtn').onclick = addDailyExpense;

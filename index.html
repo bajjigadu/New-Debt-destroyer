@@ -111,7 +111,7 @@
     <div id="debts" class="tab-panel">
         <div class="card"><div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px; margin-bottom:20px;"><h2>💸 Your Debts</h2><div class="button-group" style="margin:0;"><button id="addDebtRowBtn" class="btn-primary">+ Add Debt</button><button id="quickAddPaymentBtn" class="btn-secondary">💵 Quick Pay (Avalanche)</button></div></div>
         <div class="debt-table"><table id="debtsTable"><thead><tr><th>Bank</th><th>Product</th><th>Balance ($)</th><th>Rate (%)</th><th>Min Payment ($)</th><th>Due Day</th><th>Pay</th><th>Delete</th></thead><tbody id="debtTableBody"></tbody></table></div>
-        <div class="tip">💡 <strong>Min Payment is now editable!</strong> Click any min payment cell and type your desired amount. For BNPL (Zip/Afterpay) we start at $0. Changes save automatically.</div></div>
+        <div class="tip">💡 <strong>Min Payment now includes interest!</strong> Calculated as <strong>Interest + 1% of balance</strong> (minimum $25). For 0% interest debts (BNPL) default is $0, but you can edit any min payment manually.</div></div>
     </div>
 
     <div id="budget" class="tab-panel">
@@ -216,11 +216,13 @@ function loadState() {
         if (el) el.value = budgetValues[id];
     }
 }
-// Default minimum: For BNPL (rate == 0) default to 0, otherwise 2% or $25.
-function defaultMinPayment(balance, rate) {
+// New min payment: Interest + 1% of principal, min $25. For 0% interest -> $0 default
+function calculateMinPayment(balance, rate) {
     if (balance <= 0) return 0;
     if (rate === 0) return 0;  // BNPL / Zip / Afterpay default 0
-    return Math.max(25, Math.ceil(balance * 0.02));
+    const monthlyInterest = balance * (rate / 100 / 12);
+    const principalPart = balance * 0.01; // 1% of balance
+    return Math.max(25, Math.ceil(monthlyInterest + principalPart));
 }
 function updateDebtRatesAndMin(respectCustom = true) {
     for (let d of debts) {
@@ -231,7 +233,7 @@ function updateDebtRatesAndMin(respectCustom = true) {
         }
         // Only auto-update min payment if not custom OR if balance changed to zero
         if (!respectCustom || !d.customMin || d.balance === 0) {
-            d.minPayment = defaultMinPayment(d.balance, d.rate);
+            d.minPayment = calculateMinPayment(d.balance, d.rate);
             if (d.balance === 0) d.customMin = false;
         }
     }
@@ -315,7 +317,7 @@ function updateAllDisplays() {
     buildPlanView();
 }
 
-// ========== DEBT TABLE (Min Payment EDITABLE) ==========
+// ========== DEBT TABLE (Fully editable, no reset bugs) ==========
 function renderDebtTable() {
     const tbody = document.getElementById('debtTableBody');
     if (!tbody) return;
@@ -378,6 +380,7 @@ function renderDebtTable() {
         }
         function updateDebtFromRow(resetCustomMin = true) {
             const oldBalance = d.balance;
+            const oldRate = d.rate;
             d.bank = bankSel.value;
             d.product = prodSel.value;
             d.balance = parseFloat(balInp.value) || 0;
@@ -388,22 +391,20 @@ function renderDebtTable() {
                 rateInp.value = d.rate;
             }
             d.dueDay = parseInt(dueInp.value) || 1;
-            // If balance changed to zero, clear custom flag and recalc
+            // If balance changed to zero, clear custom flag and set min to 0
             if (oldBalance !== d.balance && d.balance === 0) {
                 d.customMin = false;
                 d.minPayment = 0;
-            } else if (resetCustomMin && (oldBalance !== d.balance || d.rate !== (d.oldRate || d.rate))) {
-                d.customMin = false;
-                d.minPayment = defaultMinPayment(d.balance, d.rate);
-            } else if (!d.customMin) {
-                d.minPayment = defaultMinPayment(d.balance, d.rate);
+            } 
+            // If balance or rate changed and not custom, recalculate
+            else if ((resetCustomMin || oldBalance !== d.balance || oldRate !== d.rate) && !d.customMin) {
+                d.minPayment = calculateMinPayment(d.balance, d.rate);
             }
-            d.oldRate = d.rate;
             minInp.value = d.minPayment;
             updateAllDisplays();
             saveAll();
         }
-        // Handle manual min payment edit
+        // Manual min payment override
         minInp.addEventListener('input', () => {
             let newMin = parseFloat(minInp.value) || 0;
             d.minPayment = newMin;
@@ -441,9 +442,11 @@ function makeDebtPayment(index) {
     totalSaved += amount;
     totalPaymentsCount++;
     checkCarLoanCompletion(oldBal, debt.balance, debt.product);
-    // After payment, if balance becomes zero, clear customMin
     if (debt.balance === 0) {
         debt.customMin = false;
+        debt.minPayment = 0;
+    } else if (!debt.customMin) {
+        debt.minPayment = calculateMinPayment(debt.balance, debt.rate);
     }
     updateAllDisplays();
     renderDebtTable();
@@ -462,7 +465,12 @@ function applyPayment(amount) {
         if (pay > 0) totalPaymentsCount++;
         checkCarLoanCompletion(oldBal, d.balance, d.product);
         remaining -= pay;
-        if (d.balance === 0) d.customMin = false;
+        if (d.balance === 0) {
+            d.customMin = false;
+            d.minPayment = 0;
+        } else if (!d.customMin) {
+            d.minPayment = calculateMinPayment(d.balance, d.rate);
+        }
     }
     updateAllDisplays();
     renderDebtTable();
